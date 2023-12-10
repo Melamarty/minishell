@@ -7,15 +7,40 @@
 # include <readline/history.h>
 # include <unistd.h>
 
+typedef struct s_env
+{
+	char	*key;
+	char	*val;
+	struct s_env	*next;
+}	t_env;
+
 typedef struct s_cmd
 {
-	char	*cmd;
-	char	**args;
-	char		**env;
+	char			*cmd;
+	char			**args;
+	char			**envi;
+	t_env			*env;
+	int				flag;
 }	t_cmd;
 
-int	ft_strcmp(char *str1, char *str2);
-int	ft_strncmp(char *str1, char *str2, int n);
-int	cd(char *path);
+typedef struct s_tree
+{
+	t_cmd			*cmd;
+	struct s_tree	*left;
+	struct s_tree	*right;
+}	t_tree;
+
+int		ft_strcmp(char *str1, char *str2);
+int		ft_strncmp(char *str1, char *str2, int n);
+
+// cmds
+int		cd(char *path);
+int		ls(t_cmd *cmd);
+int		echo(t_cmd *cmd);
+int		pwd();
+// utils
+char	*ft_strjoin(char *s1,char *s2);
+int		ft_strlen(char *str);
+int		putstr(char *str);
 
 #endif
