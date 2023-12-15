@@ -1,11 +1,13 @@
 #include "parsing.h"
 
-int	level(t_list *tk)
+int	level(t_list *tk, int l)
 {
 	if (tk->type == TOKEN_PIPE)
 		return (1);
 	else if (tk->type == TOKEN_AND || tk->type == TOKEN_OR)
 		return (2);
+	else if (tk->type == TOKEN_BRACKET_CLOSE && l)
+		return (3);
 	return (0);
 }
 
@@ -24,7 +26,7 @@ t_cmd	*set_cmd(void)
 	return (cmd);
 }
 
-t_tree	*command(t_list **tokens)
+t_tree	*command(t_list **tokens, int m)
 {
 	t_tree	*node;
 	t_cmd	*cmd;
@@ -34,7 +36,7 @@ t_tree	*command(t_list **tokens)
 	cmd = set_cmd();
 	if (!cmd)
 		exit(1);
-	while ((*tokens) && level(*tokens) < 1)
+	while ((*tokens) && level(*tokens, m) < 1)
 	{
 		if ((*tokens)->type == TOKEN_REDIR_IN)
 		{
@@ -71,17 +73,38 @@ void aff_list(t_list *lst)
 {
 	while (lst) //////////////////////////////////////////////////////////////////////
 	{
-		printf("%s --> ", lst->token);
+		printf("%d --> ", lst->type);
 		lst = lst->next;
 	}
 	printf("\n\n");
 }
 
-t_tree	*condition(t_list **tokens)
+int	after_brackets(t_list **tokens)
+{
+	while (*tokens && (*tokens)->type != TOKEN_BRACKET_CLOSE)
+		(*tokens) = (*tokens)->next;
+	if (!*tokens)
+		return (-1);
+	(*tokens) = (*tokens)->next;
+	return (0);
+}
+
+t_tree	*condition(t_list **tokens, int l)
 {
 	t_tree	*head;
 	t_tree	*left;
-	left = pipeline(tokens);
+
+	if (!*tokens)
+		return (NULL);
+	if ((*tokens)->type != TOKEN_BRACKET_OPEN)
+		left = pipeline(tokens, l);
+	else
+	{
+		(*tokens) = (*tokens)->next;
+		left = condition(tokens, 1);
+		if (after_brackets(tokens))
+			exit(1);
+	}
 	if ((*tokens) && ((*tokens)->type == TOKEN_OR || (*tokens)->type == TOKEN_AND))
 	{
 		if ((*tokens)->type == TOKEN_OR)
@@ -95,15 +118,26 @@ t_tree	*condition(t_list **tokens)
 	if (!*tokens)
 		exit(1); // syntax error in case of : ls &&
 	head->left = left;
-	head->right = condition(tokens);
+	head->right = condition(tokens, l);
 	return (head);
 }
 
-t_tree	*pipeline(t_list **tokens)
+t_tree	*pipeline(t_list **tokens, int l)
 {
 	t_tree	*head;
 	t_tree	*left;
-	left = command(tokens);
+
+	if (!*tokens)
+		return (NULL);
+	if ((*tokens)->type != TOKEN_BRACKET_OPEN)
+		left = command(tokens, l);
+	else
+	{
+		(*tokens) = (*tokens)->next;
+		left = condition(tokens, 1);
+		if (after_brackets(tokens))
+			exit(1);
+	}
 	if ((*tokens) && (*tokens)->type == TOKEN_PIPE)
 		head = new_node(NULL, TOKEN_PIPE);
 	else
@@ -112,7 +146,7 @@ t_tree	*pipeline(t_list **tokens)
 	if (!*tokens)
 		exit(1); // syntax error in case of : ls |
 	head->left = left;
-	head->right = pipeline(tokens);
+	head->right = pipeline(tokens, l);
 	return (head);
 }
 

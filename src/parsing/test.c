@@ -10,7 +10,7 @@ void	bash_loop()
 	{
 		cmd = readline("\e[1;32mminishell >>✗");
 		t_list *tokens = get_tokens(cmd);
-		t_tree *tree = condition(&tokens);
+		t_tree *tree = condition(&tokens, 0);
 		//aff_list(tokens);
 		print_tree(tree, 0);
 		free(cmd);

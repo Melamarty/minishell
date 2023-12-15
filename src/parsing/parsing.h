@@ -31,10 +31,10 @@ size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s);
 int		ft_strncmp(const char *a, const char *b, size_t n);
 t_list	*ft_lstlast(t_list *lst);
-t_tree	*pipeline(t_list **tokens);
+t_tree	*pipeline(t_list **tokens, int l);
 t_tree 	*new_node(t_cmd *cmd, int type);
 void	add_node(t_tree **tree, t_cmd *cmd, int	left);
-t_tree	*condition(t_list **tokens);
+t_tree	*condition(t_list **tokens, int l);
 void	print_tree(t_tree	*tree, int c);     /////////////////////////
 
 #endif
