@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-t_list	*ft_lstnew(char *content)
+t_list	*ft_lstnew(char *content, int type)
 {
 	t_list	*res;
 
@@ -8,6 +8,7 @@ t_list	*ft_lstnew(char *content)
 	if (res == NULL)
 		return (NULL);
 	res->next = NULL;
+	res->type = type;
 	res->token = content;
 	return (res);
 }

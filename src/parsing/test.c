@@ -1,15 +1,5 @@
-#include "../minishell.h"
-
-void aff_list(t_list *lst)
-{
-	printf("\nTokens : ");
-	while (lst)
-	{
-		printf("%s --> ", lst->token);
-		lst = lst->next;
-	}
-	printf("\n\n");
-}
+#include "parsing.h"
+void aff_list(t_list *lst);
 
 void	bash_loop()
 {
@@ -20,14 +10,14 @@ void	bash_loop()
 	{
 		cmd = readline("\e[1;32mminishell >>✗");
 		t_list *tokens = get_tokens(cmd);
-		aff_list(tokens);
-		// if (!ft_strncmp(cmd, "exit", 4))
-		// 	break;
-		write (1, "\e[1;34m", 7);
-		//handel_cmd(cmd);
+		t_tree *tree = condition(&tokens);
+		//aff_list(tokens);
+		print_tree(tree, 0);
+		free(cmd);
 		ft_lstclear(&tokens, free);
 	}
 }
+
 
 int main ()
 {

@@ -1,5 +1,4 @@
-#include "../minishell.h"
-
+#include "parsing.h"
 size_t	ft_strlen(const char *s)
 {
 	int	i;
@@ -55,4 +54,38 @@ char	*ft_substr(char const *s, unsigned int start, size_t ln)
 		res[i] = s[start + i];
 	res[i] = '\0';
 	return (res);
+}
+char	*ft_strdup(const char *s)
+{
+	char	*res;
+	int		len;
+	int		i;
+
+	i = -1;
+	len = ft_strlen((char *)s);
+	res = (char *)malloc(len + 1);
+	if (res == NULL)
+		return (NULL);
+	while (++i < len)
+		res[i] = s[i];
+	res[i] = '\0';
+	return (res);
+}
+
+int	ft_strncmp(const char *a, const char *b, size_t n)
+{
+	size_t			i;
+	unsigned char	*p;
+	unsigned char	*pp;
+
+	i = 0;
+	p = (unsigned char *)a;
+	pp = (unsigned char *)b;
+	while (i < n && (p[i] || pp[i]))
+	{
+		if (p[i] != pp[i])
+			return (p[i] - pp[i]);
+		i++;
+	}
+	return (0);
 }

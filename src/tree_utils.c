@@ -1,13 +1,14 @@
 #include "minishell.h"
 
-t_tree 	*new_node(t_cmd *cmd)
+t_tree 	*new_node(t_cmd *cmd, int type)
 {
 	t_tree  *node;
 
-	if (!cmd)
-		return (NULL);
+	// if (!cmd)
+	// 	return (NULL);
 	node = malloc(sizeof(t_tree));
 	node->cmd = cmd;
+	node->type = type;
 	node->left = NULL;
 	node->right = NULL;
 	return (node);

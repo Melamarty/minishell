@@ -14,21 +14,6 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-typedef struct s_cmd
-{
-	char			*cmd;
-	char			**args;
-	char			**envi;
-	t_env			*env;
-	int				flag;
-}	t_cmd;
-
-typedef struct s_tree
-{
-	t_cmd			*cmd;
-	struct s_tree	*left;
-	struct s_tree	*right;
-}	t_tree;
 
 typedef struct s_list
 {
@@ -37,17 +22,27 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
+typedef struct s_cmd
+{
+	char			*cmd;
+	t_list			*args;
+	char			**envi;
+	t_list			*redir_in;
+	t_list			*redir_out;
+	t_env			*env;
+	int				flag;
+}	t_cmd;
 
-int		ft_strcmp(char *str1, char *str2);
-int		ft_strncmp(char *str1, char *str2, int n);
+typedef struct s_tree
+{
+	t_cmd			*cmd;
+	int				type;
+	struct s_tree	*left;
+	struct s_tree	*right;
+}	t_tree;
 
-//mozennou
-t_list	*get_tokens(char *expr);
-t_list	*ft_lstnew(char *content);
-int		ft_lstadd_back(t_list **lst, t_list *new);
-void	ft_lstclear(t_list **lst, void (*del)(void*));
-char	*ft_substr(char const *s, unsigned int start, size_t ln);
-size_t	ft_strlen(const char *s);
+// int		ft_strcmp(char *str1, char *str2);
+// int		ft_strncmp(char *str1, char *str2, int n);
 
 // cmds
 int		cd(char *path);
