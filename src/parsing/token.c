@@ -157,3 +157,77 @@ t_list	*get_tokens(char *expr)
 	}
 	return (tokens);
 }
+
+void	in_out(t_list *tokens)
+{
+	t_list	*p;
+	t_list	*pp;
+	int	inquotes;
+
+	inquotes = 0;
+	p = tokens;
+	pp = NULL;
+	while (p)
+	{
+		if (p->type == TOKEN_EXPR)
+		{
+			if (p->next && (p->next->type == TOKEN_DOUBLE_QUOTE || p->next->type == TOKEN_SINGLE_QUOTE))
+				p->pos = 1;
+			else if (pp && (pp->type == TOKEN_DOUBLE_QUOTE || pp->type == TOKEN_SINGLE_QUOTE))
+				p->pos = 1;
+			else
+				p->pos = 0;
+		}
+		else
+			p->pos = 0;
+		pp = p;
+		p = p->next;
+	}
+}
+
+t_list	*out_of_quotes(t_list	**tk)
+{
+	t_list	*p;
+	t_list	*pp;
+	char	*s;
+	int		flg;
+
+	p = NULL;
+	s = NULL;
+	flg = 0;
+	aff_list(*tk);
+	while (*tk)
+	{
+		if ((*tk)->type == TOKEN_DOUBLE_QUOTE || (*tk)->type == TOKEN_SINGLE_QUOTE)
+			printf("NN\n");
+		else if ((*tk)->pos == 0)
+		{
+			ft_lstadd_back(&p, ft_lstnew((*tk)->token, (*tk)->type));
+			flg = 0;
+		}
+		else
+		{
+			if (flg == 0)
+			{
+				ft_lstadd_back(&p, ft_lstnew(ft_strdup((*tk)->token), TOKEN_EXPR));
+				flg = 1;
+			}
+			else
+			{
+				pp = ft_lstlast(p);
+				pp->token = ft_strjoin(pp->token, (*tk)->token);
+			}
+		}
+		(*tk) = (*tk)->next;
+	}
+	return (ft_lstclear(tk, free), p);
+}
+
+t_list	*tokenizing(char *expr)
+{
+	t_list	*tokens;
+
+	tokens = get_tokens(expr);
+	in_out(tokens);
+	return (out_of_quotes(&tokens));
+}

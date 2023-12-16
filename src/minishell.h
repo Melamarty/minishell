@@ -19,6 +19,7 @@ typedef struct s_list
 {
 	char			*token;
 	int				type;
+	int				pos; // 1: in quotes, 0: out quotes
 	struct s_list	*next;
 }	t_list;
 
