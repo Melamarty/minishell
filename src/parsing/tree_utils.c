@@ -33,17 +33,28 @@ t_tree 	*new_node(t_cmd *cmd, int type)
 
 void	print_tree(t_tree	*tree, int c)
 {
-	int i = 0;
-	if (!tree)
-		return;
-	print_tree(tree->right, c + 5);
-	while (i < c)
-	{
-		printf(" ");
-		i++;
-	}
-	printf("%d - >\n", tree->type);
-	print_tree(tree->left, c + 5);
+	 int i = 0;
+    if (!tree)
+        return;
+    print_tree(tree->right, c + 5);
+    while (i < c)
+    {
+        printf(" ");
+        i++;
+    }
+    if (tree->type == 5)
+        printf("%c ->\n", '|');
+	else if (tree->type == 7)
+		printf("%s ->\n", "||");
+    else if (tree->type == 6)
+        printf("%s ->\n", "&&");
+    else if (tree->type == 100)
+        printf("%c ->\n", 'C');
+    else if (tree->type == 0)
+        printf("%s ->\n", tree->cmd->cmd);
+    else
+        printf("%d ->\n", tree->type);
+    print_tree(tree->left, c + 5);
 }
 
 // int	execute_cmd(t_cmd *cmd)

@@ -16,8 +16,8 @@ enum
 	TOKEN_SPACE,
 	TOKEN_BRACKET_OPEN,
 	TOKEN_BRACKET_CLOSE,
-	TOKEN_DOUBLE_QUOTE,
-	TOKEN_SINGLE_QUOTE,
+	TOKEN_D_Q,
+	TOKEN_S_Q,
 	TOKEN_END
 } ;
 
@@ -37,6 +37,7 @@ void	add_node(t_tree **tree, t_cmd *cmd, int	left);
 t_tree	*condition(t_list **tokens);
 char	*ft_strjoin(char *a, char *b);
 t_list	*tokenizing(char *expr);
+char	*ft_strchr(const char *s, int c);
 void	print_tree(t_tree	*tree, int c);     /////////////////////////
 void	in_out(t_list *tokens); ///////////
 void aff_list(t_list *lst); ///////////

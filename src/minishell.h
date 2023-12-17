@@ -20,6 +20,7 @@ typedef struct s_list
 	char			*token;
 	int				type;
 	int				pos; // 1: in quotes, 0: out quotes
+	int				expand; // 1: should expand
 	struct s_list	*next;
 }	t_list;
 

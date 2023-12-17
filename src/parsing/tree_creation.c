@@ -34,8 +34,24 @@ t_tree	*command(t_list **tokens)
 	cmd = set_cmd();
 	if (!cmd)
 		exit(1);
-	while ((*tokens) && level(*tokens) < 1)
+	if ((*tokens) && (*tokens)->type == TOKEN_BRACKET_OPEN)      ///////////// NON protcted
 	{
+		(*tokens) = (*tokens)->next;
+		node = condition(tokens);
+		while ((*tokens) && level(*tokens) < 1)
+			(*tokens) = (*tokens)->next;
+		return (node);
+	}
+	while ((*tokens) && level(*tokens) < 1 && (*tokens)->type != TOKEN_BRACKET_CLOSE)
+	{
+		if ((*tokens)->type == TOKEN_BRACKET_OPEN)      ///////////// NON protcted
+		{
+			(*tokens) = (*tokens)->next;
+			node = condition(tokens);
+			while ((*tokens) && level(*tokens) < 1)
+				(*tokens) = (*tokens)->next;
+			return (node);
+		}
 		if ((*tokens)->type == TOKEN_REDIR_IN)
 		{
 			if ((*tokens)->next == NULL)

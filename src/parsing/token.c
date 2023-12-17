@@ -23,9 +23,9 @@ int	is_special(char *s)
 	else if (*s == '>')
 		return (TOKEN_REDIR_OUT);
 	else if (*s == '\"')
-		return (TOKEN_DOUBLE_QUOTE);
+		return (TOKEN_D_Q);
 	else if (*s == '\'')
-		return (TOKEN_SINGLE_QUOTE);
+		return (TOKEN_S_Q);
 	else if (*s == ' ' || *s == '\t')
 		return (TOKEN_SPACE);
 	return (TOKEN_EXPR);
@@ -51,9 +51,9 @@ char *ft_get_special(int l)
 		return (ft_strdup("<"));
 	else if (l == TOKEN_REDIR_OUT)
 		return (ft_strdup(">"));
-	else if (l == TOKEN_DOUBLE_QUOTE)
+	else if (l == TOKEN_D_Q)
 		return (ft_strdup("\""));
-	else if (l == TOKEN_SINGLE_QUOTE)
+	else if (l == TOKEN_S_Q)
 		return (ft_strdup("\'"));
 	else if (l == TOKEN_SPACE)
 		return (ft_strdup(" "));
@@ -86,7 +86,7 @@ char	*get_arg(char *s, int l)
 	char	c;
 
 	i = 0;
-	if (l == TOKEN_DOUBLE_QUOTE)
+	if (l == TOKEN_D_Q)
 		c = '\"';
 	else
 		c = '\'';
@@ -103,6 +103,14 @@ char	*get_arg(char *s, int l)
 	return (res);
 }
 
+int set_space(t_list **tokens)
+{
+	ft_lstadd_back(tokens, ft_lstnew(ft_strdup(" "),TOKEN_SPACE));
+	return (0);
+}
+
+
+
 t_list	*get_tokens(char *expr)
 {
 	t_list	*tokens;
@@ -115,6 +123,8 @@ t_list	*get_tokens(char *expr)
 	flg = 0;
 	inquotes = 0;
 	tokens = NULL;
+	while (expr[i] && (expr[i] == ' ' || expr[i] == '\t'))
+		i++;
 	while (expr[i])
 	{
 		l = is_special(expr + i);
@@ -127,12 +137,9 @@ t_list	*get_tokens(char *expr)
 				continue ;
 			}
 			if (flg)
-			{
-				ft_lstadd_back(&tokens, ft_lstnew(ft_strdup(" "),TOKEN_SPACE));
-				flg = 0;
-			}
+				flg = set_space(&tokens);
 			ft_lstadd_back(&tokens, ft_lstnew(ft_get_special(l), l));
-			if (l == TOKEN_DOUBLE_QUOTE || l == TOKEN_SINGLE_QUOTE)
+			if (l == TOKEN_D_Q || l == TOKEN_S_Q)
 			{
 				if (!inquotes)
 				{
@@ -147,10 +154,7 @@ t_list	*get_tokens(char *expr)
 		else
 		{
 			if (flg)
-			{
-				ft_lstadd_back(&tokens, ft_lstnew(ft_strdup(" "), TOKEN_SPACE));
-				flg = 0;
-			}
+				flg = set_space(&tokens);
 			ft_lstadd_back(&tokens, ft_lstnew(ft_get_expr(expr + i), TOKEN_EXPR));
 		}
 		i += ft_strlen(ft_lstlast(tokens)->token);
@@ -171,9 +175,9 @@ void	in_out(t_list *tokens)
 	{
 		if (p->type == TOKEN_EXPR)
 		{
-			if (p->next && (p->next->type == TOKEN_DOUBLE_QUOTE || p->next->type == TOKEN_SINGLE_QUOTE))
+			if (p->next && (p->next->type == TOKEN_D_Q || p->next->type == TOKEN_S_Q))
 				p->pos = 1;
-			else if (pp && (pp->type == TOKEN_DOUBLE_QUOTE || pp->type == TOKEN_SINGLE_QUOTE))
+			else if (pp && (pp->type == TOKEN_D_Q || pp->type == TOKEN_S_Q))
 				p->pos = 1;
 			else
 				p->pos = 0;
@@ -195,21 +199,22 @@ t_list	*out_of_quotes(t_list	**tk)
 	p = NULL;
 	s = NULL;
 	flg = 0;
-	aff_list(*tk);
 	while (*tk)
 	{
-		if ((*tk)->type == TOKEN_DOUBLE_QUOTE || (*tk)->type == TOKEN_SINGLE_QUOTE)
-			printf("NN\n");
-		else if ((*tk)->pos == 0)
+		if ((*tk)->pos == 0 && (*tk)->type != TOKEN_D_Q && (*tk)->type != TOKEN_S_Q)
 		{
 			ft_lstadd_back(&p, ft_lstnew((*tk)->token, (*tk)->type));
+			pp = ft_lstlast(p);
+			pp->expand = (*tk)->expand;
 			flg = 0;
 		}
-		else
+		else if((*tk)->type != TOKEN_D_Q && (*tk)->type != TOKEN_S_Q)
 		{
 			if (flg == 0)
 			{
 				ft_lstadd_back(&p, ft_lstnew(ft_strdup((*tk)->token), TOKEN_EXPR));
+				pp = ft_lstlast(p);
+				pp->expand = (*tk)->expand;
 				flg = 1;
 			}
 			else
@@ -223,11 +228,46 @@ t_list	*out_of_quotes(t_list	**tk)
 	return (ft_lstclear(tk, free), p);
 }
 
+static int valid(char *s)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_strchr(s, '$'))
+		return (0);
+	while (s[i])
+	{
+		if (s[i] == '$' && (s[i + 1] == ' ' || s[i + 1] == '\t' || s[i + 1] == '\0'))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 t_list	*tokenizing(char *expr)
 {
 	t_list	*tokens;
+	t_list	*p;
+	int		in;
 
 	tokens = get_tokens(expr);
+	in = 0;
+	p = tokens;
+	while (p)
+	{
+		if (p->type == TOKEN_S_Q)
+		{
+			if(!in)
+				in = 1;
+			else
+				in = 0;
+		}
+		if (p->type == TOKEN_EXPR && valid(p->token) && !in)
+			p->expand = 1;
+		else
+			p->expand = 0;
+		p = p->next;
+	}
 	in_out(tokens);
 	return (out_of_quotes(&tokens));
 }
