@@ -18,8 +18,13 @@ void	bash_loop()
 	}
 }
 
-
-int main ()
+int main(int ac, char **av, char **env)
 {
-	bash_loop();
+	t_env *my_env = get_env(env);
+	//bash_loop();
+	while (my_env)
+	{
+		printf("%s=%s\n", my_env->key, my_env->val);
+		my_env = my_env->next;
+	}
 }
