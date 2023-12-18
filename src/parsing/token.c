@@ -1,6 +1,4 @@
 #include "parsing.h"
-#include <string.h>
-
 
 int	is_special(char *s)
 {
@@ -99,17 +97,61 @@ char	*get_arg(char *s, int l)
 		res[i] = s[i];
 		i++;
 	}
+	if (s[i] == '\0')
+		return (NULL);
 	res[i] = 0;
 	return (res);
 }
 
-int set_space(t_list **tokens)
+static int	func(int inquotes, int *i, t_list **tokens, char *expr)
 {
-	ft_lstadd_back(tokens, ft_lstnew(ft_strdup(" "),TOKEN_SPACE));
+	int		l;
+	char	*arg;
+
+	l = is_special(expr + *i);
+	if ((l == TOKEN_D_Q || l == TOKEN_S_Q) && !inquotes)
+	{
+		(*i)++;
+		arg = get_arg(expr + (*i), l);
+		if (!arg)
+			return (-1);
+		ft_lstadd_back(tokens, ft_lstnew(get_arg(expr + (*i), l),TOKEN_EXPR));
+		return (1);
+	}
+	return (0);
+}	
+
+int set_space(t_list **tokens, int flg)
+{
+	if (flg)
+		ft_lstadd_back(tokens, ft_lstnew(ft_strdup(" "),TOKEN_SPACE));
 	return (0);
 }
 
+// static void func2(int flg, t_list **tokens, char *expr, int *i, int inquotes)
+// {
+// 	int	l
 
+// 	l = is_special(expr + i);
+// 	if (l)
+// 	{
+// 		if (l == TOKEN_SPACE)
+// 		{
+// 			i++;
+// 			flg = 1;
+// 			return ;
+// 		}
+// 		flg = set_space(tokens, flg);
+// 		ft_lstadd_back(tokens, ft_lstnew(ft_get_special(l), l));
+// 		inquotes = func(inquotes, *i, tokens, expr);
+// 	}
+// 	else
+// 	{
+// 		flg = set_space(tokens, flg);
+// 		ft_lstadd_back(tokens, ft_lstnew(ft_get_expr(expr + *i), TOKEN_EXPR));
+// 	}
+// 	(*i) += ft_strlen(ft_lstlast(*tokens)->token);
+// }
 
 t_list	*get_tokens(char *expr)
 {
@@ -123,8 +165,6 @@ t_list	*get_tokens(char *expr)
 	flg = 0;
 	inquotes = 0;
 	tokens = NULL;
-	while (expr[i] && (expr[i] == ' ' || expr[i] == '\t'))
-		i++;
 	while (expr[i])
 	{
 		l = is_special(expr + i);
@@ -136,25 +176,15 @@ t_list	*get_tokens(char *expr)
 				flg = 1;
 				continue ;
 			}
-			if (flg)
-				flg = set_space(&tokens);
+			flg = set_space(&tokens, flg);
 			ft_lstadd_back(&tokens, ft_lstnew(ft_get_special(l), l));
-			if (l == TOKEN_D_Q || l == TOKEN_S_Q)
-			{
-				if (!inquotes)
-				{
-					i++;
-					ft_lstadd_back(&tokens, ft_lstnew(get_arg(expr + i, l),TOKEN_EXPR));
-					inquotes = 1;
-				}
-				else
-					inquotes = 0;
-			}
+			inquotes = func(inquotes, &i, &tokens, expr);
+			if (inquotes == -1)
+				return (ft_lstclear(&tokens, free), NULL);
 		}
 		else
 		{
-			if (flg)
-				flg = set_space(&tokens);
+			flg = set_space(&tokens, flg);
 			ft_lstadd_back(&tokens, ft_lstnew(ft_get_expr(expr + i), TOKEN_EXPR));
 		}
 		i += ft_strlen(ft_lstlast(tokens)->token);
@@ -189,43 +219,50 @@ void	in_out(t_list *tokens)
 	}
 }
 
-t_list	*out_of_quotes(t_list	**tk)
+static	int	func1(t_list **tk, t_list *p, t_list *pp, int flg)
+{
+	if (flg == 0)
+	{
+		ft_lstadd_back(&p, ft_lstnew(ft_strdup((*tk)->token), TOKEN_EXPR));
+		pp = ft_lstlast(p);
+		pp->expand = (*tk)->expand;
+		return (1);
+	}
+	else
+	{
+		pp = ft_lstlast(p);
+		pp->token = ft_strjoin(pp->token, (*tk)->token);
+	}
+	return (flg);
+}
+
+t_list	*out_of_quotes(t_list	*tk)
 {
 	t_list	*p;
 	t_list	*pp;
+	t_list	*l;
 	char	*s;
 	int		flg;
 
 	p = NULL;
 	s = NULL;
 	flg = 0;
-	while (*tk)
+	l = tk;
+	while (tk)
 	{
-		if ((*tk)->pos == 0 && (*tk)->type != TOKEN_D_Q && (*tk)->type != TOKEN_S_Q)
+		if ((tk)->pos == 0 && (tk)->type != TOKEN_D_Q && (tk)->type != TOKEN_S_Q && (tk)->type != TOKEN_SPACE)
 		{
-			ft_lstadd_back(&p, ft_lstnew((*tk)->token, (*tk)->type));
+			ft_lstadd_back(&p, ft_lstnew(ft_strdup((tk)->token), (tk)->type));
 			pp = ft_lstlast(p);
-			pp->expand = (*tk)->expand;
+			pp->expand = (tk)->expand;
 			flg = 0;
 		}
-		else if((*tk)->type != TOKEN_D_Q && (*tk)->type != TOKEN_S_Q)
-		{
-			if (flg == 0)
-			{
-				ft_lstadd_back(&p, ft_lstnew(ft_strdup((*tk)->token), TOKEN_EXPR));
-				pp = ft_lstlast(p);
-				pp->expand = (*tk)->expand;
-				flg = 1;
-			}
-			else
-			{
-				pp = ft_lstlast(p);
-				pp->token = ft_strjoin(pp->token, (*tk)->token);
-			}
-		}
-		(*tk) = (*tk)->next;
+		else if((tk)->type != TOKEN_D_Q && (tk)->type != TOKEN_S_Q  && (tk)->type != TOKEN_SPACE)
+			flg = func1(&tk, p, pp, flg);
+		(tk) = (tk)->next;
 	}
-	return (ft_lstclear(tk, free), p);
+	ft_lstclear(&l, free);
+	return (p);
 }
 
 static int valid(char *s)
@@ -269,5 +306,7 @@ t_list	*tokenizing(char *expr)
 		p = p->next;
 	}
 	in_out(tokens);
-	return (out_of_quotes(&tokens));
+	return (out_of_quotes(tokens));
 }
+
+t_map

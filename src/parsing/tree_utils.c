@@ -57,6 +57,23 @@ void	print_tree(t_tree	*tree, int c)
     print_tree(tree->left, c + 5);
 }
 
+void tree_free(t_tree *tree)
+{
+	if (!tree)
+		return ;
+	tree_free(tree->left);
+	tree_free(tree->right);
+	if (tree->cmd)
+	{
+		ft_lstclear(&tree->cmd->args, free);
+		ft_lstclear(&tree->cmd->redir_in, free);
+		ft_lstclear(&tree->cmd->redir_out, free);
+		free(tree->cmd->cmd);
+		free(tree->cmd);
+	}
+	free(tree);
+}
+
 // int	execute_cmd(t_cmd *cmd)
 // {
 // 	pid_t	cmd_pid;

@@ -38,7 +38,9 @@ t_tree	*condition(t_list **tokens);
 char	*ft_strjoin(char *a, char *b);
 t_list	*tokenizing(char *expr);
 char	*ft_strchr(const char *s, int c);
-t_env	*get_env(char **env);
+t_map	*get_env(char **env);
+void	ft_putstr_fd(char *s, int fd);
+void	tree_free(t_tree *tree);
 void	print_tree(t_tree	*tree, int c);     /////////////////////////
 void	in_out(t_list *tokens); ///////////
 void aff_list(t_list *lst); ///////////

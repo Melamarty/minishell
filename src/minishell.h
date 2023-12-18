@@ -7,11 +7,17 @@
 # include <readline/history.h>
 # include <unistd.h>
 
-typedef struct s_env
+typedef struct s_map
 {
-	char	*key;
-	char	*val;
-	struct s_env	*next;
+    char            *key;
+    char            *val;
+    struct s_map    *next;
+}    t_map;
+
+typedef struct _s_env
+{
+    t_map *env;
+    t_map *ex_env;
 }	t_env;
 
 
@@ -28,10 +34,8 @@ typedef struct s_cmd
 {
 	char			*cmd;
 	t_list			*args;
-	char			**envi;
 	t_list			*redir_in;
 	t_list			*redir_out;
-	t_env			*env;
 	int				flag;
 }	t_cmd;
 

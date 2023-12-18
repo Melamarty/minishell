@@ -1,7 +1,7 @@
 
 #include "parsing.h"
 
-t_env	*ft_envlast(t_env *env)
+t_map	*ft_envlast(t_map *env)
 {
 	if (env)
 	{
@@ -13,11 +13,11 @@ t_env	*ft_envlast(t_env *env)
 	return (env);
 }
 
-t_env	*ft_envnew(char *key, char *val)
+t_map	*ft_envnew(char *key, char *val)
 {
-	t_env	*res;
+	t_map	*res;
 
-	res = (t_env *)malloc(sizeof(t_env));
+	res = (t_map *)malloc(sizeof(t_map));
 	if (res == NULL)
 		return (NULL);
 	res->next = NULL;
@@ -26,7 +26,7 @@ t_env	*ft_envnew(char *key, char *val)
 	return (res);
 }
 
-int	ft_envadd_back(t_env **env, t_env *new)
+int	ft_envadd_back(t_map **env, t_map *new)
 {
 	if (!env || !new)
 		return (-1);
@@ -37,9 +37,9 @@ int	ft_envadd_back(t_env **env, t_env *new)
 	return (0);
 }
 
-t_env	*get_env(char **env)
+t_map	*get_env(char **env)
 {
-	t_env	*res;
+	t_map	*res;
 	char	*tmp1;
 	char	*tmp2;
 	int		i;
