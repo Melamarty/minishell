@@ -8,7 +8,7 @@ all : $(NAME) clean
 	cc -c $< -o $@
 
 $(NAME) : $(OBJS)
-	cc $(OBJS) -o $(NAME) -lreadline #-fsanitize=address
+	cc $(OBJS) -o $(NAME) -lreadline -fsanitize=address
 
 clean : 
 	rm -f $(OBJS)

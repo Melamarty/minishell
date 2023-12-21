@@ -42,9 +42,9 @@ void	bash_loop()
 			exit(0);
 		add_history(cmd);
 		t_list *tokens = tokenizing(cmd);
-		aff_list(tokens);
 		if (!tokens)
 			continue ;
+		aff_list(tokens);
 		cpy = tokens;
 		t_tree *tree = condition(&tokens);
 		print_tree(tree, 0);

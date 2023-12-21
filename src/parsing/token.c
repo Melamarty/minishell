@@ -261,9 +261,13 @@ static	int	func3(int type1, int type2)
 	if (type1 == TOKEN_BRKT_OPEN && type2 == TOKEN_BRKT_CLOSE)
 		return (type1);
 	if (type1 == TOKEN_BRKT_CLOSE && (is_hight(type2)))
+		return (type1);
+	if (type2 == TOKEN_BRKT_CLOSE && type1 == TOKEN_EXPR)
 		return (type2);
 	if (type2 == TOKEN_BRKT_OPEN && (is_hight(type1)))
 		return (type2);
+	if (type1 == TOKEN_BRKT_OPEN && type2 == TOKEN_EXPR)
+		return (type1);
 	if (type2 == TOKEN_HEREDOC && type1 == TOKEN_HEREDOC)
 		return (type1);
 	if (type2 == TOKEN_REDIR_APPEND && type1 == TOKEN_REDIR_APPEND)
@@ -332,6 +336,24 @@ int	is_valid(t_list *a, t_list *b, int f)
 	return (0);
 }
 
+t_list	*relink(t_list *p)
+{
+	t_list	*pp;
+	t_list	*cpy;
+
+	cpy = p;
+	pp = NULL;
+	while (cpy)
+	{
+		if (pp)
+			cpy->prev = pp;
+		cpy->visited = 0;
+		pp = cpy;
+		cpy = cpy->next;
+	}
+	return (p);
+}
+
 t_list	*syntax_check(t_list *p)
 {
 	t_list	*cpy;
@@ -347,6 +369,8 @@ t_list	*syntax_check(t_list *p)
 			f++;
 		else if (cpy->type == TOKEN_BRKT_CLOSE)
 			f--;
+		if (f < 0 || ft_strchr(cpy->token, ';'))
+			return (ft_lstclear(&p, free), ft_putsyntax_error(NULL));
 		if (is_valid(pp, cpy, 0))
 			return (ft_lstclear(&p, free), ft_putsyntax_error(NULL));
 		pp = cpy;
@@ -354,7 +378,7 @@ t_list	*syntax_check(t_list *p)
 	}
 	if (is_valid(pp, NULL, f))
 		return (ft_lstclear(&p, free), ft_putsyntax_error(NULL));
-	return (p);
+	return (relink(p));
 }
 
 t_list	*out_of_quotes(t_list	*tk)
@@ -373,12 +397,6 @@ t_list	*out_of_quotes(t_list	*tk)
 	{
 		if (tk->type == TOKEN_SPACE)
 			flg = 0;
-		// if (tk->next && ((tk->type == TOKEN_D_Q && tk->next->type == TOKEN_D_Q)
-		// 	|| (tk->type == TOKEN_S_Q && tk->next->type == TOKEN_S_Q)))
-		// {
-		// 	ft_lstadd_back(&p, ft_lstnew(ft_strdup(""), TOKEN_EXPR));
-		// 	tk=tk->next;
-		// }
 		if (tk->pos == 0 && tk->type != TOKEN_D_Q && tk->type != TOKEN_S_Q && tk->type != TOKEN_SPACE)
 		{
 			ft_lstadd_back(&p, ft_lstnew(ft_strdup(tk->token), tk->type));

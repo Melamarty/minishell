@@ -14,7 +14,7 @@ typedef struct s_map
     struct s_map    *next;
 }    t_map;
 
-typedef struct _s_env
+typedef struct s_env
 {
     t_map *env;
     t_map *ex_env;
@@ -27,6 +27,8 @@ typedef struct s_list
 	int				type;
 	int				pos; // 1: in quotes, 0: out quotes
 	int				expand; // 1: should expand
+	int				visited;
+	struct s_list	*prev;
 	struct s_list	*next;
 }	t_list;
 

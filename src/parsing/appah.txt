@@ -1,10 +1,12 @@
 // !/ syntax
 
-)(
-(<)
-(|)
-(a) P
-<  (s)
+
+ls (ls)
+ls )k(
+. a
+ls | ;
+!
+\
 
 
 // !/ garbage value
