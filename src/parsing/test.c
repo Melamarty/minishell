@@ -29,41 +29,6 @@ t_list	*ft_lstcpy(t_list *lst)
 	return (res);
 }
 
-t_list	*flip(t_list *lst)
-{
-	t_list	*res = NULL;
-	t_list	*p;
-	int		i = ft_lstsize(lst);
-	int		j = 0;
-
-	while(i)
-	{
-		j = -1;
-		p = lst;
-		while (++j < i - 1)
-			p = p->next;
-		ft_lstadd_back(&res, ft_lstcpy(p));
-		i--;
-	}
-	p = res;
-	while (p)
-	{
-		if (p->type == TOKEN_BRKT_OPEN)
-		{
-			free(p->token);
-			p->token = ft_strdup(")");
-			p->type = TOKEN_BRKT_CLOSE;
-		}
-		else if (p->type == TOKEN_BRKT_CLOSE)
-		{
-			free(p->token);
-			p->token = ft_strdup("(");
-			p->type = TOKEN_BRKT_OPEN;
-		}
-		p = p->next;
-	}
-	return (res);
-}
 
 void	bash_loop()
 {
@@ -77,13 +42,11 @@ void	bash_loop()
 			exit(0);
 		add_history(cmd);
 		t_list *tokens = tokenizing(cmd);
-		t_list *tk = flip(tokens);
-		free(tokens);
-		aff_list(tk);
+		aff_list(tokens);
 		if (!tokens)
 			continue ;
-		cpy = tk;
-		t_tree *tree = condition(&tk);
+		cpy = tokens;
+		t_tree *tree = condition(&tokens);
 		print_tree(tree, 0);
 		tree_free(tree);
 		free(cmd);
@@ -97,3 +60,39 @@ int main(int ac, char **av, char **env)
 	//t_env *my_env = get_env(env);
 	bash_loop();
 }
+
+// t_list	*flip(t_list *lst)
+// {
+// 	t_list	*res = NULL;
+// 	t_list	*p;
+// 	int		i = ft_lstsize(lst);
+// 	int		j = 0;
+
+// 	while(i)
+// 	{
+// 		j = -1;
+// 		p = lst;
+// 		while (++j < i - 1)
+// 			p = p->next;
+// 		ft_lstadd_back(&res, ft_lstcpy(p));
+// 		i--;
+// 	}
+// 	p = res;
+// 	while (p)
+// 	{
+// 		if (p->type == TOKEN_BRKT_OPEN)
+// 		{
+// 			free(p->token);
+// 			p->token = ft_strdup(")");
+// 			p->type = TOKEN_BRKT_CLOSE;
+// 		}
+// 		else if (p->type == TOKEN_BRKT_CLOSE)
+// 		{
+// 			free(p->token);
+// 			p->token = ft_strdup("(");
+// 			p->type = TOKEN_BRKT_OPEN;
+// 		}
+// 		p = p->next;
+// 	}
+// 	return (res);
+// }

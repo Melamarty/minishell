@@ -53,19 +53,9 @@ t_tree	*command(t_list **tokens)
 			return (node);
 		}
 		if ((*tokens)->type == TOKEN_REDIR_IN)
-		{
-			// if ((*tokens)->next == NULL)
-			// 	return (perror("sysntax (0)"), NULL);
-			// else
 				ft_lstadd_back(&cmd->redir_in, ft_lstnew(ft_strdup((*tokens)->token), 0));
-		}
 		else if ((*tokens)->type == TOKEN_REDIR_OUT)
-		{
-			if ((*tokens)->next == NULL)
-				return (perror("sysntax (0)"), NULL);
-			else
 				ft_lstadd_back(&cmd->redir_out, ft_lstnew(ft_strdup((*tokens)->token), 0));
-		}
 		else if ((*tokens)->type == TOKEN_EXPR)
 		{
 			if (l == 0)
@@ -143,8 +133,8 @@ t_tree	*pipeline(t_list **tokens)
 	(*tokens) = (*tokens)->next;
 	if (!*tokens)
 		exit(1); // syntax error in case of : ls |
-	head->right = right;
-	head->left = pipeline(tokens);
+	head->left = right;
+	head->right = pipeline(tokens);
 	return (head);
 }
 

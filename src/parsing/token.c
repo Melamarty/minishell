@@ -247,9 +247,22 @@ static	int	func1(t_list **tk, t_list **p, t_list **pp, int flg)
 	return (flg);
 }
 
+int is_hight(int type)
+{
+	if (type == TOKEN_OR || type == TOKEN_AND || type == TOKEN_PIPE || type == TOKEN_HEREDOC || type == TOKEN_REDIR_APPEND || type == TOKEN_REDIR_OUT || type == TOKEN_REDIR_IN)
+		return (1);
+	return (0);
+}
+
 static	int	func3(int type1, int type2)
 {
 	if (type2 == TOKEN_BRKT_OPEN && type1 == TOKEN_BRKT_CLOSE)
+		return (type2);
+	if (type1 == TOKEN_BRKT_OPEN && type2 == TOKEN_BRKT_CLOSE)
+		return (type1);
+	if (type1 == TOKEN_BRKT_CLOSE && (is_hight(type2)))
+		return (type2);
+	if (type2 == TOKEN_BRKT_OPEN && (is_hight(type1)))
 		return (type2);
 	if (type2 == TOKEN_HEREDOC && type1 == TOKEN_HEREDOC)
 		return (type1);
