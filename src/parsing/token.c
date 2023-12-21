@@ -6,6 +6,8 @@ int	is_special(char *s)
 		return (TOKEN_OR);
 	else if (!ft_strncmp(s, "&&", 2))
 		return (TOKEN_AND);
+	else if (*s == '&')
+		return (-1);
 	else if (!ft_strncmp(s, ">>", 2))
 		return (TOKEN_REDIR_APPEND);
 	else if (!ft_strncmp(s, "<<", 2))
@@ -13,9 +15,9 @@ int	is_special(char *s)
 	else if (*s == '|')
 		return (TOKEN_PIPE);
 	else if (*s == '(')
-		return (TOKEN_BRACKET_OPEN);
+		return (TOKEN_BRKT_OPEN);
 	else if (*s == ')')
-		return (TOKEN_BRACKET_CLOSE);
+		return (TOKEN_BRKT_CLOSE);
 	else if (*s == '<')
 		return (TOKEN_REDIR_IN);
 	else if (*s == '>')
@@ -41,9 +43,9 @@ char *ft_get_special(int l)
 		return (ft_strdup("<<"));
 	else if (l == TOKEN_PIPE)
 		return (ft_strdup("|"));
-	else if (l == TOKEN_BRACKET_OPEN)
+	else if (l == TOKEN_BRKT_OPEN)
 		return (ft_strdup("("));
-	else if (l == TOKEN_BRACKET_CLOSE)
+	else if (l == TOKEN_BRKT_CLOSE)
 		return (ft_strdup(")"));
 	else if (l == TOKEN_REDIR_IN)
 		return (ft_strdup("<"));
@@ -55,7 +57,7 @@ char *ft_get_special(int l)
 		return (ft_strdup("\'"));
 	else if (l == TOKEN_SPACE)
 		return (ft_strdup(" "));
-	return (ft_strdup("EXPR"));
+	return (NULL);
 }
 
 char	*ft_get_expr(char *s)
@@ -153,6 +155,17 @@ int set_space(t_list **tokens, int flg)
 // 	(*i) += ft_strlen(ft_lstlast(*tokens)->token);
 // }
 
+static int	func5(char *s, int l, int *i, int *flg)
+{
+	if (l == TOKEN_SPACE)
+	{
+		*flg = 1;
+		(*i)++;
+		return (1);
+	}
+	return (0);
+}
+
 t_list	*get_tokens(char *expr)
 {
 	t_list	*tokens;
@@ -168,19 +181,17 @@ t_list	*get_tokens(char *expr)
 	while (expr[i])
 	{
 		l = is_special(expr + i);
+		if (l == -1)
+			return (ft_lstclear(&tokens, free), ft_putsyntax_error(NULL));
 		if (l)
 		{
-			if (l == TOKEN_SPACE)
-			{
-				i++;
-				flg = 1;
+			if (func5(expr, l, &i, &flg))
 				continue ;
-			}
 			flg = set_space(&tokens, flg);
 			ft_lstadd_back(&tokens, ft_lstnew(ft_get_special(l), l));
 			inquotes = func(inquotes, &i, &tokens, expr);
 			if (inquotes == -1)
-				return (ft_lstclear(&tokens, free), NULL);
+				return (ft_lstclear(&tokens, free), ft_putsyntax_error(NULL));
 		}
 		else
 		{
@@ -219,21 +230,118 @@ void	in_out(t_list *tokens)
 	}
 }
 
-static	int	func1(t_list **tk, t_list *p, t_list *pp, int flg)
+static	int	func1(t_list **tk, t_list **p, t_list **pp, int flg)
 {
 	if (flg == 0)
 	{
-		ft_lstadd_back(&p, ft_lstnew(ft_strdup((*tk)->token), TOKEN_EXPR));
-		pp = ft_lstlast(p);
-		pp->expand = (*tk)->expand;
+		ft_lstadd_back(p, ft_lstnew(ft_strdup((*tk)->token), TOKEN_EXPR));
+		*pp = ft_lstlast(*p);
+		(*pp)->expand = (*tk)->expand;
 		return (1);
+	}
+	else if (p)
+	{
+		(*pp) = ft_lstlast(*p);
+		(*pp)->token = ft_strjoin((*pp)->token, (*tk)->token);
+	}
+	return (flg);
+}
+
+static	int	func3(int type1, int type2)
+{
+	if (type2 == TOKEN_BRKT_OPEN && type1 == TOKEN_BRKT_CLOSE)
+		return (type2);
+	if (type2 == TOKEN_HEREDOC && type1 == TOKEN_HEREDOC)
+		return (type1);
+	if (type2 == TOKEN_REDIR_APPEND && type1 == TOKEN_REDIR_APPEND)
+		return (type1);
+	if (type2 == TOKEN_REDIR_IN && type1 == TOKEN_REDIR_IN)
+		return (type1);
+	if (type2 == TOKEN_REDIR_OUT && type1 == TOKEN_REDIR_OUT)
+		return (type1);
+	if (type2 == TOKEN_PIPE && type1 == TOKEN_PIPE)
+		return (type1);
+	if (type2 == TOKEN_OR && type1 == TOKEN_OR)
+		return (type1);
+	if (type2 == TOKEN_AND && type1 == TOKEN_AND)
+		return (type1);
+	if (type2 == TOKEN_REDIR_IN && type1 == TOKEN_REDIR_IN)
+		return (type1);
+	if (type1 == TOKEN_EXPR || type2 == TOKEN_EXPR)
+		return (0);
+	if (type1 == TOKEN_BRKT_CLOSE || type2 == TOKEN_BRKT_CLOSE)
+		return (0);
+	if (type1 == TOKEN_BRKT_OPEN || type2 == TOKEN_BRKT_OPEN)
+		return (0);
+	if (type1 != type2)
+		return (type1);
+	return (0);
+}
+
+static int	func4(int l)
+{
+	if (l == TOKEN_AND || l == TOKEN_OR || l == TOKEN_PIPE || l == TOKEN_HEREDOC
+		|| l == TOKEN_REDIR_APPEND || l == TOKEN_REDIR_OUT || 
+		l == TOKEN_REDIR_IN)
+		return (1);
+	return (0);
+}
+
+static int	func6(int l)
+{
+	if (l == TOKEN_AND || l == TOKEN_OR || l == TOKEN_PIPE)
+		return (1);
+	return (0);
+}
+
+int	is_valid(t_list *a, t_list *b, int f)
+{
+	int	l;
+
+	if (f)
+		return (1);
+	if (!a)
+	{
+		if (func6(b->type))
+			return (1);
+	}
+	else if(!b)
+	{
+		if (func4(a->type))
+			return (1);
 	}
 	else
 	{
-		pp = ft_lstlast(p);
-		pp->token = ft_strjoin(pp->token, (*tk)->token);
+		l = func3(b->type, a->type);
+		if (l)
+			return (1);
 	}
-	return (flg);
+	return (0);
+}
+
+t_list	*syntax_check(t_list *p)
+{
+	t_list	*cpy;
+	t_list	*pp;
+	int		f;
+
+	cpy = p;
+	pp = NULL;
+	f = 0;
+	while (cpy)
+	{
+		if(cpy->type == TOKEN_BRKT_OPEN)
+			f++;
+		else if (cpy->type == TOKEN_BRKT_CLOSE)
+			f--;
+		if (is_valid(pp, cpy, 0))
+			return (ft_lstclear(&p, free), ft_putsyntax_error(NULL));
+		pp = cpy;
+		cpy = cpy->next;
+	}
+	if (is_valid(pp, NULL, f))
+		return (ft_lstclear(&p, free), ft_putsyntax_error(NULL));
+	return (p);
 }
 
 t_list	*out_of_quotes(t_list	*tk)
@@ -250,19 +358,28 @@ t_list	*out_of_quotes(t_list	*tk)
 	l = tk;
 	while (tk)
 	{
-		if ((tk)->pos == 0 && (tk)->type != TOKEN_D_Q && (tk)->type != TOKEN_S_Q && (tk)->type != TOKEN_SPACE)
+		if (tk->type == TOKEN_SPACE)
+			flg = 0;
+		// if (tk->next && ((tk->type == TOKEN_D_Q && tk->next->type == TOKEN_D_Q)
+		// 	|| (tk->type == TOKEN_S_Q && tk->next->type == TOKEN_S_Q)))
+		// {
+		// 	ft_lstadd_back(&p, ft_lstnew(ft_strdup(""), TOKEN_EXPR));
+		// 	tk=tk->next;
+		// }
+		if (tk->pos == 0 && tk->type != TOKEN_D_Q && tk->type != TOKEN_S_Q && tk->type != TOKEN_SPACE)
 		{
-			ft_lstadd_back(&p, ft_lstnew(ft_strdup((tk)->token), (tk)->type));
+			ft_lstadd_back(&p, ft_lstnew(ft_strdup(tk->token), tk->type));
 			pp = ft_lstlast(p);
-			pp->expand = (tk)->expand;
+			pp->expand = tk->expand;
+			pp->pos = tk->pos;
 			flg = 0;
 		}
-		else if((tk)->type != TOKEN_D_Q && (tk)->type != TOKEN_S_Q  && (tk)->type != TOKEN_SPACE)
-			flg = func1(&tk, p, pp, flg);
-		(tk) = (tk)->next;
+		else if(tk->type != TOKEN_D_Q && tk->type != TOKEN_S_Q  && tk->type != TOKEN_SPACE)
+			flg = func1(&tk, &p, &pp, flg);
+		tk = tk->next;
 	}
 	ft_lstclear(&l, free);
-	return (p);
+	return (syntax_check(p));
 }
 
 static int valid(char *s)
@@ -288,6 +405,8 @@ t_list	*tokenizing(char *expr)
 	int		in;
 
 	tokens = get_tokens(expr);
+	if (!tokens)
+		return (NULL);
 	in = 0;
 	p = tokens;
 	while (p)
@@ -308,5 +427,3 @@ t_list	*tokenizing(char *expr)
 	in_out(tokens);
 	return (out_of_quotes(tokens));
 }
-
-t_map

@@ -14,16 +14,15 @@ enum
 	TOKEN_AND,
 	TOKEN_OR,
 	TOKEN_SPACE,
-	TOKEN_BRACKET_OPEN,
-	TOKEN_BRACKET_CLOSE,
+	TOKEN_BRKT_OPEN,
+	TOKEN_BRKT_CLOSE,
 	TOKEN_D_Q,
 	TOKEN_S_Q,
-	TOKEN_END
 } ;
-
 
 t_list	*get_tokens(char *expr);
 t_list	*ft_lstnew(char *content, int type);
+int	ft_lstsize(t_list *lst);
 int		ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 char	*ft_substr(char const *s, unsigned int start, size_t ln);
@@ -41,6 +40,7 @@ char	*ft_strchr(const char *s, int c);
 t_map	*get_env(char **env);
 void	ft_putstr_fd(char *s, int fd);
 void	tree_free(t_tree *tree);
+void	*ft_putsyntax_error(char *s);
 void	print_tree(t_tree	*tree, int c);     /////////////////////////
 void	in_out(t_list *tokens); ///////////
 void aff_list(t_list *lst); ///////////

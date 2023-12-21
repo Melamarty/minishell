@@ -34,7 +34,7 @@ t_tree	*command(t_list **tokens)
 	cmd = set_cmd();
 	if (!cmd)
 		exit(1);
-	if ((*tokens) && (*tokens)->type == TOKEN_BRACKET_OPEN)      ///////////// NON protcted
+	if ((*tokens) && (*tokens)->type == TOKEN_BRKT_OPEN)      ///////////// NON protcted
 	{
 		(*tokens) = (*tokens)->next;
 		node = condition(tokens);
@@ -42,9 +42,9 @@ t_tree	*command(t_list **tokens)
 			(*tokens) = (*tokens)->next;
 		return (node);
 	}
-	while ((*tokens) && level(*tokens) < 1 && (*tokens)->type != TOKEN_BRACKET_CLOSE)
+	while ((*tokens) && level(*tokens) < 1 && (*tokens)->type != TOKEN_BRKT_CLOSE)
 	{
-		if ((*tokens)->type == TOKEN_BRACKET_OPEN)      ///////////// NON protcted
+		if ((*tokens)->type == TOKEN_BRKT_OPEN)      ///////////// NON protcted
 		{
 			(*tokens) = (*tokens)->next;
 			node = condition(tokens);
@@ -54,9 +54,9 @@ t_tree	*command(t_list **tokens)
 		}
 		if ((*tokens)->type == TOKEN_REDIR_IN)
 		{
-			if ((*tokens)->next == NULL)
-				return (perror("sysntax (0)"), NULL);
-			else
+			// if ((*tokens)->next == NULL)
+			// 	return (perror("sysntax (0)"), NULL);
+			// else
 				ft_lstadd_back(&cmd->redir_in, ft_lstnew(ft_strdup((*tokens)->token), 0));
 		}
 		else if ((*tokens)->type == TOKEN_REDIR_OUT)
@@ -87,7 +87,7 @@ void aff_list(t_list *lst)
 {
 	while (lst) //////////////////////////////////////////////////////////////////////
 	{
-		printf("%s --> ", lst->token);
+		printf("%s -((%d))-> ", lst->token, lst->type);
 		lst = lst->next;
 	}
 	printf("\n\n");
@@ -95,7 +95,7 @@ void aff_list(t_list *lst)
 
 int	after_brackets(t_list **tokens)
 {
-	while (*tokens && (*tokens)->type != TOKEN_BRACKET_CLOSE)
+	while (*tokens && (*tokens)->type != TOKEN_BRKT_CLOSE)
 		(*tokens) = (*tokens)->next;
 	if (!*tokens)
 		return (-1);
@@ -106,11 +106,11 @@ int	after_brackets(t_list **tokens)
 t_tree	*condition(t_list **tokens)
 {
 	t_tree	*head;
-	t_tree	*left;
+	t_tree	*right;
 
 	if (!*tokens)
 		return (NULL);
-	left = pipeline(tokens);
+	right = pipeline(tokens);
 	if ((*tokens) && ((*tokens)->type == TOKEN_OR || (*tokens)->type == TOKEN_AND))
 	{
 		if ((*tokens)->type == TOKEN_OR)
@@ -119,32 +119,32 @@ t_tree	*condition(t_list **tokens)
 			head = new_node(NULL, TOKEN_AND);
 	}
 	else
-		return (left);
+		return (right);
 	(*tokens) = (*tokens)->next;
 	if (!*tokens)
 		exit(1); // syntax error in case of : ls &&
-	head->left = left;
-	head->right = condition(tokens);
+	head->right = right;
+	head->left = condition(tokens);
 	return (head);
 }
 
 t_tree	*pipeline(t_list **tokens)
 {
 	t_tree	*head;
-	t_tree	*left;
+	t_tree	*right;
 
 	if (!*tokens)
 		return (NULL);
-	left = command(tokens);
+	right = command(tokens);
 	if ((*tokens) && (*tokens)->type == TOKEN_PIPE)
 		head = new_node(NULL, TOKEN_PIPE);
 	else
-		return (left);
+		return (right);
 	(*tokens) = (*tokens)->next;
 	if (!*tokens)
 		exit(1); // syntax error in case of : ls |
-	head->left = left;
-	head->right = pipeline(tokens);
+	head->right = right;
+	head->left = pipeline(tokens);
 	return (head);
 }
 

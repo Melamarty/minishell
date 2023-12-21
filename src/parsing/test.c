@@ -5,34 +5,95 @@ void lol()
 	system("leaks a.out");
 }
 
+void	*ft_putsyntax_error(char *s)
+{
+	if (!s)
+	{
+		ft_putstr_fd("minishell: syntax error\n", 2);
+		return (NULL);
+	}
+	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+	ft_putstr_fd(s, 2);
+	ft_putstr_fd("'\n", 2);
+	free(s);
+	return (NULL);
+}
+
+t_list	*ft_lstcpy(t_list *lst)
+{
+	t_list	*res = NULL;
+
+	res = ft_lstnew(ft_strdup(lst->token), lst->type);
+	res->expand = lst->expand;
+	res->pos = lst->pos;
+	return (res);
+}
+
+t_list	*flip(t_list *lst)
+{
+	t_list	*res = NULL;
+	t_list	*p;
+	int		i = ft_lstsize(lst);
+	int		j = 0;
+
+	while(i)
+	{
+		j = -1;
+		p = lst;
+		while (++j < i - 1)
+			p = p->next;
+		ft_lstadd_back(&res, ft_lstcpy(p));
+		i--;
+	}
+	p = res;
+	while (p)
+	{
+		if (p->type == TOKEN_BRKT_OPEN)
+		{
+			free(p->token);
+			p->token = ft_strdup(")");
+			p->type = TOKEN_BRKT_CLOSE;
+		}
+		else if (p->type == TOKEN_BRKT_CLOSE)
+		{
+			free(p->token);
+			p->token = ft_strdup("(");
+			p->type = TOKEN_BRKT_OPEN;
+		}
+		p = p->next;
+	}
+	return (res);
+}
+
 void	bash_loop()
 {
 	t_list *cpy;
 	char	*cmd;
 	cmd = NULL;
-	// while (1)
-	// {
+	while (1)
+	{
 		cmd = readline("\e[1;32mminishell >> \e[0m");
+		if (!cmd)
+			exit(0);
+		add_history(cmd);
 		t_list *tokens = tokenizing(cmd);
+		t_list *tk = flip(tokens);
+		free(tokens);
+		aff_list(tk);
 		if (!tokens)
-		{
-			ft_putstr_fd("minishell: syntax error\n", 2);
-			// continue ;
-			exit(1);
-		}
-		aff_list(tokens);
-		cpy = tokens;
-		t_tree *tree = condition(&tokens);
+			continue ;
+		cpy = tk;
+		t_tree *tree = condition(&tk);
 		print_tree(tree, 0);
 		tree_free(tree);
 		free(cmd);
 		ft_lstclear(&cpy, free);
-	// }
+	}
 }
 
 int main(int ac, char **av, char **env)
 {
-	atexit(lol);
+	//atexit(lol);
 	//t_env *my_env = get_env(env);
 	bash_loop();
 }
