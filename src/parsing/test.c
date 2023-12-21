@@ -5,31 +5,6 @@ void lol()
 	system("leaks a.out");
 }
 
-void	*ft_putsyntax_error(char *s)
-{
-	if (!s)
-	{
-		ft_putstr_fd("minishell: syntax error\n", 2);
-		return (NULL);
-	}
-	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-	ft_putstr_fd(s, 2);
-	ft_putstr_fd("'\n", 2);
-	free(s);
-	return (NULL);
-}
-
-t_list	*ft_lstcpy(t_list *lst)
-{
-	t_list	*res = NULL;
-
-	res = ft_lstnew(ft_strdup(lst->token), lst->type);
-	res->expand = lst->expand;
-	res->pos = lst->pos;
-	return (res);
-}
-
-
 void	bash_loop()
 {
 	t_list *cpy;
@@ -60,6 +35,17 @@ int main(int ac, char **av, char **env)
 	//t_env *my_env = get_env(env);
 	bash_loop();
 }
+
+
+// t_list	*ft_lstcpy(t_list *lst)
+// {
+// 	t_list	*res = NULL;
+
+// 	res = ft_lstnew(ft_strdup(lst->token), lst->type);
+// 	res->expand = lst->expand;
+// 	res->pos = lst->pos;
+// 	return (res);
+// }
 
 // t_list	*flip(t_list *lst)
 // {

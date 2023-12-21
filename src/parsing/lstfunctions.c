@@ -1,4 +1,16 @@
-#include "../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lstfunctions.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/21 20:36:38 by mozennou          #+#    #+#             */
+/*   Updated: 2023/12/21 20:37:31 by mozennou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parsing.h"
 
 t_list	*ft_lstnew(char *content, int type)
 {
@@ -59,17 +71,3 @@ void	ft_lstclear(t_list **lst, void (*del)(void*))
 		p = (*lst);
 	}
 }
-
-int	ft_lstsize(t_list *lst)
-{
-	int	res;
-
-	res = 0;
-	while (lst)
-	{
-		lst = lst->next;
-		res++;
-	}
-	return (res);
-}
-

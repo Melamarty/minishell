@@ -41,6 +41,12 @@ t_map	*get_env(char **env);
 void	ft_putstr_fd(char *s, int fd);
 void	tree_free(t_tree *tree);
 void	*ft_putsyntax_error(char *s);
+t_map	*ft_envlast(t_map *env);
+char	*get_arg(char *s, int l);
+int		is_special(char *s);
+int		set_space(t_list **tokens, int flg);
+char	*ft_get_expr(char *s);
+t_list	*syntax_check(t_list *p);
 void	print_tree(t_tree	*tree, int c);     /////////////////////////
 void	in_out(t_list *tokens); ///////////
 void aff_list(t_list *lst); ///////////
