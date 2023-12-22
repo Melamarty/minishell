@@ -28,6 +28,7 @@ typedef struct s_list
 	int				pos; // 1: in quotes, 0: out quotes
 	int				expand; // 1: should expand
 	int				visited;
+	struct s_list	*last;
 	struct s_list	*prev;
 	struct s_list	*next;
 }	t_list;

@@ -6,89 +6,11 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 21:44:22 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/21 21:55:56 by mozennou         ###   ########.fr       */
+/*   Updated: 2023/12/22 10:09:31 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-
-int	set_space(t_list **tokens, int flg)
-{
-	if (flg)
-		ft_lstadd_back(tokens, ft_lstnew(ft_strdup(" "), TOKEN_SPACE));
-	return (0);
-}
-
-void	in_out(t_list *tokens)
-{
-	t_list	*p;
-	t_list	*pp;
-	int		inquotes;
-
-	inquotes = 0;
-	p = tokens;
-	pp = NULL;
-	while (p)
-	{
-		if (p->type == TOKEN_EXPR)
-		{
-			if (p->next
-				&& (p->next->type == TOKEN_D_Q || p->next->type == TOKEN_S_Q))
-				p->pos = 1;
-			else if (pp && (pp->type == TOKEN_D_Q || pp->type == TOKEN_S_Q))
-				p->pos = 1;
-			else
-				p->pos = 0;
-		}
-		else
-			p->pos = 0;
-		pp = p;
-		p = p->next;
-	}
-}
-
-int	is_valid(t_list *a, t_list *b, int f)
-{
-	int	l;
-
-	if (f)
-		return (1);
-	if (!a)
-	{
-		if (func6(b->type))
-			return (1);
-	}
-	else if (!b)
-	{
-		if (func4(a->type))
-			return (1);
-	}
-	else
-	{
-		l = func3(b->type, a->type);
-		if (l)
-			return (1);
-	}
-	return (0);
-}
-
-t_list	*relink(t_list *p)
-{
-	t_list	*pp;
-	t_list	*cpy;
-
-	cpy = p;
-	pp = NULL;
-	while (cpy)
-	{
-		if (pp)
-			cpy->prev = pp;
-		cpy->visited = 0;
-		pp = cpy;
-		cpy = cpy->next;
-	}
-	return (p);
-}
 
 t_list	*syntax_check(t_list *p)
 {
@@ -115,4 +37,67 @@ t_list	*syntax_check(t_list *p)
 	if (is_valid(pp, NULL, f))
 		return (ft_lstclear(&p, free), ft_putsyntax_error(NULL));
 	return (relink(p));
+}
+
+int	is_hight(int type)
+{
+	if (type == TOKEN_OR || type == TOKEN_AND || type == TOKEN_PIPE
+		|| type == TOKEN_HEREDOC || type == TOKEN_REDIR_APPEND
+		|| type == TOKEN_REDIR_OUT || type == TOKEN_REDIR_IN)
+		return (1);
+	return (0);
+}
+
+static	int	func1(t_list **tk, t_list **p, t_list **pp, int flg)
+{
+	if (flg == 0)
+	{
+		ft_lstadd_back(p, ft_lstnew(ft_strdup((*tk)->token), TOKEN_EXPR));
+		*pp = ft_lstlast(*p);
+		(*pp)->expand = (*tk)->expand;
+		return (1);
+	}
+	else if (p)
+	{
+		(*pp) = ft_lstlast(*p);
+		(*pp)->token = ft_strjoin((*pp)->token, (*tk)->token);
+	}
+	return (flg);
+}
+
+static int	func2(t_list *tk, t_list **p, t_list **pp)
+{
+	ft_lstadd_back(p, ft_lstnew(ft_strdup(tk->token), tk->type));
+	(*pp) = ft_lstlast(*p);
+	(*pp)->expand = tk->expand;
+	(*pp)->pos = tk->pos;
+	return (0);
+}
+
+t_list	*out_of_quotes(t_list	*tk)
+{
+	t_list	*p;
+	t_list	*pp;
+	t_list	*l;
+	char	*s;
+	int		flg;
+
+	p = NULL;
+	s = NULL;
+	flg = 0;
+	l = tk;
+	while (tk)
+	{
+		if (tk->type == TOKEN_SPACE)
+			flg = 0;
+		if (tk->pos == 0 && tk->type != TOKEN_D_Q
+			&& tk->type != TOKEN_S_Q && tk->type != TOKEN_SPACE)
+			flg = func2(tk, &p, &pp);
+		else if (tk->type != TOKEN_D_Q && tk->type != TOKEN_S_Q
+			&& tk->type != TOKEN_SPACE)
+			flg = func1(&tk, &p, &pp, flg);
+		tk = tk->next;
+	}
+	ft_lstclear(&l, free);
+	return (syntax_check(p));
 }

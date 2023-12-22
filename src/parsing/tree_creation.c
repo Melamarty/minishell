@@ -73,15 +73,6 @@ t_tree	*command(t_list **tokens)
 	node = new_node(cmd, TOKEN_EXPR);
 	return (node);
 }
-void aff_list(t_list *lst)
-{
-	while (lst) //////////////////////////////////////////////////////////////////////
-	{
-		printf("%s -((%d))-> ", lst->token, lst->type);
-		lst = lst->next;
-	}
-	printf("\n\n");
-}
 
 int	after_brackets(t_list **tokens)
 {

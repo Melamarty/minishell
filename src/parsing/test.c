@@ -5,6 +5,23 @@ void lol()
 	system("leaks a.out");
 }
 
+void aff_list(t_list *lst)
+{
+	while (lst->next) //////////////////////////////////////////////////////////////////////
+	{
+		printf("%s -((%d))-> ", lst->token, lst->type);
+		lst = lst->next;
+	}
+	printf("%s -((%d))-> ", lst->token, lst->type);
+	printf("\n");
+	while (lst) //////////////////////////////////////////////////////////////////////
+	{
+		printf("%s -((%d))-> ", lst->token, lst->type);
+		lst = lst->prev;
+	}
+	printf("\n\n");
+}
+
 void	bash_loop()
 {
 	t_list *cpy;
