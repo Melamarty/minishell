@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:49:39 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/21 21:24:26 by mozennou         ###   ########.fr       */
+/*   Updated: 2023/12/23 15:27:19 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,67 @@ static int	func(int inquotes, int *i, t_list **tokens, char *expr)
 	return (0);
 }
 
+int	ft_isalnum(int c)
+{
+	if ((c <= 'z' && c >= 'a') || (c <= 'Z' && c >= 'A')
+		|| (c >= '0' && c <= '9') || c == '-' || c == '$')
+		return (1);
+	return (0);
+}
+
+static void	func0(char *res, char *s)
+{
+	int	flg;
+	int	l;
+
+	l = 0;
+	flg = 0;
+	while (s[l] && (!is_special(s + l) || is_special(s + l) == 101)
+		&& ft_isalnum(s[l]))
+	{
+		if (s[l] == '$')
+		{
+			if (!flg)
+				flg = 1;
+			else
+				break ;
+		}
+		res[l] = s[l];
+		l++;
+	}
+	res[l] = 0;
+}
+
+char	*ft_get_env(char *s)
+{
+	char	*res;
+	int		l;
+	int		flg;
+
+	flg = 0;
+	l = 0;
+	if (s[l + 1] == '?')
+		return (ft_strdup("$?"));
+	else if (s[l + 1] == '$')
+		return (ft_strdup("$$"));
+	while (s[l] && (!is_special(s + l) || is_special(s + l) == 101)
+		&& ft_isalnum(s[l]))
+	{
+		if (s[l++] == '$')
+		{
+			if (!flg)
+				flg = 1;
+			else
+				break ;
+		}
+	}
+	res = malloc(l + 1);
+	if (!res)
+		return (NULL);
+	func0(res, s);
+	return (res);
+}
+
 t_list	*get_tokens(char *expr)
 {
 	t_list	*tokens;
@@ -96,7 +157,7 @@ t_list	*get_tokens(char *expr)
 		l = is_special(expr + i);
 		if (l == -1)
 			return (ft_lstclear(&tokens, free), ft_putsyntax_error(NULL));
-		if (l)
+		if (l && l != 101)
 		{
 			if (func5(expr, l, &i, &flg))
 				continue ;
@@ -105,6 +166,11 @@ t_list	*get_tokens(char *expr)
 			inquotes = func(inquotes, &i, &tokens, expr);
 			if (inquotes == -1)
 				return (ft_lstclear(&tokens, free), ft_putsyntax_error(NULL));
+		}
+		else if (l == 101)
+		{
+			flg = set_space(&tokens, flg);
+			ft_lstadd_back(&tokens, ft_lstnew(ft_get_env(expr + i), TOKEN_EXPR));
 		}
 		else
 			flg = func9(&tokens, flg, i, expr);

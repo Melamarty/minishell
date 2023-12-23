@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:39:40 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/21 20:48:58 by mozennou         ###   ########.fr       */
+/*   Updated: 2023/12/23 14:07:38 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,7 @@ int	is_special(char *s)
 		return (TOKEN_BRKT_CLOSE);
 	else if (*s == '<')
 		return (TOKEN_REDIR_IN);
+	else if (*s == '$')
+		return (101);
 	return (func_is_special(s));
 }

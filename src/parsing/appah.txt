@@ -1,16 +1,7 @@
 // !/ syntax
 
-
-minishell >> s |<s
-minishell: syntax error
-
-minishell >> (<a)
-minishell: syntax error
-
-minishell >> <f(a|b)
-minishell: syntax error
-
-minishell >> <(c)
+<< $US'ER'
+<< -((0))-> $USER -((1))-> 
 
 
 // !/ garbage value
@@ -29,17 +20,3 @@ minishell >> <(c)
 
 &&a 
 
-
-
-
-
-
-
-
-
-
-
-
-t9abi lmla7:
-
-<<delimiter (cmd)

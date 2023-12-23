@@ -9,7 +9,7 @@ void aff_list(t_list *lst)
 {
 	while (lst) //////////////////////////////////////////////////////////////////////
 	{
-		printf("%s -((%d))-> ", lst->token, lst->expand);
+		printf("%s --> ", lst->token);
 		lst = lst->next;
 	}
 	printf("\n\n");

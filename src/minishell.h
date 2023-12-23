@@ -3,9 +3,11 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
+# include <signal.h>
 
 typedef struct s_map
 {
@@ -28,6 +30,7 @@ typedef struct s_list
 	int				pos; // 1: in quotes, 0: out quotes
 	int				expand; // 1: should expand
 	int				visited;
+	int				fd;
 	struct s_list	*last;
 	struct s_list	*prev;
 	struct s_list	*next;

@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 21:26:10 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/22 10:35:44 by mozennou         ###   ########.fr       */
+/*   Updated: 2023/12/23 15:33:08 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ t_list	*in_out(t_list *tokens)
 {
 	t_list	*p;
 	t_list	*pp;
-	int		inquotes;
 
-	inquotes = 0;
 	p = tokens;
 	pp = NULL;
 	while (p)
@@ -36,6 +34,8 @@ t_list	*in_out(t_list *tokens)
 				&& (p->next->type == TOKEN_D_Q || p->next->type == TOKEN_S_Q))
 				p->pos = 1;
 			else if (pp && (pp->type == TOKEN_D_Q || pp->type == TOKEN_S_Q))
+				p->pos = 1;
+			else if (pp && p->expand == 1 && pp->type == TOKEN_EXPR)
 				p->pos = 1;
 			else
 				p->pos = 0;

@@ -52,6 +52,9 @@ t_list	*in_out(t_list *tokens);
 t_list	*relink(t_list *p);
 int		is_hight(int type);
 t_list	*out_of_quotes(t_list	*tk);
+
+char	*ft_itoa(int n);
+int		read_heredoc(char *limiter);
 void	print_tree(t_tree	*tree, int c);     /////////////////////////
 void aff_list(t_list *lst); ///////////
 

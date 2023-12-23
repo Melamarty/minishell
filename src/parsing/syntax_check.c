@@ -6,11 +6,31 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 21:44:22 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/23 09:50:09 by mozennou         ###   ########.fr       */
+/*   Updated: 2023/12/23 13:25:42 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
+
+static int	func(t_list *cpy, t_list *pp, t_list *p)
+{
+	if (is_valid(pp, cpy, 0))
+	{
+		ft_lstclear(&p, free);
+		ft_putsyntax_error(NULL);
+		return (1);
+	}
+	if (pp && pp->type == TOKEN_HEREDOC && cpy->type == TOKEN_EXPR)
+	{
+		cpy->fd = read_heredoc(cpy->token);
+		if (cpy->fd == -1)
+		{
+			ft_lstclear(&p, free);
+			return (1);
+		}
+	}
+	return (0);
+}
 
 t_list	*syntax_check(t_list *p)
 {
@@ -23,14 +43,15 @@ t_list	*syntax_check(t_list *p)
 	f = 0;
 	while (cpy)
 	{
+		cpy->fd = -1;
 		if (cpy->type == TOKEN_BRKT_OPEN)
 			f++;
 		else if (cpy->type == TOKEN_BRKT_CLOSE)
 			f--;
 		if (f < 0 || ft_strchr(cpy->token, ';'))
 			return (ft_lstclear(&p, free), ft_putsyntax_error(NULL));
-		if (is_valid(pp, cpy, 0))
-			return (ft_lstclear(&p, free), ft_putsyntax_error(NULL));
+		if (func(cpy, pp, p))
+			return (NULL);
 		pp = cpy;
 		cpy = cpy->next;
 	}
