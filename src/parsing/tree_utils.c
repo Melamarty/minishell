@@ -54,6 +54,16 @@ void	print_tree(t_tree	*tree, int c)
         printf("%s ->\n", tree->cmd->cmd);
     else
         printf("%d ->\n", tree->type);
+	if (tree->type == 0)
+	{
+		t_list *tmp ;
+		tmp = tree->cmd->redir_in;
+		while (tmp)
+		{
+			printf("redir_in: %s\n", tmp->token);
+			tmp = tmp->next;
+		}
+	}
     print_tree(tree->left, c + 5);
 }
 

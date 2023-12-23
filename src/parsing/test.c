@@ -7,17 +7,10 @@ void lol()
 
 void aff_list(t_list *lst)
 {
-	while (lst->next) //////////////////////////////////////////////////////////////////////
-	{
-		printf("%s -((%d))-> ", lst->token, lst->type);
-		lst = lst->next;
-	}
-	printf("%s -((%d))-> ", lst->token, lst->type);
-	printf("\n");
 	while (lst) //////////////////////////////////////////////////////////////////////
 	{
-		printf("%s -((%d))-> ", lst->token, lst->type);
-		lst = lst->prev;
+		printf("%s -((%d))-> ", lst->token, lst->expand);
+		lst = lst->next;
 	}
 	printf("\n\n");
 }
@@ -38,7 +31,7 @@ void	bash_loop()
 			continue ;
 		aff_list(tokens);
 		cpy = tokens;
-		t_tree *tree = condition(&tokens);
+		t_tree *tree = condition(ft_lstlast(tokens));
 		print_tree(tree, 0);
 		tree_free(tree);
 		free(cmd);

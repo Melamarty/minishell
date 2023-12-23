@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 21:44:22 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/22 10:09:31 by mozennou         ###   ########.fr       */
+/*   Updated: 2023/12/23 09:50:09 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,11 @@ t_list	*syntax_check(t_list *p)
 
 int	is_hight(int type)
 {
-	if (type == TOKEN_OR || type == TOKEN_AND || type == TOKEN_PIPE
-		|| type == TOKEN_HEREDOC || type == TOKEN_REDIR_APPEND
-		|| type == TOKEN_REDIR_OUT || type == TOKEN_REDIR_IN)
+	if (type == TOKEN_OR || type == TOKEN_AND || type == TOKEN_PIPE)
 		return (1);
+	else if (type == TOKEN_HEREDOC || type == TOKEN_REDIR_APPEND
+		|| type == TOKEN_REDIR_OUT || type == TOKEN_REDIR_IN)
+		return (2);
 	return (0);
 }
 

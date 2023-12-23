@@ -1,12 +1,16 @@
 // !/ syntax
 
 
-ls (ls)
-ls )k(
-. a
-ls | ;
-!
-\
+minishell >> s |<s
+minishell: syntax error
+
+minishell >> (<a)
+minishell: syntax error
+
+minishell >> <f(a|b)
+minishell: syntax error
+
+minishell >> <(c)
 
 
 // !/ garbage value
@@ -25,3 +29,17 @@ ls | ;
 
 &&a 
 
+
+
+
+
+
+
+
+
+
+
+
+t9abi lmla7:
+
+<<delimiter (cmd)

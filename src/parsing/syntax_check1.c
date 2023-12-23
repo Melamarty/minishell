@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:42:04 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/22 10:02:42 by mozennou         ###   ########.fr       */
+/*   Updated: 2023/12/23 10:14:46 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,12 @@
 
 static int	func33(int type1, int type2)
 {
-	if (type2 == TOKEN_PIPE && type1 == TOKEN_PIPE)
-		return (type1);
-	if (type2 == TOKEN_OR && type1 == TOKEN_OR)
-		return (type1);
-	if (type2 == TOKEN_AND && type1 == TOKEN_AND)
-		return (type1);
-	if (type2 == TOKEN_REDIR_IN && type1 == TOKEN_REDIR_IN)
-		return (type1);
+	if (is_hight(type2) == 2 && is_hight(type1) == 2)
+		return (1);
+	if (is_hight(type2) == 1 && is_hight(type1) == 1)
+		return (1);
+	if (is_hight(type2) == 1 && is_hight(type1) == 2)
+		return (0);
 	if (type1 == TOKEN_EXPR || type2 == TOKEN_EXPR)
 		return (0);
 	if (type1 == TOKEN_BRKT_CLOSE || type2 == TOKEN_BRKT_CLOSE)
@@ -29,32 +27,28 @@ static int	func33(int type1, int type2)
 	if (type1 == TOKEN_BRKT_OPEN || type2 == TOKEN_BRKT_OPEN)
 		return (0);
 	if (type1 != type2)
-		return (type1);
+		return (1);
 	return (0);
 }
 
 static	int	func3(int type1, int type2)
 {
 	if (type2 == TOKEN_BRKT_OPEN && type1 == TOKEN_BRKT_CLOSE)
-		return (type2);
+		return (1);
 	if (type1 == TOKEN_BRKT_OPEN && type2 == TOKEN_BRKT_CLOSE)
-		return (type1);
-	if (type1 == TOKEN_BRKT_CLOSE && (is_hight(type2)))
-		return (type1);
+		return (1);
+	if (type1 == TOKEN_BRKT_CLOSE && is_hight(type2) == 1)
+		return (1);
 	if (type2 == TOKEN_BRKT_CLOSE && type1 == TOKEN_EXPR)
-		return (type2);
-	if (type2 == TOKEN_BRKT_OPEN && (is_hight(type1)))
-		return (type2);
+		return (1);
+	if (type2 == TOKEN_BRKT_OPEN && (is_hight(type1)) == 1)
+		return (1);
 	if (type1 == TOKEN_BRKT_OPEN && type2 == TOKEN_EXPR)
-		return (type1);
-	if (type2 == TOKEN_HEREDOC && type1 == TOKEN_HEREDOC)
-		return (type1);
-	if (type2 == TOKEN_REDIR_APPEND && type1 == TOKEN_REDIR_APPEND)
-		return (type1);
-	if (type2 == TOKEN_REDIR_IN && type1 == TOKEN_REDIR_IN)
-		return (type1);
-	if (type2 == TOKEN_REDIR_OUT && type1 == TOKEN_REDIR_OUT)
-		return (type1);
+		return (1);
+	if (type1 == TOKEN_BRKT_OPEN && is_hight(type2) == 2)
+		return (1);
+	if (type1 == TOKEN_BRKT_CLOSE && is_hight(type2) == 2)
+		return (1);
 	return (func33(type1, type2));
 }
 

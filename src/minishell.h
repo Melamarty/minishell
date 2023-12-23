@@ -36,6 +36,7 @@ typedef struct s_list
 typedef struct s_cmd
 {
 	char			*cmd;
+	int				expand;
 	t_list			*args;
 	t_list			*redir_in;
 	t_list			*redir_out;
