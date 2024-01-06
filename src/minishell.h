@@ -61,6 +61,7 @@ typedef struct s_adress
 {
 	void			*addr;
 	struct s_adress	*next;
+	int index;
 }	t_adress;
 
 //////////////////////////////////

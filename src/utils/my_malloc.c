@@ -26,7 +26,7 @@ void ft_addr_clear(t_adress **head)
 		return ;
 	while (*head)
 	{
-		// printf ("free %p\n", (*head)->addr);
+		// printf ("free  %p index %d\n", (*head)->addr, (*head)->index);
 		tmp = *head;
 		*head = (*head)->next;
 		free(tmp->addr);
@@ -37,11 +37,16 @@ void ft_addr_clear(t_adress **head)
 t_adress *ft_addrnew(void *addr)
 {
 	t_adress *new;
+	static int i = 0;		
 
 	new = malloc(sizeof(t_adress));
+	// printf ("addr %p\n", addr);
 	if (!new)
 		return (NULL);
 	new->addr = addr;
+	new->index = i;
+	// printf ("new %p index %d\n", new, new->index);
+	i++;
 	new->next = NULL;
 	return (new);
 }
@@ -54,10 +59,10 @@ void	*my_malloc(size_t size, int mode)
 	if (!mode)
 	{
 		ptr = malloc(size);
-		// printf ("malloc %p\n", ptr);
 		if (!ptr)
 			return (ft_addr_clear(&head), exit(1), NULL);
 		ft_addr_back(&head, ft_addrnew(ptr));
+		// printf ("malloc %p\n", ptr);
 		return (ptr);
 	}
 	else

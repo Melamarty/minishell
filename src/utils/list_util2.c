@@ -8,7 +8,7 @@ int	env_add_back(t_map **env, char *key, char *val)
 	head = NULL;
 	if (*env)
 		head = *env;
-	new = malloc(sizeof(t_map));
+	new = my_malloc(sizeof(t_map), 0);
 	if (!new)
 		return (0);
 	new->key = ft_strdup(key);
@@ -45,7 +45,7 @@ void	ft_envadd_back(t_map **lst, t_map *new)
 int	export_add_back(t_map **env, char *key)
 {
 	t_map	*new;
-	new = malloc(sizeof(t_map));
+	new = my_malloc(sizeof(t_map), 0);
 	if (!new)
 		return (0);
 	new->key = ft_strdup(key);

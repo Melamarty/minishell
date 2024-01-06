@@ -129,18 +129,15 @@ char **set_args(char *file, t_list *args)
 	int		i;
 
 	args_len = list_len(args);
-	e_args = my_malloc(args_len * sizeof(char *) + 1, 0);
-	i = 0;
+	e_args =my_malloc((args_len + 2)* sizeof(char *), 0);
+	i = 1;
 	e_args[0] = file;
-	while (++i < args_len + 1)
+	while (args)
 	{
-		//printf("entered\n");
-		e_args[i] = args->token;
+		e_args[i++] = args->token;
 		args = args->next;
 	}
 	e_args[i] = NULL;
-	//printf("%s\n", e_args[1]);
-	//exit (0);
 	return e_args;
 }
 
