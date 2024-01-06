@@ -69,13 +69,12 @@ int	print_export_env(t_env **envr)
 	t_map *sorted;
 
 	tmp = NULL;
+	sorted = NULL;
 	if ((*envr)->env)
 	{
 		tmp = duplicate_env((*envr)->env);
 		sorted = sort_env(tmp);
 	}
-	//if(tmp)
-	print_export(tmp, (*envr)->ex_env);
-	// if (tmp)
+	print_export(sorted, (*envr)->ex_env);
 	return (1);
 }

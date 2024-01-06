@@ -24,24 +24,6 @@ void	sort_ex_env(t_map **env)
 	}
 }
 
-int	change_val(t_map**env, char *key, char *val)
-{
-	t_map	*tmp;
-	char	*hlp;
-
-	tmp = *env;
-	while (tmp && ft_strcmp(tmp->key, key))
-		tmp = tmp->next;
-	hlp = tmp->key;
-	tmp->key = key;
-	if (val)
-	{
-		hlp = tmp->val;
-		tmp->val = val;
-	}
-	return (1);
-}
-
 void	append_var(t_map **env, t_map *var)
 {
 	t_map	*tmp;
@@ -54,6 +36,14 @@ void	append_var(t_map **env, t_map *var)
 	tmp->val = ft_strjoin(tmp->val, var->val);
 }
 
+void	add_var(t_env**env, t_map *var, t_list *tmp )
+{
+	unset(env, tmp);
+	if (var->val)
+		env_add_back(&(*env)->env, var->key, var->val);
+	else
+		export_add_back(&(*env)->ex_env, var->key);
+}
 int	export_args(t_env **env, t_list *args)
 {
 	t_map	*var;
@@ -69,14 +59,12 @@ int	export_args(t_env **env, t_list *args)
 		tmp->next = NULL;
 		if (var && append && var->val && is_exist((*env)->env, var->key))
 			append_var(&(*env)->env, var);
+		else if (is_exist((*env)->env, args->token) && !var->val)
+			append += 0;
+		else if (!append && var->val)
+			env_add_back(&(*env)->env, var->key, var->val);
 		else if (var)
-		{
-			unset(env, tmp);
-			if (var->val)
-				env_add_back(&(*env)->env, var->key, var->val);
-			else
-				export_add_back(&(*env)->ex_env, var->key);
-		}
+			add_var(env, var, tmp);
 		args = args->next;
 	}
 	return (1);

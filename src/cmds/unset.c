@@ -2,47 +2,54 @@
 
 t_map	*unset_var(t_map *env, char *key)
 {
-	t_map	*head;
-	t_map	*prev;
+	t_map *new = NULL;
+	t_map *head = NULL;
+	t_map *prev = NULL;
 
-	head = env;
-	if (env && (!env->next || !ft_strcmp(env->key, key)))
-		return (env = env->next, env);
-	while (env && key && ft_strcmp(env->key, key))
+	while (env)
 	{
-		prev = env;
+		if (ft_strcmp(env->key, key))
+		{
+			new = my_malloc(sizeof(t_map), 0);
+			new->key = env->key;
+			new->val = env->val;
+		
+			if (head == NULL)
+				head = new;
+			else
+				prev->next = new;
+			prev = new;
+		}
 		env = env->next;
 	}
-	if (!env)
-		return (head);
-	if (env->next)
-	{
-		env = prev;
-		env->next = prev->next->next;
-		prev->next = NULL;
-	}
-	else
-	{
-		env = prev;
-		env->next = NULL;
-	}
-	return (head);
+	return head;
 }
+
 
 int	unset(t_env **envr, t_list *args)
 {
 	t_map	*tmp;
+	t_map 	*tmp2;
+	int		i;
 
 	if (!args || !args->token)
-		return ((*envr)->last_exit = 0, 0);
+		return ((*envr)->last_exit = 0, 1);
 	while (args)
 	{
-		tmp = unset_var((*envr)->env, args->token);
-		(*envr)->env = tmp;
-		tmp = unset_var((*envr)->ex_env, args->token);
-		(*envr)->ex_env = tmp;
+		tmp2 = parse_param(args->token, &i, *envr);
+		if (tmp2)
+		{
+			tmp = unset_var((*envr)->env, args->token);
+			(*envr)->env = tmp;
+			tmp = unset_var((*envr)->ex_env, args->token);
+			(*envr)->ex_env = tmp;
+		}
+		else
+			(*envr)->last_exit = -1;
 		args = args->next;
 	}
+	if ((*envr)->last_exit == -1)
+		return ( (*envr)->last_exit = 1, 0);
 	(*envr)->last_exit = 0;
 	return (1);
 }

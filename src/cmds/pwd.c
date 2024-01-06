@@ -8,7 +8,7 @@ int	pwd(t_cmd *cmd, t_env *env)
 	{
 		env->last_exit = 1;
 		write(2, "pwd: too many arguments\n", 24);
-		return (1);
+		return (0);
 	}
 	getcwd(path, 1024);
 	putstr(path);
