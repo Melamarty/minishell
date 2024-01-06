@@ -1,0 +1,5 @@
+minishell >> $a
+minishell: $a: command not found
+
+
+exit status

@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 int	ft_strcmp(char *str1, char *str2)
 {
@@ -13,6 +13,7 @@ int	ft_strcmp(char *str1, char *str2)
 	}
 	return (0);
 }
+
 int	ft_strncmp(char *str1, char *str2, int n)
 {
 	int i;
@@ -25,4 +26,9 @@ int	ft_strncmp(char *str1, char *str2, int n)
 		i++;
 	}
 	return (0);
+}
+
+int	ft_isalnum(int c)
+{
+    return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'));
 }

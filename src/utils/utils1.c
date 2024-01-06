@@ -1,53 +1,66 @@
 #include "../minishell.h"
 
-char	*ft_strdup(const char *s)
+char	*ft_strjoin(char *s1,char *s2)
 {
-	char	*res;
-	int		len;
-	int		i;
+	size_t i;
+	size_t j;
+	char *str;
 
-	i = -1;
-	len = ft_strlen((char *)s);
-	res = (char *)malloc(len + 1);
-	if (res == NULL)
+	if(!s1 && !s2)
 		return (NULL);
-	while (++i < len)
-		res[i] = s[i];
-	res[i] = '\0';
-	return (res);
+	if (s1 == NULL)
+		s1 = ft_strdup("");
+	if (s2 == NULL)
+		s2 = "";
+	str = (char *)my_malloc(ft_strlen(s1) + ft_strlen(s2) + 1, 0);
+	if (!str)
+		return NULL;
+	i = 0;
+	j = 0;
+	while(s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}  
+	while(s2[j])
+		str[i++] = s2[j++];
+	str[i] = '\0';
+	//free(s1);
+	return (str);
 }
 
-char	*ft_strjoin(char const *a, char const *b)
+char	*ft_strjoin2(char *s1,char *s2)
 {
-	int		i;
-	int		a_ln;
-	int		b_ln;
-	char	*res;
+	size_t i;
+	size_t j;
+	char *str;
 
-	if (!a && !b)
+	if(!s1 && !s2)
 		return (NULL);
-	if (!a)
-		return (ft_strdup(b));
-	if (!b)
-		return (ft_strdup(a));
-	a_ln = ft_strlen((char *)a);
-	b_ln = ft_strlen((char *)b);
-	res = (char *)malloc(a_ln + b_ln + 1);
-	if (!res)
-		return (res);
-	i = -1;
-	while (++i < a_ln)
-		res[i] = a[i];
-	i = -1;
-	while (++i < b_ln)
-		res[a_ln + i] = b[i];
-	res[a_ln + i] = '\0';
-	return (res);
+	if (s1 == NULL)
+		s1 = ft_strdup("");
+	if (s2 == NULL)
+		s2 = "";
+	str = (char *)my_malloc(ft_strlen(s1) + ft_strlen(s2) + 1, 0);
+	if (!str)
+		return NULL;
+	i = 0;
+	j = 0;
+	while(s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}  
+	while(s2[j])
+		str[i++] = s2[j++];
+	str[i] = '\0';
+	// free(s1);
+	return (str);
 }
 
-int	ft_strlen(char *str)
+size_t	ft_strlen(char *str)
 {
-	int	i;
+	size_t	i;
 
 	i = -1;
 	while (str[++i]);

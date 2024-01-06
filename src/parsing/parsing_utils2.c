@@ -6,29 +6,11 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:39:40 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/23 14:07:38 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/05 15:11:28 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-
-int	ft_strncmp(const char *a, const char *b, size_t n)
-{
-	size_t			i;
-	unsigned char	*p;
-	unsigned char	*pp;
-
-	i = 0;
-	p = (unsigned char *)a;
-	pp = (unsigned char *)b;
-	while (i < n && (p[i] || pp[i]))
-	{
-		if (p[i] != pp[i])
-			return (p[i] - pp[i]);
-		i++;
-	}
-	return (0);
-}
 
 void	*ft_putsyntax_error(char *s)
 {
@@ -40,7 +22,6 @@ void	*ft_putsyntax_error(char *s)
 	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 	ft_putstr_fd(s, 2);
 	ft_putstr_fd("'\n", 2);
-	free(s);
 	return (NULL);
 }
 
@@ -57,7 +38,7 @@ char	*get_arg(char *s, int l)
 		c = '\'';
 	while (s[i] && s[i] != c)
 		i++;
-	res = malloc(i + 1);
+	res = my_malloc(i + 1, 0);
 	i = 0;
 	while (s[i] && s[i] != c)
 	{
@@ -103,7 +84,5 @@ int	is_special(char *s)
 		return (TOKEN_BRKT_CLOSE);
 	else if (*s == '<')
 		return (TOKEN_REDIR_IN);
-	else if (*s == '$')
-		return (101);
 	return (func_is_special(s));
 }

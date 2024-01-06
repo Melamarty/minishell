@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:45:56 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/23 21:43:44 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/05 15:24:14 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_get_expr(char *s)
 	l = 0;
 	while (s[l] && !is_special(s + l))
 		l++;
-	res = malloc(l + 1);
+	res = my_malloc(l + 1, 0);
 	l = 0;
 	while (s[l] && !is_special(s + l))
 	{
@@ -31,30 +31,13 @@ char	*ft_get_expr(char *s)
 	return (res);
 }
 
-static int	valid(char *s)
-{
-	int	i;
-
-	i = 0;
-	if (!ft_strchr(s, '$'))
-		return (0);
-	while (s[i])
-	{
-		if (s[i] == '$' && (s[i + 1] == ' ' || s[i + 1] == '\t'
-				|| s[i + 1] == '\0'))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-t_list	*tokenizing(char *expr)
+t_list	*tokenizing(char *expr, t_env *env)
 {
 	t_list	*tokens;
 	t_list	*p;
 	int		in;
 
-	tokens = get_tokens(expr);
+	tokens = get_tokens(expr, 0);
 	if (!tokens)
 		return (NULL);
 	in = 0;
@@ -68,11 +51,11 @@ t_list	*tokenizing(char *expr)
 			else
 				in = 0;
 		}
-		if (p->type == TOKEN_EXPR && valid(p->token) && !in)
+		if (p->type == TOKEN_EXPR && ft_strchr(p->token, '$') && !in)
 			p->expand = 1;
 		else
 			p->expand = 0;
 		p = p->next;
 	}
-	return (out_of_quotes(in_out(tokens)));
+	return (out_of_quotes(in_out(tokens), env));
 }

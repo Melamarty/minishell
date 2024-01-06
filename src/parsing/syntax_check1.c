@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:42:04 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/23 10:14:46 by mozennou         ###   ########.fr       */
+/*   Updated: 2023/12/30 10:32:15 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int	func6(int l)
 	return (0);
 }
 
-int	is_valid(t_list *a, t_list *b, int f)
+int	is_valid2(t_list *a, t_list *b, int f)
 {
 	int	l;
 

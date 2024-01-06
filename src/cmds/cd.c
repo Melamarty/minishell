@@ -1,16 +1,18 @@
 #include "../minishell.h"
 
-int	two_points(char *curr_path,int one)
+// cc cd.c ../utils/utils1.c pwd.c ../utils/utils.c -lreadline echo.c
+
+int	two_points(char *curr_path,char *path)
 {
 	int		i;
 	char	*new_path;
 
-	if (one)
+	if (!path[1] || path[1] == '/')
 		return (1);
 	i = ft_strlen(curr_path) - 2;
 	while (curr_path[i] && curr_path[i] != '/')
 		i--;
-	new_path = malloc(i);
+	new_path = my_malloc(i, 0);
 	if (!new_path)
 		return (0);
 	++i;
@@ -18,37 +20,50 @@ int	two_points(char *curr_path,int one)
 		new_path[i] = curr_path[i];
 	if (chdir(new_path))
 	{
-		perror("chdir");
+		// perror("chdir");
 		return (1);
 	}
 	return (0);
 }
 
-int	cd(char	*path)
+int	special_path(char *path, t_env *env)
+{
+	char 	tmp[] = "/Users/mel-amar";
+	char	*abs_path;
+	(void)env;
+	//tmp = get_env(env, "HOME");
+	if (path)
+		abs_path = ft_strjoin(tmp, path + 1);
+	else
+		abs_path = tmp;
+	if (!chdir (abs_path))
+		return (env->last_exit = 0, 1);
+	// perror("chdir");
+	env->last_exit = 1;
+	return (0);
+}
+
+int	cd(char *path, t_env *env)
 {
 	char	*abs_path;
 	char	*tmp;
 
-	if (path[0] == '/')
-	{
-		if (!chdir(path))
-			return (1);
-		perror("chdir");
-		return (0);
-	}
-	tmp = malloc(1024);
-	if (!tmp)
-		return (0);
-	getcwd(tmp, 1024);
-	if (path[0] == '.')
-		return (two_points(tmp, path[1] == '\0'));
-	free (tmp);
-	tmp = ft_strjoin(tmp, "/");
-	abs_path = ft_strjoin(tmp, path);
-	free (tmp);
-	if (!chdir(abs_path))
+	(void)abs_path;
+	(void)tmp;
+
+	//if (!path || path->token)
+	//	printf("hello\n");
+	//exit (0);
+	if (!path)
+		return (special_path(NULL , env));
+	if (path && path[0] == '~')
+		return (special_path(path , env));
+	int res = chdir(path);
+	// printf ("res is %d\n", res);
+	if (!res)
 		return (1);
-	perror("chdir");
-	free(abs_path);
+	write(2, "minishell: cd: ", 15);
+	write(2, path, ft_strlen(path));
+	write(2, ": No such file or directory\n", 28);
 	return (0);
 }

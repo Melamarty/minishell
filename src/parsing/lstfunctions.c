@@ -16,7 +16,7 @@ t_list	*ft_lstnew(char *content, int type)
 {
 	t_list	*res;
 
-	res = (t_list *)malloc(sizeof(t_list));
+	res = (t_list *)my_malloc(sizeof(t_list), 0);
 	if (res == NULL)
 		return (NULL);
 	res->next = NULL;
@@ -41,6 +41,7 @@ int	ft_lstadd_back(t_list **lst, t_list *new)
 {
 	if (!lst || !new)
 		return (-1);
+	new->next = NULL;
 	if (*lst == NULL)
 		(*lst) = new;
 	else
@@ -50,10 +51,11 @@ int	ft_lstadd_back(t_list **lst, t_list *new)
 
 void	ft_lstdelone(t_list *lst, void (*del)(void*))
 {
+	(void)free;
 	if (lst && del)
 	{
 		(*del)(lst->token);
-		free(lst);
+		// (lst);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 11:53:08 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/23 22:04:59 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/05 13:03:08 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,19 @@
 char	*ft_get_name(void)
 {
 	char	*res;
-	char	tmp[10];
 	int		i;
 
 	i = 0;
 	res = ft_strdup(".heredoc");
 	while (!access(res, F_OK))
 	{
-		res = ft_strjoin(res, ft_itoa(i));
+		res = ft_strjoin2(res, ft_itoa(i));
 		i++;
 	}
 	return (res);
 }
 
-void	sig_handler(int sig)
+void	signal_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -36,63 +35,51 @@ void	sig_handler(int sig)
 	}
 }
 
-int is_fd_closed(int fd)
+static void	func(t_env *env)
 {
-    int flags = fcntl(fd, F_GETFD);
-    return (flags == -1);
+	int	m;
+
+	m = open(ttyname(2), O_RDWR);
+	if (m == -1)
+		exit(1);
+	ft_dup2(0, m);
+	env->last_exit = 1;
 }
 
-int	read_heredoc(char *limiter)
+static int	func2(int *fd1, int *fd2)
 {
-	int		fd;
-	int		m;
 	char	*name;
-	char	*buffer;
-	int		i;
 
-	signal(SIGINT, sig_handler);
 	name = ft_get_name();
-	fd = open(name, O_RDWR | O_CREAT | O_TRUNC, 0644);
-	if (unlink(name) == -1)
-		return (perror("unlink"),free(name), -1);
-	free(name);
+	*fd1 = open(name, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (*fd1 == -1)
+		return (-1);
+	*fd2 = open(name, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (unlink(name) == -1 || *fd2 == -1)
+		return (perror("unlink"), close(*fd1), -1);
+	return (0);
+}
+
+int	read_heredoc(char *limiter, t_env *env)
+{
+	int		fd1;
+	int		fd2;
+	char	*buffer;
+
+	signal(SIGINT, signal_handler);
+	if (func2(&fd1, &fd2) == -1)
+		return (-1);
 	while (1)
 	{
 		buffer = readline("> ");
 		if (!ttyname(0))
-		{
-			m = open(ttyname(2), O_RDWR);
-			dup2(0, m);
-			return (-1);
-		}
+			return (func(env), close(fd1), close(fd2), -1);
 		if (!buffer)
-			return (fd);
+			return (close(fd1), fd2);
 		if (!ft_strncmp(buffer, limiter, ft_strlen(limiter) + 1))
-			return (fd);
-		write(fd, buffer, ft_strlen(buffer));
-		free(buffer);
+			return ( fd2);
+		buffer = ft_strjoin(buffer, "\n");
+		write(fd1, buffer, ft_strlen(buffer));
 	}
 	return (-1);
 }
-
-// int	read_heredoc(char *limiter)
-// {
-// 	int		fd[2];
-// 	char	*buffer;
-// 	int		i;
-
-// 	if (pipe(fd) == -1)
-// 		return (-1);
-// 	while (1)
-// 	{
-// 		i = 0;
-// 		buffer = readline("> ");
-// 		if (!buffer)
-// 			return (close(fd[0]), close(fd[1]), fd[0]);
-// 		if (!ft_strncmp(buffer, limiter, ft_strlen(limiter) + 1))
-// 			return (free(buffer), close(fd[1]), fd[0]);
-// 		write(fd[1], buffer, ft_strlen(buffer));
-// 		free(buffer);
-// 	}
-// 	return (-1);
-// }

@@ -6,21 +6,11 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:37:51 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/21 20:39:54 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/05 13:07:21 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-
-size_t	ft_strlen(const char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
 
 void	ft_bzero(void *s, size_t n)
 {
@@ -39,49 +29,19 @@ void	*ft_calloc(size_t n, size_t s)
 
 	if ((int)n < 0 && (int)s < 0)
 		return (NULL);
-	res = malloc(n * s);
+	res = my_malloc(n * s, 0);
 	if (!res)
 		return (NULL);
 	ft_bzero(res, s * n);
 	return (res);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t ln)
+int	is_hight(int type)
 {
-	size_t	n;
-	size_t	i;
-	char	*res;
-
-	n = 0;
-	i = -1;
-	if (!s)
-		return (NULL);
-	if (start > ft_strlen(s))
-		return (ft_calloc(1, sizeof(char)));
-	while (s[start + n] && n < ln)
-		n++;
-	res = (char *)malloc(n + 1);
-	if (res == NULL)
-		return (NULL);
-	while (++i < n)
-		res[i] = s[start + i];
-	res[i] = '\0';
-	return (res);
-}
-
-char	*ft_strdup(const char *s)
-{
-	char	*res;
-	int		len;
-	int		i;
-
-	i = -1;
-	len = ft_strlen((char *)s);
-	res = (char *)malloc(len + 1);
-	if (res == NULL)
-		return (NULL);
-	while (++i < len)
-		res[i] = s[i];
-	res[i] = '\0';
-	return (res);
+	if (type == TOKEN_OR || type == TOKEN_AND || type == TOKEN_PIPE)
+		return (1);
+	else if (type == TOKEN_HEREDOC || type == TOKEN_REDIR_APPEND
+		|| type == TOKEN_REDIR_OUT || type == TOKEN_REDIR_IN)
+		return (2);
+	return (0);
 }

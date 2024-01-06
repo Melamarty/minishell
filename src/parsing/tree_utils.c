@@ -6,7 +6,7 @@ t_tree 	*new_node(t_cmd *cmd, int type)
 
 	// if (!cmd)
 	// 	return (NULL);
-	node = malloc(sizeof(t_tree));
+	node = my_malloc(sizeof(t_tree), 0);
 	node->cmd = cmd;
 	node->type = type;
 	node->left = NULL;
@@ -52,6 +52,8 @@ void	print_tree(t_tree	*tree, int c)
         printf("%c ->\n", 'C');
     else if (tree->type == 0)
         printf("%s ->\n", tree->cmd->cmd);
+	else if (tree->type == TOKEN_REDIR_IN)
+		printf("%c ->\n", '<');
     else
         printf("%d ->\n", tree->type);
 	if (tree->type == 0)
@@ -78,10 +80,10 @@ void tree_free(t_tree *tree)
 		ft_lstclear(&tree->cmd->args, free);
 		ft_lstclear(&tree->cmd->redir_in, free);
 		ft_lstclear(&tree->cmd->redir_out, free);
-		free(tree->cmd->cmd);
-		free(tree->cmd);
+		// free(tree->cmd->cmd);
+		// free(tree->cmd);
 	}
-	free(tree);
+	// free(tree);
 }
 
 // int	execute_cmd(t_cmd *cmd)

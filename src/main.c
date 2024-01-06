@@ -1,111 +1,76 @@
 #include "minishell.h"
-#include <string.h>
-#include "minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 
-void	put_err(char *cmd);
-//int exec_cmd(t_cmd *cmd)
-//{
-//    pid_t pid = fork();
+int sig;
 
-//    if (pid == -1)
-//    {
-//		perror("fork");
-//		exit(EXIT_FAILURE);
-//    }
-//    else if (pid == 0) // Child process
-//    {
-//        execve(cmd->cmd, cmd->args, cmd->env);
-//		free (cmd->cmd);
-//		free(cmd->args[0]);
-//		free(cmd->args[1]);
-//		free(cmd->args);
-//		free (cmd);
-//        perror("execve");
-//        exit(EXIT_FAILURE);
-//    }
-//    else // Parent process
-//    {
-//        int status;
-//        waitpid(pid, &status, 0); // Wait for the child to finish
-//    }
-//    return 0;
-//}
-
-
-void	handel_cmd(char	*cmd)
+void aff_list(t_list *lst)
 {
-	if (!ft_strncmp(cmd, "echo", 4))
+	while (lst) //////////////////////////////////////////////////////////////////////
 	{
-		while (*(cmd + 5) == ' ')
-			cmd++;
-		printf("%s\n", cmd + 5);
+		printf("%s --> ", lst->token);
+		lst = lst->next;
 	}
-	else if (!ft_strncmp(cmd, "ls", 2))
-	{
-		t_cmd *cmd;
-
-		cmd = malloc(sizeof(t_tree));
-		cmd->args = malloc(sizeof(char *) * 2);
-		cmd->env = NULL;
-		cmd->cmd = "/bin/ls";
-		cmd->args[0] = malloc(1);
-		cmd->args[1] = malloc(1);
-		cmd->args[0] = "/bin/ls";
-		cmd->args[1] = NULL;
-		cmd->args[2] = NULL;
-		ls(cmd);
-	}
-	//else if (!ft_strncmp(cmd, "cd", 2))
-	//{
-	//	cd(cmd + 3);
-	//}
-	else
-		put_err(cmd);
+	printf("\n\n");
 }
 
-void	bash_loop()
+void sigint_handler(int signo)
 {
+	(void)signo;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	// write(1, "\e[1;32", 7);
+	rl_replace_line("", 0);
+	rl_redisplay();
+	sig = 1;
+}
+
+
+void	bash_loop(t_env *my_env)
+{
+	t_list *cpy;
 	char	*cmd;
 
 	cmd = NULL;
 	while (1)
 	{
-		cmd = readline("\e[1;32mminishell >>✗");
-		if (!ft_strncmp(cmd, "exit", 4))
-			break;
-		write (1, "\e[1;34m", 7);
-		handel_cmd(cmd);
+		sig = 0;
+		signal(SIGINT, sigint_handler);
+		write (1, "\e[1;32m", 7);
+		rl_catch_signals = 0;
+		cmd = readline("\e[1;32mminishell >> \e[0m");
+		add_history(cmd);
+		if (!cmd || !ft_strncmp(cmd, "exit", 4)) // to handel espace
+			return (my_malloc(0, 1), free (cmd), (void )printf("exit\n"));
+		t_list *tokens = tokenizing(cmd, my_env);
+		free(cmd);
+		if (!tokens)
+			continue ;
+		if (sig)
+			my_env->last_exit = 1;
+		cpy = tokens;
+		t_tree *tree = condition(ft_lstlast(tokens));
+		// print_tree(tree, 0);
+		printf ("executing line\n");
+		exec_line(&tree, &my_env);
+		// ft_lstclear(&cpy, free);
+		// printf ("last exit status is %d\n", my_env->last_exit);
 	}
 }
 
-int main ()
+void f(void)
 {
-	// char *command = "/bin/ls";
-    // char *args[] = {"/bin/ls", NULL, NULL};
-
-    // char *env[] = {NULL};
-
-	// execve(command, args, env);
-	// t_tree	*cmd;
-	// cmd = malloc(sizeof(cmd));
-	// cmd->cmd = command;
-	// cmd->args = malloc(10 * sizeof (char *));
-	// cmd->args = malloc(10);
-	bash_loop();
+	system("leaks minishell");
 }
-
-void put_err(char *cmd)
+int main(int ac, char **av, char **env)
 {
-	write(2, "minishell : ", 12);
-	write(2, " command not found: ", 20);
-	while (*cmd && *cmd != ' ')
-	{
-		write (2, cmd, 1);
-		cmd++;
-	}
-	write(2, "\n", 1);
+	(void)ac;
+	(void)av; //find solution to this
+	atexit(f);
+	t_env *enver = my_malloc(sizeof(t_env), 0);
+	t_map *my_env = get_env55(env);
+	enver->env = my_env;
+	enver->ex_env = NULL;
+	bash_loop(enver);
+	// while (1)
+	// 	pause();
+	return (0);
 }

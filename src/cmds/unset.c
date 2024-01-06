@@ -1,23 +1,52 @@
 #include "../minishell.h"
 
-int unset(t_cmd *cmd)
+t_map *unset_var(t_map *env, char *key)
 {
-	t_env	*tmp;
-	t_env	*is_key;
+	t_map *head = env;
+	t_map	*prev;
 
-	tmp = cmd->env;
-	if (!tmp)
-		return (1);
-	while (tmp && tmp->key != cmd->args[0])
+	if (env && (!env->next || !ft_strcmp(env->key, key)))
 	{
-		is_key = tmp;
-		tmp = tmp->next;
+		prev = env;
+		env = env->next;
+		return (env);
 	}
-	if (!tmp)
-		return (1);
-	tmp = is_key;
-	is_key = tmp->next->next;
-	free (tmp);
-	tmp->next = is_key;
+	while (env && key && ft_strcmp(env->key, key))
+	{
+		prev = env;
+		env = env->next;
+	}
+	if (!env)
+		return (head);
+	if (env->next)
+	{
+		env = prev;
+		env->next = prev->next->next;
+		prev->next = NULL;
+	}
+	else
+	{
+		env = prev;
+		env->next = NULL;
+	}
+	return (head);
+}
+
+int unset(t_env **envr, t_list *args)
+{
+	t_map *tmp;
+
+	if (!args || !args->token)
+		return ((*envr)->last_exit = 0, 0);
+	while (args)
+	{
+		char *key = args->token;
+		tmp = unset_var((*envr)->env, key);
+		(*envr)->env = tmp;
+		tmp = unset_var((*envr)->ex_env, key);
+		(*envr)->ex_env = tmp;
+		args = args->next;
+	}
+	(*envr)->last_exit = 0;
 	return (1);
 }

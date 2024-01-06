@@ -6,17 +6,17 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:34:00 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/21 20:36:24 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/01 08:55:43 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "parsing.h" 
 
 t_map	*ft_envnew(char *key, char *val)
 {
 	t_map	*res;
 
-	res = (t_map *)malloc(sizeof(t_map));
+	res = my_malloc(sizeof(t_map), 0);
 	if (res == NULL)
 		return (NULL);
 	res->next = NULL;
@@ -25,7 +25,7 @@ t_map	*ft_envnew(char *key, char *val)
 	return (res);
 }
 
-int	ft_envadd_back(t_map **env, t_map *new)
+int	ft__back(t_map **env, t_map *new)
 {
 	if (!env || !new)
 		return (-1);
@@ -36,7 +36,7 @@ int	ft_envadd_back(t_map **env, t_map *new)
 	return (0);
 }
 
-t_map	*get_env(char **env)
+t_map	*get_env55(char **env)
 {
 	t_map	*res;
 	char	*tmp1;
@@ -52,7 +52,7 @@ t_map	*get_env(char **env)
 		tmp1 = ft_substr(env[i], 0, ft_strchr(env[i], '=') - env[i]);
 		tmp2 = ft_substr(env[i], ft_strchr(env[i], '=') - env[i] + 1, \
 							ft_strlen(env[i]));
-		ft_envadd_back(&res, ft_envnew(tmp1, tmp2));
+		ft__back(&res, ft_envnew(tmp1, tmp2));
 		i++;
 	}
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 21:26:10 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/23 15:33:08 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/05 15:32:15 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,23 @@ t_list	*relink(t_list *p)
 		cpy = cpy->next;
 	}
 	return (p);
+}
+
+static int	func5(int l, int *i, int *flg)
+{
+	if (l == TOKEN_SPACE)
+	{
+		*flg = 1;
+		(*i)++;
+		return (1);
+	}
+	return (0);
+}
+
+int	func333(int l, int *i, int *flg, t_list **tokens)
+{
+	if (func5(l, i, flg))
+		return (1);
+	*flg = set_space(tokens, *flg);
+	return (0);
 }

@@ -1,0 +1,9 @@
+minishell >> ./a.out 
+execve: Permission denied
+minishell >> echo $?
+1 
+
+bash-3.2$ ./a.out
+bash: ./a.out: Permission denied
+bash-3.2$ echo $?
+126

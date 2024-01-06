@@ -1,23 +1,24 @@
-
-
-SRCS = src/main.c src/utils.c src/cmds/ls.c src/cmds/echo.c src/utils/utils1.c
-OBJS = $(patsubst src/%.c,src/objs/%.o,$(SRCS))
-CFLAGS = -Wall -Wextra -Werror 
+DIR = src
+SRCS = $(shell find src -name '*.c')
+OBJS = $(SRCS:.c=.o)
 NAME = minishell
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address
+LIBS = -lreadline
+READLINE_L = $(shell brew --prefix readline)/lib
+READLINE_I = $(shell brew --prefix readline)/include
 
-all : obj_folder $(NAME)
-
-obj_folder:
-	mkdir -p src/objs
+all: $(NAME)
 
 $(NAME): $(OBJS)
-	cc $(CFLAGS) -lreadline $^ -o $@
+	cc -o $@ $(OBJS) $(LIBS) -L $(READLINE_L) #-fsanitize=address 
 
-src/objs/%.o : src/%.c src/minishell.h
-	cc $(CFLAGS) -c $< -o $@
+%.o: %.c src/minishell.h
+	cc $(CFLAGS) -I $(READLINE_I) -c $< -o $@ 
 
-clean :
-	rm -rf srcs/objs
+clean:
+	rm -rf $(OBJS)
+
 fclean: clean
 	rm -f $(NAME)
-re : fclean all
+
+re: fclean all

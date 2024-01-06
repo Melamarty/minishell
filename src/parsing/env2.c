@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:34:11 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/21 20:39:02 by mozennou         ###   ########.fr       */
+/*   Updated: 2023/12/31 09:06:06 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,33 +35,21 @@ int	ft_lstsize(t_list *lst)
 	return (res);
 }
 
-char	*ft_strjoin(char *a, char *b)
+void	env_free(t_env *env)
 {
-	int		i;
-	int		a_ln;
-	int		b_ln;
-	char	*res;
+	t_map	*tmp;
 
-	if (!a && !b)
-		return (NULL);
-	if (!a)
-		return (ft_strdup(b));
-	if (!b)
-		return (ft_strdup(a));
-	a_ln = ft_strlen((char *)a);
-	b_ln = ft_strlen((char *)b);
-	res = (char *)malloc(a_ln + b_ln + 1);
-	if (!res)
-		return (res);
-	i = -1;
-	while (++i < a_ln)
-		res[i] = a[i];
-	i = -1;
-	while (++i < b_ln)
-		res[a_ln + i] = b[i];
-	res[a_ln + i] = '\0';
-	free(a);
-	return (res);
+	while (env->env)
+	{
+		tmp = env->env->next;
+		// (env->env->val);
+		env->env = tmp;
+	}
+	while (env->ex_env)
+	{
+		tmp = env->ex_env->next;
+		env->ex_env = tmp;
+	}
 }
 
 char	*ft_strchr(const char *s, int c)

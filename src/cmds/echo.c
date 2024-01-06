@@ -1,54 +1,29 @@
 #include "../minishell.h"
 
-char	*get_var(t_env *env, char *key, int *i)
+int	echo(t_cmd *cmd, t_env *env)
 {
-	if (!env)
-		return (" ");
-	while(env && ft_strcmp(env->key, key))
-		env = env->next;
-	if (!env)
-		return (" ");
-	return (env->val);
-}
+	t_list	*args;
+	int		is_n;
 
-int	echo(t_cmd *cmd)
-{
-	int		i;
-	int		j;
-	char	*var;
-	char	*tmp;
-
-	i = -1;
-	j = 0;
-	tmp = cmd->args[0];
-	while (tmp[++i])
+	args = cmd->args;
+	is_n = 0;
+	if (cmd->args && cmd->args->token && !ft_strcmp(cmd->args->token, "-n"))
 	{
-		if (tmp[i + 1]  && tmp[i] == '$' && tmp[i + 1] != ' ')
-		{
-			var = get_var(cmd->env, cmd->args[++j], &i);
-			if (!var)
-				return (0);
-			write(1, var, ft_strlen(var));
-			i += ft_strlen(cmd->args[j]);
-		}
-		else
-			write(1, &tmp[i], 1);
+		is_n = 1;
+		args = args->next;
 	}
-	write(1, "\n", 1);
+	while (args)
+	{
+		if (args->expand)
+			ft_putstr_fd(ft_expand(args->token, env), 1);
+		else
+			ft_putstr_fd(args->token, 1);
+		if (args->next)
+			ft_putstr_fd(" ", 1);
+		args = args->next;
+	}
+	if (!is_n)
+		write(1, "\n", 1);
+	env->last_exit = 0;
 	return (1);
-}
-
-int main() {
-	t_env env;
-	env.key = "USE";
-	env.val = "1337";
-	env.next = NULL;
-    t_cmd cmd;
-    cmd.cmd = "echo";
-	cmd.args = malloc(2 * sizeof(char *));
-	cmd.args[0] = "hello _$USE_ is the user";
-	cmd.args[1] = "USE";
-    cmd.env = &env;
-    echo(&cmd);
-    return 0;
 }

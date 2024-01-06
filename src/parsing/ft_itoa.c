@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/05 12:42:01 by mozennou          #+#    #+#             */
+/*   Updated: 2024/01/05 12:42:06 by mozennou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parsing.h"
 
 static int	func(int n, int *neg)
@@ -35,7 +47,7 @@ char	*ft_itoa(int n)
 	if (neg == 1)
 		n *= -1;
 	k = n;
-	res = (char *)malloc(ln + 1);
+	res = (char *)my_malloc(ln + 1, 0);
 	if (res == NULL)
 		return (NULL);
 	if (neg)
