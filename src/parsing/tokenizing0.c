@@ -88,7 +88,7 @@ t_list	*get_tokens(char *expr, int i)
 	{
 		l = is_special(expr + i);
 		if (l == -1)
-			return (ft_lstclear(&tokens, free), ft_putsyntax_error(NULL));
+			return (ft_putsyntax_error(NULL));
 		if (l)
 		{
 			if (func333(l, &i, &flg, &tokens))
@@ -96,7 +96,7 @@ t_list	*get_tokens(char *expr, int i)
 			ft_lstadd_back(&tokens, ft_lstnew(ft_get_special(l), l));
 			inquotes = func(inquotes, &i, &tokens, expr);
 			if (inquotes == -1)
-				return (ft_lstclear(&tokens, free), ft_putsyntax_error(NULL));
+				return (ft_putsyntax_error(NULL));
 		}
 		else
 			flg = func9(&tokens, flg, i, expr);

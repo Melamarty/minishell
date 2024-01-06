@@ -24,7 +24,6 @@ t_list	*get_tokens(char *expr, int i);
 t_list	*ft_lstnew(char *content, int type);
 int		ft_lstsize(t_list *lst);
 int		ft_lstadd_back(t_list **lst, t_list *new);
-void	ft_lstclear(t_list **lst, void (*del)(void*));
 t_list	*ft_lstlast(t_list *lst);
 int		func333(int l, int *i, int *flg, t_list **tokens);
 int		my_close(t_list *cpy);

@@ -49,13 +49,13 @@ t_list	*syntax_check(t_list *p, t_env *env)
 		else if (cpy->type == TOKEN_BRKT_CLOSE)
 			f--;
 		if (f < 0 || ft_strchr(cpy->token, ';') || ft_strchr(cpy->token, '\\'))
-			return (ft_lstclear(&p, free), ft_putsyntax_error(NULL));
+			return ( ft_putsyntax_error(NULL));
 		if (func(cpy, pp, p, env))
 			return (NULL);
 		pp = cpy;
 		cpy = cpy->next;
 	}
 	if (is_valid2(pp, NULL, f))
-		return (ft_lstclear(&p, free), ft_putsyntax_error(NULL));
+		return (ft_putsyntax_error(NULL));
 	return (relink(p));
 }

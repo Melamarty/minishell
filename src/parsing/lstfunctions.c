@@ -58,18 +58,3 @@ void	ft_lstdelone(t_list *lst, void (*del)(void*))
 		// (lst);
 	}
 }
-
-void	ft_lstclear(t_list **lst, void (*del)(void*))
-{
-	t_list	*p;
-
-	if (!lst || !(del))
-		return ;
-	p = (*lst);
-	while (*lst)
-	{
-		(*lst) = (*lst)->next;
-		ft_lstdelone(p, del);
-		p = (*lst);
-	}
-}

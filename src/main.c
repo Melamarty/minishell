@@ -51,7 +51,6 @@ void	bash_loop(t_env *my_env)
 		// print_tree(tree, 0);
 		// printf ("\e[1;31mexecuting\e[0m\n");
 		exec_line(&tree, &my_env);
-		// ft_lstclear(&cpy, free);
 		// printf ("last exit status is %d\n", my_env->last_exit);
 	}
 }
