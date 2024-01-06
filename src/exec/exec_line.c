@@ -2,7 +2,9 @@
 
 int	exec_line(t_tree **line, t_env **env)
 {
-	t_tree *tree = *line;
+	t_tree	*tree;
+
+	tree = *line;
 	if (!tree)
 		return (1);
 	if (tree->cmd)
@@ -10,7 +12,7 @@ int	exec_line(t_tree **line, t_env **env)
 		if (tree->cmd->redir_in || tree->cmd->redir_out)
 			return (redirect (tree, env));
 		else
-			return exec_cmd(tree->cmd, env);
+			return (exec_cmd(tree->cmd, env));
 	}
 	if (tree->type == 6)
 		return (exec_line(&tree->left, env) && exec_line(&tree->right, env));

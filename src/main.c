@@ -63,7 +63,7 @@ int main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av; //find solution to this
-	atexit(f);
+	// atexit(f);
 	t_env *enver = my_malloc(sizeof(t_env), 0);
 	t_map *my_env = get_env55(env);
 	enver->env = my_env;

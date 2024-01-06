@@ -3,26 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   export_parse.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By:  mel-amar@student.1337.ma <mel-amar>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:40:45 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/05 12:41:47 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/06 20:03:03 by  mel-amar@s      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	print_err(char *s)
-{
-	write (2, "minishell: export: ", 19);
-	while (*s)
-	{
-		write (2, s, 1);
-		s++;
-	}
-	write (2, ": not a valid identifier\n", 25);
-	return (1);
-}
 
 int	is_valid(char c)
 {
@@ -42,8 +31,6 @@ t_map	*get_keyval(char *param, int i)
 	t_map	*var;
 
 	var = my_malloc(sizeof(t_env), 0);
-	if (!var)
-		return (NULL);
 	var->key = ft_substr(param, 0, i);
 	if (!var->key)
 		return (NULL);
@@ -73,7 +60,7 @@ t_map	*parse_param(char *param, int *append, t_env *env)
 	i = 0;
 	first_char(param[0], &i);
 	if (!i)
-		return (print_err(param), NULL);
+		return (export_err(param), NULL);
 	*append = 0;
 	while (param[i] && (param[i] != '='))
 	{
@@ -84,8 +71,8 @@ t_map	*parse_param(char *param, int *append, t_env *env)
 		}
 		if (!is_valid(param[i]) || (param[0] >= '0' && param[i] <= '9'))
 		{
-			env->last_exit = 33;
-			print_err(param);
+			env->last_exit = 1;
+			export_err(param);
 			return (NULL);
 		}
 		i++;

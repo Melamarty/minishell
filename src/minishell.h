@@ -106,6 +106,14 @@ int		putstr(char *str);
 char	*ft_substr(char *s, unsigned int start, size_t len);
 char	*get_next_line(int fd);
 void	*my_malloc(size_t size, int mode);
+char	**set_args(char *file, t_list *args);
+char	**set_env(t_env *env_list);
+char	*locate_cmd(char *cmd, char *path);
+
+// export utils
+int		print_export(t_map *env, t_map *ex_env);
+int		print_export_env(t_env **envr);
+void	sort_ex_env(t_map **env);
 
 
 //tree utils
@@ -121,6 +129,12 @@ int		is_exist(t_map *env, char *key);
 int		list_len (t_list *lst);
 t_list	*ft_lstlast(t_list *lst);
 void	ft_dup2(int fd1, int fd2);
+
+//errors 
+int	file_error(char *file);
+int	put_err(char *file, int flag);
+int	export_err(char *s);
+
 //test utils
 //void	(t_tree	*tree); // delete it
 void	print_info(t_cmd *cmd); // delete it

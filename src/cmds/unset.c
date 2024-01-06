@@ -1,16 +1,13 @@
 #include "../minishell.h"
 
-t_map *unset_var(t_map *env, char *key)
+t_map	*unset_var(t_map *env, char *key)
 {
-	t_map *head = env;
+	t_map	*head;
 	t_map	*prev;
 
+	head = env;
 	if (env && (!env->next || !ft_strcmp(env->key, key)))
-	{
-		prev = env;
-		env = env->next;
-		return (env);
-	}
+		return (env = env->next, env);
 	while (env && key && ft_strcmp(env->key, key))
 	{
 		prev = env;
@@ -32,18 +29,17 @@ t_map *unset_var(t_map *env, char *key)
 	return (head);
 }
 
-int unset(t_env **envr, t_list *args)
+int	unset(t_env **envr, t_list *args)
 {
-	t_map *tmp;
+	t_map	*tmp;
 
 	if (!args || !args->token)
 		return ((*envr)->last_exit = 0, 0);
 	while (args)
 	{
-		char *key = args->token;
-		tmp = unset_var((*envr)->env, key);
+		tmp = unset_var((*envr)->env, args->token);
 		(*envr)->env = tmp;
-		tmp = unset_var((*envr)->ex_env, key);
+		tmp = unset_var((*envr)->ex_env, args->token);
 		(*envr)->ex_env = tmp;
 		args = args->next;
 	}

@@ -18,6 +18,7 @@
 		"stdio.h": "c",
 		"readline.h": "c",
 		"string.h": "c",
-		"__node_handle": "c"
+		"__node_handle": "c",
+		"algorithm": "c"
 	}
 }

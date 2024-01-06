@@ -2,7 +2,7 @@
 
 int	env(t_cmd *cmd, t_env *envr)
 {
-	t_map *env;
+	t_map	*env;
 
 	env = envr->env;
 	if (!ft_strlen (get_env(envr, "PATH")))

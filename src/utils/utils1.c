@@ -73,3 +73,16 @@ int	putstr(char *str)
 	write(1, "\n", 1);
 	return ft_strlen(str);
 }
+
+int	list_len(t_list *lst)
+{
+	int	len;
+
+	len = 0;
+	while (lst)
+	{
+		++len;
+		lst = lst->next;
+	}
+	return (len);
+}
