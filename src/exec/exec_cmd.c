@@ -49,7 +49,9 @@ void	expand_cmd(t_cmd *cmd, t_list **args, t_env *env)
 
 int	exec_cmd(t_cmd	*cmd, t_env **envr)
 {
-	expand_cmd(cmd, &cmd->args, *envr);
+	// expand_cmd(cmd, &cmd->args, *envr);
+	if (!cmd->cmd)
+		return (0);
 	if (!ft_strcmp(cmd->cmd, "echo"))
 		return (echo(cmd, *envr));
 	else if (!ft_strcmp(cmd->cmd, "cd"))

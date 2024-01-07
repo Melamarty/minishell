@@ -41,7 +41,7 @@ void	bash_loop(t_env *my_env)
 		if (!cmd || !ft_strncmp(cmd, "exit", 4)) // to handel espace
 			return (my_malloc(0, 1), free (cmd), (void )printf("exit\n"));
 		t_list *tokens = tokenizing(cmd, my_env);
-		aff_list(tokens);
+		//aff_list(tokens);
 		free(cmd);
 		if (!tokens)
 			continue ;

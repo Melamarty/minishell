@@ -38,6 +38,21 @@ int	redirect_out(t_tree *tree, t_env **env)
 	return (1);
 }
 
+char	*ft_get_name2(void)
+{
+	char	*res;
+	int		i;
+
+	i = 0;
+	res = ft_strdup(".expand");
+	while (!access(res, F_OK))
+	{
+		res = ft_strjoin2(res, ft_itoa(i));
+		i++;
+	}
+	return (res);
+}
+
 int	read_fd(int fd, t_env *env)
 {
 	int		res_fd;
@@ -45,9 +60,11 @@ int	read_fd(int fd, t_env *env)
 	char	*name;
 	int		cpy;
 
-	name = ft_get_name();
-	res_fd = open(".expand", O_RDWR | O_CREAT | O_TRUNC, 0644);
-	cpy = open(".expand", O_RDWR | O_CREAT | O_TRUNC, 0644);
+	name = ft_get_name2();
+	res_fd = open(name, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	cpy = open(name, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (unlink(name) || cpy == -1 || res_fd == -1)
+		return (my_malloc(0, 1), exit (1), 0);
 	buffer = get_next_line(fd);
 	while (buffer)
 	{
@@ -81,7 +98,6 @@ int	redirect_in(t_tree *tree, t_env **env)
 			break ;
 		tmp = tmp->next;
 	}
-	printf("((%d))\n", tmp->expand);
 	if (tmp->type == TOKEN_HEREDOC && !tmp->expand)
 		fd = read_fd(tmp->fd, *env);
 	ft_dup2(fd, 0);

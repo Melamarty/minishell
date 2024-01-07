@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By:  mel-amar@student.1337.ma <mel-amar>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:45:56 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/07 10:24:15 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/07 11:39:18 by  mel-amar@s      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_list	*tokenizing(char *expr, t_env *env)
 			else
 				in = 0;
 		}
-		if (p->type == TOKEN_EXPR && ft_strchr(p->token, '$') && in == 1)
+		if (p->type == TOKEN_EXPR && in == 1)
 			p->expand = 1;
 		else if (p->type == TOKEN_EXPR && in == 2)
 			p->expand = 2;
