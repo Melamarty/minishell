@@ -92,6 +92,7 @@ int		redirect(t_tree *tree, t_env **env);
 //expanding
 char	*ft_expand(char *s, t_env *env);
 char	*ft_get_name(void);
+t_list	*get_wildcard(void);
 
 // utils
 int		 ft_lstlen(t_list *lst);
@@ -110,6 +111,7 @@ void	*my_malloc(size_t size, int mode);
 char	**set_args(char *file, t_list *args);
 char	**set_env(t_env *env_list);
 char	*locate_cmd(char *cmd, char *path);
+void	ft_dup2(int fd1, int fd2);
 
 // export utils
 int		print_export(t_map *env, t_map *ex_env);

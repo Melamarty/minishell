@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handel_pipe.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/07 17:10:01 by mel-amar          #+#    #+#             */
+/*   Updated: 2024/01/07 17:16:09 by mel-amar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	first_cmd(t_tree *tree, int fds[2], t_env **env)
@@ -18,7 +30,7 @@ int	seceond_cmd(t_tree *tree, int fds[2], t_env **env)
 	exit (0);
 }
 
-int handel_pipe(t_tree *tree, t_env **env)
+int	handel_pipe(t_tree *tree, t_env **env)
 {
 	int		fds[2];
 	int		p1;

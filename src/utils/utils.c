@@ -32,3 +32,12 @@ int	ft_isalnum(int c)
 {
     return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'));
 }
+
+void	ft_dup2(int fd1, int fd2)
+{
+	if (dup2(fd1, fd2) == -1)
+	{
+		my_malloc(0, 1);
+		exit(1);
+	}
+}

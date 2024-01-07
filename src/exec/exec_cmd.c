@@ -1,30 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_cmd.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/07 17:10:10 by mel-amar          #+#    #+#             */
+/*   Updated: 2024/01/07 17:32:39 by mel-amar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
-
-t_list	*get_wildcard(void)
-{
-	DIR				*dir;
-	t_list			*wild_list;
-	struct dirent	*entry;
-
-	wild_list = NULL;
-	dir = opendir(".");
-	if (!dir)
-		return (perror("opendir"), NULL);
-	entry = readdir(dir);
-	while (entry)
-	{
-		if (ft_strncmp(entry->d_name, ".", 1))
-			ft_lstadd_back(&wild_list, ft_lstnew(entry->d_name, 0));
-		entry = readdir(dir);
-	}
-	closedir(dir);
-	return (wild_list);
-}
 
 void	expand_cmd(t_cmd *cmd)
 {
 	cmd->cmd = cmd->args->token;
 	cmd->args = cmd->args->next;
+}
+
+void	norm_helper(t_list **res, int *l, char *string)
+{
+	ft_lstadd_back(res, ft_lstnew(string, 0));
+	*l = 1;
 }
 
 t_list	*expand_args(t_list *args, t_env *env)
@@ -36,40 +33,49 @@ t_list	*expand_args(t_list *args, t_env *env)
 
 	res = NULL;
 	l = 0;
-	while(args)
+	while (args)
 	{
 		if (args->expand != 1)
 			string = ft_expand(args->token, env);
 		else
 			string = ft_strdup(args->token);
 		if (args->pos && !l && ft_strlen(string))
-		{
-			ft_lstadd_back(&res, ft_lstnew(string, 0));
-			l = 1;
-		}
+			norm_helper(&res, &l, string);
 		else if (args->pos && l && ft_strlen(string))
 		{
 			tmp = ft_lstlast(res);
 			tmp->token = ft_strjoin(tmp->token, string);
 		}
-		else if(ft_strlen(string))
+		else if (ft_strlen(string))
 			ft_lstadd_back(&res, ft_lstnew(string, 0));
 		args = args->next;
 	}
 	return (res);
 }
 
-int	exec_cmd(t_cmd	*cmd, t_env **envr)
+	// if (!ft_lstlen(cmd->args))
+	// {
+	// 	printf ("\e[1;31mhelooooo");
+	// 	expand_cmd(cmd);
+	// }
+int	fix_cmd(t_cmd *cmd, t_env *env)
 {
 	if (!ft_lstlen(cmd->args))
 		expand_cmd(cmd);
 	else
 	{
-		cmd->args = expand_args(cmd->args, *envr);
+		cmd->args = expand_args(cmd->args, env);
 		if (!cmd->args)
-			return (0);
+			return (1);
 		expand_cmd(cmd);
 	}
+	return (0);
+}
+
+int	exec_cmd(t_cmd	*cmd, t_env **envr)
+{
+	if (fix_cmd(cmd, *envr))
+		return ((*envr)->last_exit = 0, 1);
 	if (!ft_strcmp(cmd->cmd, "echo"))
 		return (echo(cmd, *envr));
 	else if (!ft_strcmp(cmd->cmd, "cd"))

@@ -1,13 +1,16 @@
-#include "../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirect.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/07 17:08:35 by mel-amar          #+#    #+#             */
+/*   Updated: 2024/01/07 17:15:53 by mel-amar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	ft_dup2(int fd1, int fd2)
-{
-	if (dup2(fd1, fd2) == -1)
-	{
-		my_malloc(0, 1);
-		exit(1);
-	}
-}
+#include "../minishell.h"
 
 int	redirect_out(t_tree *tree, t_env **env)
 {
@@ -30,10 +33,6 @@ int	redirect_out(t_tree *tree, t_env **env)
 	}
 	ft_dup2(fd, 1);
 	close(fd);
-	// if (tree->cmd->cmd)
-	// 	exec_cmd(tree->cmd, env);
-	// if (tree->right)
-	// 	exec_line(&tree->right, env);
 	(void)env;
 	return (1);
 }
@@ -64,20 +63,17 @@ int	read_fd(int fd, t_env *env)
 	res_fd = open(name, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	cpy = open(name, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (unlink(name) || cpy == -1 || res_fd == -1)
-		return (close (cpy), close (res_fd), close (fd), my_malloc(0, 1), exit (1), 0);
+		return (close (cpy), close (res_fd),
+			close (fd), my_malloc(0, 1), exit (1), 0);
 	buffer = get_next_line(fd);
 	while (buffer)
 	{
 		buffer[ft_strlen(buffer) - 1] = 0;
 		buffer = ft_expand(buffer, env);
-		// printf("buffer: %s\n", buffer);
 		write(res_fd, buffer, ft_strlen(buffer));
 		buffer = get_next_line(fd);
 		write (res_fd, "\n", 1);
 	}
-	// printf ("res_fd: %d\n", res_fd);
-	// printf ("cpy: %d\n", cpy);
-	// printf ("fd: %d\n", fd);
 	return (close (fd), close(res_fd), cpy);
 }
 
@@ -107,28 +103,26 @@ int	redirect_in(t_tree *tree, t_env **env)
 	ft_dup2(fd, 0);
 	close(fd);
 	(void)env;
-	// if (tree->cmd->cmd)
-	// 	exec_cmd(tree->cmd, env);
 	return (1);
 }
 
 int	redirect(t_tree *tree, t_env **env)
 {
-	t_list	*list;
-	int cpy1 = -1;
-	int cpy0 = -1;
-	int res = 1;
+	int	cpy1;
+	int	cpy0;
+	int	res;
 
+	cpy1 = -1;
+	cpy0 = -1;
+	res = 1;
 	if (tree->cmd->redir_in)
 	{
 		cpy0 = dup(0);
-		list = tree->cmd->redir_in;
 		res = redirect_in(tree, env);
 	}
 	if (tree->cmd->redir_out && res)
 	{
 		cpy1 = dup(1);
-		list = tree->cmd->redir_out;
 		res = redirect_out(tree, env);
 	}
 	if (res && tree->cmd)
@@ -137,7 +131,5 @@ int	redirect(t_tree *tree, t_env **env)
 		ft_dup2(cpy1, 1);
 	if (cpy0 != -1)
 		ft_dup2(cpy0, 0);
-	close(cpy1);
-	close(cpy0);
-	return (res);
+	return (close(cpy1), close(cpy0), res);
 }
