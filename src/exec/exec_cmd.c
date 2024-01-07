@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:10:10 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 17:32:39 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/07 20:59:43 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,6 @@ t_list	*expand_args(t_list *args, t_env *env)
 	return (res);
 }
 
-	// if (!ft_lstlen(cmd->args))
-	// {
-	// 	printf ("\e[1;31mhelooooo");
-	// 	expand_cmd(cmd);
-	// }
 int	fix_cmd(t_cmd *cmd, t_env *env)
 {
 	if (!ft_lstlen(cmd->args))

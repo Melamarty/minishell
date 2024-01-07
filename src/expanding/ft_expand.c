@@ -21,7 +21,7 @@ char	*ft_get_env2(char *s, int len, t_map *env)
 		return (ft_strdup("$"));
 	while (env)
 	{
-		if (!ft_strncmp(env->key, s, ft_strlen(env->key) + 1))
+		if (!ft_strncmp(env->key, s, ft_strlen(env->key)))
 			return (ft_strdup(env->val));
 		env = env->next;
 	}
