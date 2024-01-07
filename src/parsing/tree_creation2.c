@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_creation2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By:  mel-amar@student.1337.ma <mel-amar>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:33:09 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/07 12:45:05 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/07 14:18:46 by  mel-amar@s      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,18 +61,10 @@ static void	func(t_list **tokens, t_cmd *cmd)
 	}
 	else if ((*tokens)->type == TOKEN_EXPR)
 	{
-		if (!cmd->cmd)
-		{
-			cmd->cmd = ft_strdup((*tokens)->token);
-			cmd->expand = (*tokens)->expand;
-		}
-		else
-		{
 			ft_lstadd_back(&cmd->args, ft_lstnew(ft_strdup((*tokens)->token), 0));
 			cpy = ft_lstlast(cmd->args);
 			cpy->expand = (*tokens)->expand;
 			cpy->pos = (*tokens)->pos;
-		}
 	}
 }
 
@@ -97,7 +89,8 @@ t_tree     *command(t_list *tokens)
 		}
 		else
        		func(&tokens, cmd);
-        tokens = tokens->next;
+		cmd->cmd = NULL;
+		tokens = tokens->next;
     }
     head = new_node(cmd, TOKEN_EXPR);
     return (head);

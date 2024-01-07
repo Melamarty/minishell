@@ -21,30 +21,10 @@ t_list	*get_wildcard(void)
 	return (wild_list);
 }
 
-void	expand_cmd(t_cmd *cmd, t_list **args, t_env *env)
+void	expand_cmd(t_cmd *cmd)
 {
-	t_list	*tmp;
-
-	tmp = *args;
-	if (cmd->expand != 1)
-		cmd->cmd = ft_expand(cmd->cmd, env);
-	while (tmp)
-	{
-		if (tmp->expand != 1)
-			tmp->token = ft_expand(tmp->token, env);
-		tmp = tmp->next;
-	}
-	if (!ft_strlen (cmd->cmd))
-	{
-		while (cmd->args  && !ft_strlen(cmd->args->token))
-			cmd->args = cmd->args->next;
-		if (cmd->args)
-			cmd->cmd = cmd->args->token;
-		if (cmd->args && cmd->args->next)
-			cmd->args = cmd->args->next;
-		else
-			cmd->args = NULL;
-	}
+	cmd->cmd = cmd->args->token;
+	cmd->args = cmd->args->next;
 }
 
 t_list	*expand_args(t_list *args, t_env *env)
@@ -62,17 +42,17 @@ t_list	*expand_args(t_list *args, t_env *env)
 			string = ft_expand(args->token, env);
 		else
 			string = ft_strdup(args->token);
-		if (args->pos && !l)
+		if (args->pos && !l && ft_strlen(string))
 		{
 			ft_lstadd_back(&res, ft_lstnew(string, 0));
 			l = 1;
 		}
-		else if (args->pos && l)
+		else if (args->pos && l && ft_strlen(string))
 		{
 			tmp = ft_lstlast(res);
 			tmp->token = ft_strjoin(tmp->token, string);
 		}
-		else
+		else if(ft_strlen(string))
 			ft_lstadd_back(&res, ft_lstnew(string, 0));
 		args = args->next;
 	}
@@ -81,11 +61,11 @@ t_list	*expand_args(t_list *args, t_env *env)
 
 int	exec_cmd(t_cmd	*cmd, t_env **envr)
 {
-	// expand_cmd(cmd, &cmd->args, *envr);
-	if (!cmd->cmd)
-		return (0);
-	aff_list(cmd->args);
 	cmd->args = expand_args(cmd->args, *envr);
+	if (!cmd->args)
+		cmd->cmd = ft_strdup("");
+	else
+		expand_cmd(cmd);
 	if (!ft_strcmp(cmd->cmd, "echo"))
 		return (echo(cmd, *envr));
 	else if (!ft_strcmp(cmd->cmd, "cd"))
