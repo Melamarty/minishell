@@ -2,10 +2,10 @@ DIR = src
 SRCS = $(shell find src -name '*.c')
 OBJS = $(SRCS:.c=.o)
 NAME = minishell
-CFLAGS = -Wall -Wextra -Werror# -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address
 LIBS = -lreadline
-READLINE_L = $(shell brew --prefix readline)/lib
-READLINE_I = $(shell brew --prefix readline)/include
+READLINE_L = $(shell /Users/mozennou/homebrew/bin/brew --prefix readline)/lib
+READLINE_I = $(shell /Users/mozennou/homebrew/bin/brew --prefix readline)/include
 
 all: $(NAME)
 

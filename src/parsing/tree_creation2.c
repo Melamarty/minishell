@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:33:09 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/07 10:44:01 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/07 12:45:05 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ static void	func(t_list **tokens, t_cmd *cmd)
 			ft_lstadd_back(&cmd->args, ft_lstnew(ft_strdup((*tokens)->token), 0));
 			cpy = ft_lstlast(cmd->args);
 			cpy->expand = (*tokens)->expand;
+			cpy->pos = (*tokens)->pos;
 		}
 	}
 }

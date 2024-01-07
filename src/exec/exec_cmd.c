@@ -47,11 +47,45 @@ void	expand_cmd(t_cmd *cmd, t_list **args, t_env *env)
 	}
 }
 
+t_list	*expand_args(t_list *args, t_env *env)
+{
+	t_list	*res;
+	t_list	*tmp;
+	char	*string;
+	int		l;
+
+	res = NULL;
+	l = 0;
+	while(args)
+	{
+		if (args->expand != 1)
+			string = ft_expand(args->token, env);
+		else
+			string = ft_strdup(args->token);
+		if (args->pos && !l)
+		{
+			ft_lstadd_back(&res, ft_lstnew(string, 0));
+			l = 1;
+		}
+		else if (args->pos && l)
+		{
+			tmp = ft_lstlast(res);
+			tmp->token = ft_strjoin(tmp->token, string);
+		}
+		else
+			ft_lstadd_back(&res, ft_lstnew(string, 0));
+		args = args->next;
+	}
+	return (res);
+}
+
 int	exec_cmd(t_cmd	*cmd, t_env **envr)
 {
 	// expand_cmd(cmd, &cmd->args, *envr);
 	if (!cmd->cmd)
 		return (0);
+	aff_list(cmd->args);
+	cmd->args = expand_args(cmd->args, *envr);
 	if (!ft_strcmp(cmd->cmd, "echo"))
 		return (echo(cmd, *envr));
 	else if (!ft_strcmp(cmd->cmd, "cd"))
