@@ -6,7 +6,7 @@ void aff_list(t_list *lst)
 {
 	while (lst) //////////////////////////////////////////////////////////////////////
 	{
-		printf("%s --> ", lst->token);
+		printf("%s -(%d)-> ", lst->token, lst->expand);
 		lst = lst->next;
 	}
 	printf("\n\n");
@@ -41,6 +41,7 @@ void	bash_loop(t_env *my_env)
 		if (!cmd || !ft_strncmp(cmd, "exit", 4)) // to handel espace
 			return (my_malloc(0, 1), free (cmd), (void )printf("exit\n"));
 		t_list *tokens = tokenizing(cmd, my_env);
+		aff_list(tokens);
 		free(cmd);
 		if (!tokens)
 			continue ;
@@ -63,7 +64,7 @@ int main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av; //find solution to this
-	atexit(f);
+	// atexit(f);
 	t_env *enver = my_malloc(sizeof(t_env), 0);
 	t_map *my_env = get_env55(env);
 	enver->env = my_env;

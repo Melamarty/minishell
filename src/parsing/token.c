@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:45:56 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/05 15:24:14 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/07 10:24:15 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,17 @@ t_list	*tokenizing(char *expr, t_env *env)
 			else
 				in = 0;
 		}
-		if (p->type == TOKEN_EXPR && ft_strchr(p->token, '$') && !in)
+		else if (p->type == TOKEN_D_Q)
+		{
+			if (!in)
+				in = 2;
+			else
+				in = 0;
+		}
+		if (p->type == TOKEN_EXPR && ft_strchr(p->token, '$') && in == 1)
 			p->expand = 1;
+		else if (p->type == TOKEN_EXPR && in == 2)
+			p->expand = 2;
 		else
 			p->expand = 0;
 		p = p->next;

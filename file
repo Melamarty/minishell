@@ -1,15 +1,1 @@
-total 368
--rw-r--r--   1 mel-amar  candidate    491 Jan  5 20:48 Makefile
--rw-r--r--   1 mel-amar  candidate      0 Jan  6 12:05 TODO.txt
--rw-r--r--   1 mel-amar  candidate  49680 Jan  5 20:47 a.out
--rw-r--r--   1 mel-amar  candidate    145 Jan  5 20:47 appah.txt
--rw-r--r--   1 mel-amar  candidate      0 Jan  6 13:16 file
--rw-r--r--   1 mel-amar  candidate      0 Jan  6 11:54 file.txt
--rw-r--r--   1 mel-amar  candidate   6569 Jan  6 12:36 leaks
--rw-r--r--   1 mel-amar  candidate   1590 Jan  5 20:47 main.c
--rwxr-xr-x   1 mel-amar  candidate  90304 Jan  6 13:16 minishell
--rw-r--r--   1 mel-amar  candidate      8 Jan  5 20:47 out
--rw-r--r--   1 mel-amar  candidate   3375 Jan  6 09:17 output
--rw-r--r--   1 mel-amar  candidate   4312 Jan  6 11:54 output.txt
-drwxr-xr-x  11 mel-amar  candidate    374 Jan  6 13:16 src
--rw-r--r--   1 mel-amar  candidate   2302 Jan  5 20:47 tester.sh
+hello

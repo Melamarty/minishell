@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:33:09 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/05 19:43:34 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/07 10:44:01 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ static void	func(t_list **tokens, t_cmd *cmd)
 		ft_lstadd_back(&cmd->redir_in, ft_lstnew(ft_strdup((*tokens)->next->token), TOKEN_HEREDOC));
 		cpy = ft_lstlast(cmd->redir_in);
 		cpy->fd = (*tokens)->next->fd;
+		cpy->expand = (*tokens)->next->expand;
 		(*tokens) = (*tokens)->next;
 	}
 	else if ((*tokens)->type == TOKEN_REDIR_APPEND)

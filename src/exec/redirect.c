@@ -13,7 +13,6 @@ int	redirect_out(t_tree *tree, t_env **env)
 {
 	int		fd;
 	t_list	*tmp;
-	int		cpy;
 
 	tmp = tree->cmd->redir_out;
 	while (tmp)
@@ -29,12 +28,13 @@ int	redirect_out(t_tree *tree, t_env **env)
 			close(fd);
 		tmp = tmp->next;
 	}
-	cpy = dup(1);
 	ft_dup2(fd, 1);
 	close(fd);
-	if (tree->cmd->cmd)
-		exec_cmd(tree->cmd, env);
-	ft_dup2(cpy, 1);
+	// if (tree->cmd->cmd)
+	// 	exec_cmd(tree->cmd, env);
+	// if (tree->right)
+	// 	exec_line(&tree->right, env);
+	(void)env;
 	return (1);
 }
 
@@ -57,14 +57,13 @@ int	read_fd(int fd, t_env *env)
 		buffer = get_next_line(fd);
 		write (res_fd, "\n", 1);
 	}
-	return (cpy);
+	return (close (fd), cpy);
 }
 
 int	redirect_in(t_tree *tree, t_env **env)
 {
 	int		fd;
 	t_list	*tmp;
-	int		cpy;
 
 	tmp = tree->cmd->redir_in;
 	while (tmp)
@@ -82,29 +81,43 @@ int	redirect_in(t_tree *tree, t_env **env)
 			break ;
 		tmp = tmp->next;
 	}
-	if (tmp->type == TOKEN_HEREDOC)
+	printf("((%d))\n", tmp->expand);
+	if (tmp->type == TOKEN_HEREDOC && !tmp->expand)
 		fd = read_fd(tmp->fd, *env);
-	cpy = dup(0);
 	ft_dup2(fd, 0);
 	close(fd);
-	if (tree->cmd->cmd)
-		exec_cmd(tree->cmd, env);
-	return (ft_dup2(cpy, 0), 0);
+	(void)env;
+	// if (tree->cmd->cmd)
+	// 	exec_cmd(tree->cmd, env);
+	return (1);
 }
 
 int	redirect(t_tree *tree, t_env **env)
 {
 	t_list	*list;
+	int cpy1 = -1;
+	int cpy0 = -1;
+	int res = 1;
 
 	if (tree->cmd->redir_in)
 	{
+		cpy0 = dup(0);
 		list = tree->cmd->redir_in;
-		redirect_in(tree, env);
+		res = redirect_in(tree, env);
 	}
-	if (tree->cmd->redir_out)
+	if (tree->cmd->redir_out && res)
 	{
+		cpy1 = dup(1);
 		list = tree->cmd->redir_out;
-		redirect_out(tree, env);
+		res = redirect_out(tree, env);
 	}
-	return (1);
+	if (res && tree->cmd)
+		exec_cmd(tree->cmd, env);
+	if (cpy1 != -1)
+		ft_dup2(cpy1, 1);
+	if (cpy0 != -1)
+		ft_dup2(cpy0, 0);
+	close(cpy1);
+	close(cpy0);
+	return (res);
 }

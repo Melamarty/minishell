@@ -14,7 +14,7 @@ int	echo(t_cmd *cmd, t_env *env)
 	}
 	while (args)
 	{
-		if (args->expand)
+		if (args->expand != 1)
 			ft_putstr_fd(ft_expand(args->token, env), 1);
 		else
 			ft_putstr_fd(args->token, 1);

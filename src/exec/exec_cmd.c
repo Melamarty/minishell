@@ -26,28 +26,30 @@ void	expand_cmd(t_cmd *cmd, t_list **args, t_env *env)
 	t_list	*tmp;
 
 	tmp = *args;
-	if (cmd->expand)
+	if (cmd->expand != 1)
 		cmd->cmd = ft_expand(cmd->cmd, env);
 	while (tmp)
 	{
-		if (tmp->expand)
+		if (tmp->expand != 1)
 			tmp->token = ft_expand(tmp->token, env);
 		tmp = tmp->next;
 	}
 	if (!ft_strlen (cmd->cmd))
 	{
-		while (cmd->args && !ft_strlen(cmd->args->token))
+		while (cmd->args  && !ft_strlen(cmd->args->token))
 			cmd->args = cmd->args->next;
 		if (cmd->args)
 			cmd->cmd = cmd->args->token;
 		if (cmd->args && cmd->args->next)
 			cmd->args = cmd->args->next;
+		else
+			cmd->args = NULL;
 	}
 }
 
 int	exec_cmd(t_cmd	*cmd, t_env **envr)
 {
-	// expand_cmd(cmd, &cmd->args, *envr);
+	expand_cmd(cmd, &cmd->args, *envr);
 	if (!ft_strcmp(cmd->cmd, "echo"))
 		return (echo(cmd, *envr));
 	else if (!ft_strcmp(cmd->cmd, "cd"))
@@ -65,7 +67,7 @@ int	exec_cmd(t_cmd	*cmd, t_env **envr)
 		return (unset(envr, cmd->args));
 	else if (!ft_strcmp(cmd->cmd, "env"))
 		return (env(cmd, *envr));
-	else if ((ft_strlen(cmd->cmd) && cmd->expand) || !cmd->expand)
+	else if ((ft_strlen(cmd->cmd) && cmd->expand != 1) || cmd->expand != 1)
 		return (exec_file(cmd, (*envr)));
 	(*envr)->last_exit = 0;
 	return (0);
