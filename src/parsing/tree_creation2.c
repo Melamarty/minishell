@@ -3,154 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   tree_creation2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By:  mel-amar@student.1337.ma <mel-amar>       +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/05 15:33:09 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/07 14:18:46 by  mel-amar@s      ###   ########.fr       */
+/*   Created: 2024/01/07 18:44:16 by mozennou          #+#    #+#             */
+/*   Updated: 2024/01/07 19:02:38 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-int	level(t_list *tk)
-{
-	if (tk->type == TOKEN_PIPE)
-		return (1);
-	else if (tk->type == TOKEN_AND || tk->type == TOKEN_OR)
-		return (2);
-	return (0);
-}
-
-int	after_brackets(t_list **tokens)
-{
-	while (*tokens && (*tokens)->type != TOKEN_BRKT_OPEN)
-		(*tokens) = (*tokens)->prev;
-	(*tokens)->visited = 1;
-	(*tokens) = (*tokens)->prev;
-	return (0);
-}
-
-int	set_cmd(t_cmd **cmd)
-{
-	(*cmd) = my_malloc(sizeof(t_cmd), 0);
-	if (!cmd)
-		return (-1);
-	(*cmd)->cmd = NULL;
-	(*cmd)->args = NULL;
-	(*cmd)->redir_in = NULL;
-	(*cmd)->redir_out = NULL;
-	return (0);
-}
-
-static void	func(t_list **tokens, t_cmd *cmd)
+static void	func2(t_list **tokens, t_cmd *cmd)
 {
 	t_list	*cpy;
 
 	if ((*tokens)->type == TOKEN_HEREDOC)
 	{
-		ft_lstadd_back(&cmd->redir_in, ft_lstnew(ft_strdup((*tokens)->next->token), TOKEN_HEREDOC));
+		redir_add(&cmd->redir_in, (*tokens)->next->token, TOKEN_HEREDOC);
 		cpy = ft_lstlast(cmd->redir_in);
 		cpy->fd = (*tokens)->next->fd;
-		cpy->expand = (*tokens)->next->expand;
+		(*tokens) = (*tokens)->next;
+	}
+	else if ((*tokens)->type == TOKEN_REDIR_OUT)
+	{
+		redir_add(&cmd->redir_out, (*tokens)->next->token, TOKEN_REDIR_OUT);
 		(*tokens) = (*tokens)->next;
 	}
 	else if ((*tokens)->type == TOKEN_REDIR_APPEND)
 	{
-		ft_lstadd_back(&cmd->redir_out, ft_lstnew(ft_strdup((*tokens)->next->token), 1));
+		redir_add(&cmd->redir_out, (*tokens)->next->token, TOKEN_REDIR_APPEND);
 		(*tokens) = (*tokens)->next;
 	}
-	else if ((*tokens)->type == TOKEN_EXPR)
-	{
-			ft_lstadd_back(&cmd->args, ft_lstnew(ft_strdup((*tokens)->token), 0));
-			cpy = ft_lstlast(cmd->args);
-			cpy->expand = (*tokens)->expand;
-			cpy->pos = (*tokens)->pos;
-	}
-}
-
-t_tree     *command(t_list *tokens)
-{
-    t_tree	*head;
-    t_cmd	*cmd;
-
-    if (!tokens || set_cmd(&cmd))
-        return (NULL);
-    while (tokens && !level(tokens) && tokens->visited == 0)
-    {
-		if (tokens->type == TOKEN_REDIR_IN)
-		{
-			ft_lstadd_back(&cmd->redir_in, ft_lstnew(ft_strdup(tokens->next->token), TOKEN_REDIR_IN));
-			tokens = tokens->next;
-		}
-		else if (tokens->type == TOKEN_REDIR_OUT)
-		{
-			ft_lstadd_back(&cmd->redir_out, ft_lstnew(ft_strdup(tokens->next->token), 0));
-			tokens = tokens->next;
-		}
-		else
-       		func(&tokens, cmd);
-		cmd->cmd = NULL;
-		tokens = tokens->next;
-    }
-    head = new_node(cmd, TOKEN_EXPR);
-    return (head);
-}
-
-int	to_next_brkt(t_list **tokens)
-{
-	int	f;
-
-	f = 0;
-	while (*tokens)
-	{
-		if ((*tokens)->type == TOKEN_BRKT_CLOSE)
-			f++;
-		else if ((*tokens)->type == TOKEN_BRKT_OPEN)
-			f--;
-		if (!f && (*tokens)->type == TOKEN_BRKT_OPEN)
-			break ; 
-		(*tokens) = (*tokens)->prev;
-	}
-	if ((*tokens)->prev)
-		return (0);
-	return (1);
-}
-
-t_tree	*condition(t_list *tokens)
-{
-	t_tree  *head;
-
-	if (!tokens)
-		return (NULL);
-	while (tokens->prev && tokens->visited == 0)
-	{
-		if (tokens->type == TOKEN_OR || tokens->type == TOKEN_AND)
-		{
-			tokens->visited = 1;
-			head = new_node(NULL, tokens->type);
-			head->right = pipeline(tokens->next);
-			head->left = condition(tokens->prev);
-			return (head);
-		}
-		else if (tokens->type == TOKEN_BRKT_CLOSE)
-		{
-			if(to_next_brkt(&tokens))
-				return (pipeline(tokens));
-		}
-		tokens = tokens->prev;
-	}
-	if (tokens->type == TOKEN_BRKT_OPEN)
-		return (pipeline(tokens->next));
-	tokens->visited = 0;
-	return (pipeline(tokens));
 }
 
 t_tree	*get_redirs(t_tree *head, t_list *tokens)
 {
 	t_tree	*res;
 	t_cmd	*cmd;
-	t_list	*cpy;
-
 
 	if (!tokens || level(tokens))
 		return (head);
@@ -159,27 +47,13 @@ t_tree	*get_redirs(t_tree *head, t_list *tokens)
 	while (tokens && !level(tokens))
 	{
 		if (tokens->type == TOKEN_REDIR_IN)
-        {
-            ft_lstadd_back(&cmd->redir_in, ft_lstnew(ft_strdup(tokens->next->token), TOKEN_REDIR_IN));
-            tokens = tokens->next;
-        }
-        else if (tokens->type == TOKEN_HEREDOC)
-        {
-            ft_lstadd_back(&cmd->redir_in, ft_lstnew(ft_strdup(tokens->next->token), TOKEN_HEREDOC));
-            cpy = ft_lstlast(cmd->redir_in);
-            cpy->fd = tokens->next->fd;
-            tokens = tokens->next;
-        }
-        else if (tokens->type == TOKEN_REDIR_OUT)
-        {
-            ft_lstadd_back(&cmd->redir_out, ft_lstnew(ft_strdup(tokens->next->token), 0));
-            tokens = tokens->next;
-        }
-        else if (tokens->type == TOKEN_REDIR_APPEND)
-        {
-            ft_lstadd_back(&cmd->redir_out, ft_lstnew(ft_strdup(tokens->next->token), 1));
-            tokens = tokens->next;
-        }
+		{
+			ft_lstadd_back(&cmd->redir_in,
+				ft_lstnew(ft_strdup(tokens->next->token), TOKEN_REDIR_IN));
+			tokens = tokens->next;
+		}
+		else
+			func2(&tokens, cmd);
 		tokens = tokens->next;
 	}
 	res = new_node(cmd, TOKEN_REDIR_IN);
@@ -187,37 +61,12 @@ t_tree	*get_redirs(t_tree *head, t_list *tokens)
 	return (res);
 }
 
-t_list	*no_more(t_list	*tokens)
+static void	func(t_list *tokens, t_list **cpy, t_tree **head)
 {
-	while (tokens && tokens->visited == 0)
-	{
-		if (level(tokens) == 1)
-			break ;
-		tokens = tokens->next;
-	}
-	if (!tokens || tokens->visited == 1)
-		return (NULL);
-	return (tokens);
-}
-
-t_list	*mark_token2(t_list *tokens, t_list **cpy)
-{
-	int	f;
-
-	f = 0;
-	while (tokens)
-	{
-		if (tokens->type == TOKEN_BRKT_OPEN)
-			f++;
-		else if (tokens->type == TOKEN_BRKT_CLOSE)
-			f--;
-		if (!f && tokens->type == TOKEN_BRKT_CLOSE)
-			break ; 
-		tokens = tokens->next;
-	}
 	tokens->visited = 1;
-	(*cpy) = tokens->prev;
-	return (no_more(tokens->next));
+	(*head) = new_node(NULL, TOKEN_PIPE);
+	(*head)->right = pipeline(tokens->next);
+	(*head)->left = command(*cpy);
 }
 
 t_tree	*pipeline(t_list *tokens)
@@ -231,13 +80,7 @@ t_tree	*pipeline(t_list *tokens)
 	while (tokens && tokens->visited == 0)
 	{
 		if (tokens->type == TOKEN_PIPE)
-		{
-			tokens->visited = 1;
-			head = new_node(NULL, TOKEN_PIPE);
-			head->right = pipeline(tokens->next);
-			head->left = command(cpy);
-			return (head);
-		}
+			return (func(tokens, &cpy, &head), head);
 		else if (tokens->type == TOKEN_BRKT_OPEN)
 		{
 			tokens->visited = 1;

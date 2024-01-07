@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:34:11 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/31 09:06:06 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/07 17:44:16 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	env_free(t_env *env)
 	while (env->env)
 	{
 		tmp = env->env->next;
-		// (env->env->val);
 		env->env = tmp;
 	}
 	while (env->ex_env)

@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 13:14:41 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/05 13:15:04 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/07 17:46:11 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_list	*syntax_check(t_list *p, t_env *env)
 		else if (cpy->type == TOKEN_BRKT_CLOSE)
 			f--;
 		if (f < 0 || ft_strchr(cpy->token, ';') || ft_strchr(cpy->token, '\\'))
-			return ( ft_putsyntax_error(NULL));
+			return (ft_putsyntax_error(NULL));
 		if (func(cpy, pp, p, env))
 			return (NULL);
 		pp = cpy;

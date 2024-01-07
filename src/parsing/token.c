@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By:  mel-amar@student.1337.ma <mel-amar>       +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:45:56 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/07 11:39:18 by  mel-amar@s      ###   ########.fr       */
+/*   Updated: 2024/01/07 17:47:41 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,24 @@ char	*ft_get_expr(char *s)
 	return (res);
 }
 
+static void	func(t_list *p, int *in)
+{
+	if (p->type == TOKEN_S_Q)
+	{
+		if (!(*in))
+			(*in) = 1;
+		else
+			(*in) = 0;
+	}
+	else if (p->type == TOKEN_D_Q)
+	{
+		if (!(*in))
+			(*in) = 2;
+		else
+			(*in) = 0;
+	}
+}
+
 t_list	*tokenizing(char *expr, t_env *env)
 {
 	t_list	*tokens;
@@ -44,20 +62,7 @@ t_list	*tokenizing(char *expr, t_env *env)
 	p = tokens;
 	while (p)
 	{
-		if (p->type == TOKEN_S_Q)
-		{
-			if (!in)
-				in = 1;
-			else
-				in = 0;
-		}
-		else if (p->type == TOKEN_D_Q)
-		{
-			if (!in)
-				in = 2;
-			else
-				in = 0;
-		}
+		func(p, &in);
 		if (p->type == TOKEN_EXPR && in == 1)
 			p->expand = 1;
 		else if (p->type == TOKEN_EXPR && in == 2)

@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:36:38 by mozennou          #+#    #+#             */
-/*   Updated: 2023/12/21 20:37:31 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/07 17:45:26 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,4 @@ int	ft_lstadd_back(t_list **lst, t_list *new)
 	else
 		ft_lstlast(*lst)->next = new;
 	return (0);
-}
-
-void	ft_lstdelone(t_list *lst, void (*del)(void*))
-{
-	(void)free;
-	if (lst && del)
-	{
-		(*del)(lst->token);
-		// (lst);
-	}
 }

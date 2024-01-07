@@ -1,0 +1,93 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tree_creation1.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/07 18:43:42 by mozennou          #+#    #+#             */
+/*   Updated: 2024/01/07 18:43:54 by mozennou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parsing.h"
+
+int	level(t_list *tk)
+{
+	if (tk->type == TOKEN_PIPE)
+		return (1);
+	else if (tk->type == TOKEN_AND || tk->type == TOKEN_OR)
+		return (2);
+	return (0);
+}
+
+int	set_cmd(t_cmd **cmd)
+{
+	(*cmd) = my_malloc(sizeof(t_cmd), 0);
+	if (!cmd)
+		return (-1);
+	(*cmd)->cmd = NULL;
+	(*cmd)->args = NULL;
+	(*cmd)->redir_in = NULL;
+	(*cmd)->redir_out = NULL;
+	return (0);
+}
+
+void	redir_add(t_list **lst, char *token, int type)
+{
+	ft_lstadd_back(lst, ft_lstnew(ft_strdup(token), type));
+}
+
+static void	func(t_list **tokens, t_cmd *cmd)
+{
+	t_list	*cpy;
+
+	if ((*tokens)->type == TOKEN_HEREDOC)
+	{
+		redir_add(&cmd->redir_in, (*tokens)->next->token, TOKEN_HEREDOC);
+		cpy = ft_lstlast(cmd->redir_in);
+		cpy->fd = (*tokens)->next->fd;
+		cpy->expand = (*tokens)->next->expand;
+		(*tokens) = (*tokens)->next;
+	}
+	else if ((*tokens)->type == TOKEN_REDIR_APPEND)
+	{
+		redir_add(&cmd->redir_out, (*tokens)->next->token, TOKEN_REDIR_APPEND);
+		(*tokens) = (*tokens)->next;
+	}
+	else if ((*tokens)->type == TOKEN_EXPR)
+	{
+		redir_add(&cmd->args, (*tokens)->token, TOKEN_EXPR);
+		cpy = ft_lstlast(cmd->args);
+		cpy->expand = (*tokens)->expand;
+		cpy->pos = (*tokens)->pos;
+	}
+}
+
+t_tree	*command(t_list *tokens)
+{
+	t_tree	*head;
+	t_cmd	*cmd;
+
+	if (!tokens || set_cmd(&cmd))
+		return (NULL);
+	while (tokens && !level(tokens) && tokens->visited == 0)
+	{
+		if (tokens->type == TOKEN_REDIR_IN)
+		{
+			redir_add(&cmd->redir_in, tokens->next->token, TOKEN_REDIR_IN);
+			tokens = tokens->next;
+		}
+		else if (tokens->type == TOKEN_REDIR_OUT)
+		{
+			redir_add(&cmd->redir_out, tokens->next->token, TOKEN_REDIR_OUT);
+			tokens = tokens->next;
+		}
+		else
+			func(&tokens, cmd);
+		cmd->cmd = NULL;
+		tokens = tokens->next;
+	}
+	head = new_node(cmd, TOKEN_EXPR);
+	return (head);
+}

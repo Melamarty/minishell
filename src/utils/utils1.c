@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:49:07 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 17:51:37 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/07 20:13:14 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,34 +37,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	str[i] = '\0';
 	return (str);
 }
-
-// char	*ft_strjoin2(char *s1,char *s2)
-// {
-// 	size_t	i;
-// 	size_t	j;
-// 	char	*str;
-
-// 	if(!s1 && !s2)
-// 		return (NULL);
-// 	if (s1 == NULL)
-// 		s1 = ft_strdup("");
-// 	if (s2 == NULL)
-// 		s2 = "";
-// 	str = (char *)my_malloc(ft_strlen(s1) + ft_strlen(s2) + 1, 0);
-// 	if (!str)
-// 		return NULL;
-// 	i = 0;
-// 	j = 0;
-// 	while(s1[i])
-// 	{
-// 		str[i] = s1[i];
-// 		i++;
-// 	}  
-// 	while(s2[j])
-// 		str[i++] = s2[j++];
-// 	str[i] = '\0';
-// 	return (str);
-// }
 
 size_t	ft_strlen(char *str)
 {

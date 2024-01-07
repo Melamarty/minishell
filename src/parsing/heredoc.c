@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 11:53:08 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/07 17:53:44 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/07 20:13:02 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	read_heredoc(char *limiter, t_env *env)
 		if (!buffer)
 			return (close(fd1), fd2);
 		if (!ft_strncmp(buffer, limiter, ft_strlen(limiter) + 1))
-			return ( fd2);
+			return (fd2);
 		buffer = ft_strjoin(buffer, "\n");
 		write(fd1, buffer, ft_strlen(buffer));
 	}

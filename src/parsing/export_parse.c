@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export_parse.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By:  mel-amar@student.1337.ma <mel-amar>       +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:40:45 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/06 20:03:03 by  mel-amar@s      ###   ########.fr       */
+/*   Updated: 2024/01/07 17:44:29 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 int	is_valid(char c)
 {
