@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/07 17:37:23 by mel-amar          #+#    #+#             */
+/*   Updated: 2024/01/07 17:38:06 by mel-amar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 void	sort_ex_env(t_map **env)
@@ -44,6 +56,7 @@ void	add_var(t_env**env, t_map *var, t_list *tmp )
 	else
 		export_add_back(&(*env)->ex_env, var->key);
 }
+
 int	export_args(t_env **env, t_list *args)
 {
 	t_map	*var;

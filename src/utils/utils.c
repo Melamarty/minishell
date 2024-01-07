@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/07 17:47:34 by mel-amar          #+#    #+#             */
+/*   Updated: 2024/01/07 17:47:46 by mel-amar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	ft_strcmp(char *str1, char *str2)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while ((str1[i] || str2[i]))
@@ -16,7 +28,7 @@ int	ft_strcmp(char *str1, char *str2)
 
 int	ft_strncmp(char *str1, char *str2, int n)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while ((str1[i] || str2[i]) && i < n)
@@ -30,7 +42,9 @@ int	ft_strncmp(char *str1, char *str2, int n)
 
 int	ft_isalnum(int c)
 {
-    return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'));
+	return ((c >= 'a' && c <= 'z')
+		|| (c >= 'A' && c <= 'Z')
+		|| (c >= '0' && c <= '9'));
 }
 
 void	ft_dup2(int fd1, int fd2)

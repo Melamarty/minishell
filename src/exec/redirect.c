@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:08:35 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 17:15:53 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/07 18:44:45 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*ft_get_name2(void)
 	res = ft_strdup(".expand");
 	while (!access(res, F_OK))
 	{
-		res = ft_strjoin2(res, ft_itoa(i));
+		res = ft_strjoin(res, ft_itoa(i));
 		i++;
 	}
 	return (res);
@@ -115,6 +115,7 @@ int	redirect(t_tree *tree, t_env **env)
 	cpy1 = -1;
 	cpy0 = -1;
 	res = 1;
+	// printf ("%p\n", tree->right);
 	if (tree->cmd->redir_in)
 	{
 		cpy0 = dup(0);
@@ -125,8 +126,10 @@ int	redirect(t_tree *tree, t_env **env)
 		cpy1 = dup(1);
 		res = redirect_out(tree, env);
 	}
-	if (res && tree->cmd)
+	if (res && tree->cmd->cmd)
 		exec_cmd(tree->cmd, env);
+	if (tree->right)
+		exec_line(&tree->right, env);
 	if (cpy1 != -1)
 		ft_dup2(cpy1, 1);
 	if (cpy0 != -1)

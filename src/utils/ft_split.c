@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 14:55:02 by mel-amar          #+#    #+#             */
-/*   Updated: 2023/10/30 14:55:03 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/07 17:41:51 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,6 @@ static void	*ft_free(char **arr, int n)
 	i = 0;
 	(void)n;
 	(void)arr;
-	// while (i < n)
-	// 	free(arr[i++]);
-	// free(arr);
 	return (NULL);
 }
 

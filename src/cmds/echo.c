@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/07 17:37:11 by mel-amar          #+#    #+#             */
+/*   Updated: 2024/01/07 17:37:44 by mel-amar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	echo(t_cmd *cmd, t_env *env)
@@ -14,10 +26,7 @@ int	echo(t_cmd *cmd, t_env *env)
 	}
 	while (args)
 	{
-		// if (args->expand != 1)
-		// 	ft_putstr_fd(ft_expand(args->token, env), 1);
-		// else
-			ft_putstr_fd(args->token, 1);
+		ft_putstr_fd(args->token, 1);
 		if (args->next)
 			ft_putstr_fd(" ", 1);
 		args = args->next;

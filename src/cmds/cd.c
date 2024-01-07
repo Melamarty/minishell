@@ -1,6 +1,16 @@
-#include "../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/07 17:36:52 by mel-amar          #+#    #+#             */
+/*   Updated: 2024/01/07 17:36:59 by mel-amar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// cc cd.c ../utils/utils1.c pwd.c ../utils/utils.c -lreadline echo.c
+#include "../minishell.h"
 
 int	two_points(char *curr_path, char *path)
 {

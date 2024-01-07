@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By:  mel-amar@student.1337.ma <mel-amar>       +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 11:53:08 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/07 16:27:24 by  mel-amar@s      ###   ########.fr       */
+/*   Updated: 2024/01/07 17:53:44 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_get_name(void)
 	res = ft_strdup(".heredoc");
 	while (!access(res, F_OK))
 	{
-		res = ft_strjoin2(res, ft_itoa(i));
+		res = ft_strjoin(res, ft_itoa(i));
 		i++;
 	}
 	return (res);

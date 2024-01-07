@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_arr.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/07 17:45:53 by mel-amar          #+#    #+#             */
+/*   Updated: 2024/01/07 17:46:34 by mel-amar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../minishell.h"
 
@@ -22,7 +33,7 @@ char	**set_args(char *file, t_list *args)
 	int		i;
 
 	args_len = list_len(args);
-	e_args = my_malloc((args_len + 2)* sizeof(char *), 0);
+	e_args = my_malloc((args_len + 2) * sizeof(char *), 0);
 	i = 1;
 	e_args[0] = file;
 	while (args)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/07 17:40:57 by mel-amar          #+#    #+#             */
+/*   Updated: 2024/01/07 17:41:18 by mel-amar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	print_export(t_map *env, t_map *ex_env)
@@ -50,8 +62,8 @@ int	add_back(t_map **env, t_map *new)
 
 t_map	*duplicate_env(t_map *env)
 {
-	t_map *res;
-	t_map *tmp;
+	t_map	*res;
+	t_map	*tmp;
 
 	res = NULL;
 	while (env)
@@ -66,7 +78,7 @@ t_map	*duplicate_env(t_map *env)
 int	print_export_env(t_env **envr)
 {
 	t_map	*tmp;
-	t_map *sorted;
+	t_map	*sorted;
 
 	tmp = NULL;
 	sorted = NULL;

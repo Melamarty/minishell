@@ -9,7 +9,7 @@ char	*ft_lstjoin(t_list **tokens)
 	res = NULL;
 	while (p)
 	{
-		res = ft_strjoin2(res, p->token);	//update strjoin
+		res = ft_strjoin(res, p->token);
 		p = p->next;
 	}
 	return (res);

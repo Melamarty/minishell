@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 07:25:36 by mozennou          #+#    #+#             */
-/*   Updated: 2023/11/06 21:18:26 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/07 17:51:01 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,8 @@ char	*ft_free(char *res, char *bf, char *bc, int r)
 	if (!r)
 	{
 		s = ft_strjoin(res, bf);
-		// free(res);
 		return (s);
 	}
-	// free(res);
-	// free(bf);
-	// free(bc);
 	return (NULL);
 }
 
@@ -52,8 +48,6 @@ char	*read_fd_(int fd, char *bc)
 		buffer[r] = 0;
 		res = ft_free(res, buffer, bc, 0);
 	}
-	// free(buffer);
-	// free(bc);
 	return (res);
 }
 
@@ -95,10 +89,7 @@ char	*get_next(char *bc)
 	while (bc[i] && bc[i] != '\n')
 		i++;
 	if (!bc[i])
-	{
-		// free(bc);
 		return (NULL);
-	}
 	res = ft_calloc(ft_strlen(bc) - i++, 1);
 	if (!res)
 		return (NULL);
@@ -106,7 +97,6 @@ char	*get_next(char *bc)
 	while (bc[i])
 		res[j++] = bc[i++];
 	res[j] = 0;
-	// free(bc);
 	return (res);
 }
 
