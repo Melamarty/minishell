@@ -61,11 +61,15 @@ t_list	*expand_args(t_list *args, t_env *env)
 
 int	exec_cmd(t_cmd	*cmd, t_env **envr)
 {
-	cmd->args = expand_args(cmd->args, *envr);
-	if (!cmd->args)
-		cmd->cmd = ft_strdup("");
-	else
+	if (!ft_lstlen(cmd->args))
 		expand_cmd(cmd);
+	else
+	{
+		cmd->args = expand_args(cmd->args, *envr);
+		if (!cmd->args)
+			return (0);
+		expand_cmd(cmd);
+	}
 	if (!ft_strcmp(cmd->cmd, "echo"))
 		return (echo(cmd, *envr));
 	else if (!ft_strcmp(cmd->cmd, "cd"))

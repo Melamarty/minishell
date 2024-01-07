@@ -94,6 +94,7 @@ char	*ft_expand(char *s, t_env *env);
 char	*ft_get_name(void);
 
 // utils
+int		 ft_lstlen(t_list *lst);
 char	*ft_strjoin(char *s1,char *s2);
 char	*ft_strjoin2(char *s1,char *s2);
 size_t	ft_strlen(char *str);
