@@ -64,17 +64,21 @@ int	read_fd(int fd, t_env *env)
 	res_fd = open(name, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	cpy = open(name, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (unlink(name) || cpy == -1 || res_fd == -1)
-		return (my_malloc(0, 1), exit (1), 0);
+		return (close (cpy), close (res_fd), close (fd), my_malloc(0, 1), exit (1), 0);
 	buffer = get_next_line(fd);
 	while (buffer)
 	{
 		buffer[ft_strlen(buffer) - 1] = 0;
 		buffer = ft_expand(buffer, env);
+		// printf("buffer: %s\n", buffer);
 		write(res_fd, buffer, ft_strlen(buffer));
 		buffer = get_next_line(fd);
 		write (res_fd, "\n", 1);
 	}
-	return (close (fd), cpy);
+	// printf ("res_fd: %d\n", res_fd);
+	// printf ("cpy: %d\n", cpy);
+	// printf ("fd: %d\n", fd);
+	return (close (fd), close(res_fd), cpy);
 }
 
 int	redirect_in(t_tree *tree, t_env **env)
