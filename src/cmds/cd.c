@@ -6,12 +6,19 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:52 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 15:05:56 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 16:05:02 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+void cd_err()
+{
+	write (2, "cd: ", 4);
+	write (2, "error retrieving current directory: getcwd: ", 44);
+	write (2, "cannot access parent directories: ", 34);
+	write (2, "No such file or directory\n", 26);
+}
 int	two_points(char *curr_path, char *path)
 {
 	int		i;
@@ -52,16 +59,17 @@ int	special_path(char *path, t_env *env)
 
 int	cd(char *path, t_env *env)
 {
+	int		res;
+
 	if (!path)
 		return (special_path(NULL, env));
 	if (path && path[0] == '~')
 		return (special_path(path, env));
-	// struct stat sb;
-	// printf ("%d\n", stat("/Users/mel-amar/Desktop/minishell/a", &sb));
-	if (!chdir(path))
+	res = chdir(path);
+	if (!getcwd(NULL, 0))
+		return (env->last_exit = 1, cd_err(),0);
+	if (!res)
 		return (1);
-	// int res = chdir(path);
-	// printf ("res = %d\n", res);
 	write(2, "minishell: cd: ", 15);
 	write(2, path, ft_strlen(path));
 	write(2, ": No such file or directory\n", 28);
