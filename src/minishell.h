@@ -112,6 +112,8 @@ char	**set_env(t_env *env_list);
 char	*locate_cmd(char *cmd, char *path);
 void	ft_dup2(int fd1, int fd2);
 int		ft_atoi(const char *s);
+char	**my_split(char const *s);
+void	*ft_memcpy(void *d, const void *s, size_t n);
 
 // export utils
 int		print_export(t_map *env, t_map *ex_env);

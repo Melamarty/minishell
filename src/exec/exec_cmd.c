@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:10:10 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 11:32:13 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:51:45 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,31 +30,21 @@ void	norm_helper(t_list **res, int *l, char *string)
 	*l = 1;
 }
 
-t_list *ft_lstsplit(char *string)
+t_list *ft_lstsplit(char *string, t_list **res)
 {
-	t_list	*res;
 	char	*str;
+	char 	**split;
 	int		i;
 
 	i = 0;
-	res = NULL;
-	while (string[i])
+	split = my_split(string);
+	while (split[i])
 	{
-		if (string[i] == ' ')
-		{
-			str = ft_substr(string, 0, i);
-			ft_lstadd_back(&res, ft_lstnew(str, 0));
-			string = string + i + 1;
-			i = 0;
-		}
+		str = ft_strdup(split[i]);
+		ft_lstadd_back(res, ft_lstnew(str, 0));
 		i++;
 	}
-	if (i)
-	{
-		str = ft_substr(string, 0, i);
-		ft_lstadd_back(&res, ft_lstnew(str, 0));
-	}
-	return (res);
+	return (*res);
 }
 
 t_list    *expand_args(t_list *args, t_env *env)
@@ -86,7 +76,7 @@ t_list    *expand_args(t_list *args, t_env *env)
 			if (args->expand)
            		ft_lstadd_back(&res, ft_lstnew(string, 0));
 			else
-				ft_lstadd_back(&res, ft_lstsplit(string));
+				ft_lstsplit(string, &res);
 		}
         args = args->next;
     }

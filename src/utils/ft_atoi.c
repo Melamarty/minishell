@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 08:37:00 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/08 11:02:46 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:40:01 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,23 @@ int	ft_atoi(const char *s)
 	while (s[i] && s[i] == '0')
 		i++;
 	return (func0(s, i, neg));
+}
+
+void	*ft_memcpy(void *d, const void *s, size_t n)
+{
+	size_t			i;
+	unsigned char	*p;
+	unsigned char	*pp;
+
+	if (!s && !d)
+		return (NULL);
+	i = 0;
+	p = (unsigned char *)d;
+	pp = (unsigned char *)s;
+	while (i < n)
+	{
+		p[i] = pp[i];
+		i++;
+	}
+	return (d);
 }

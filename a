@@ -1,0 +1,14 @@
+Makefile
+TODO.txt
+a
+appah.txt
+archive.tar.gz
+b
+c
+file
+file.txt
+main.c
+minishell
+output.txt
+src
+tester.sh

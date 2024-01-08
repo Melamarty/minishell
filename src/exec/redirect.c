@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:08:35 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 20:52:51 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/08 12:20:01 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	redirect_out(t_tree *tree, t_env **env)
 	tmp = tree->cmd->redir_out;
 	while (tmp)
 	{
-		if (tmp->type)
+		if (tmp->type == 3)
 			fd = open(tmp->token, O_CREAT | O_RDWR | O_APPEND, 0644);
 		else
 			fd = open(tmp->token, O_CREAT | O_RDWR | O_TRUNC, 0644);
@@ -127,6 +127,8 @@ int	redirect(t_tree *tree, t_env **env)
 	}
 	if (res && tree->cmd)
 		exec_cmd(tree->cmd, env);
+	if (res && tree->right)
+		exec_line (&tree->right, env);
 	if (cpy1 != -1)
 		ft_dup2(cpy1, 1);
 	if (cpy0 != -1)
