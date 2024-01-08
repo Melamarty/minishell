@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:10:10 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 10:52:05 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:32:13 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,33 @@ void	norm_helper(t_list **res, int *l, char *string)
 	*l = 1;
 }
 
+t_list *ft_lstsplit(char *string)
+{
+	t_list	*res;
+	char	*str;
+	int		i;
+
+	i = 0;
+	res = NULL;
+	while (string[i])
+	{
+		if (string[i] == ' ')
+		{
+			str = ft_substr(string, 0, i);
+			ft_lstadd_back(&res, ft_lstnew(str, 0));
+			string = string + i + 1;
+			i = 0;
+		}
+		i++;
+	}
+	if (i)
+	{
+		str = ft_substr(string, 0, i);
+		ft_lstadd_back(&res, ft_lstnew(str, 0));
+	}
+	return (res);
+}
+
 t_list    *expand_args(t_list *args, t_env *env)
 {
     t_list    *res;
@@ -42,7 +69,7 @@ t_list    *expand_args(t_list *args, t_env *env)
     while (args)
     {
         if (args->expand != 1)
-            string = ft_expand(args->token, env);
+        	string = ft_expand(args->token, env);
         else
             string = ft_strdup(args->token);
         if (args->pos == 1 && !l && ft_strlen(string))
@@ -55,7 +82,12 @@ t_list    *expand_args(t_list *args, t_env *env)
                 l = 0;
         }
         else if (ft_strlen(string))
-            ft_lstadd_back(&res, ft_lstnew(string, 0));
+		{
+			if (args->expand)
+           		ft_lstadd_back(&res, ft_lstnew(string, 0));
+			else
+				ft_lstadd_back(&res, ft_lstsplit(string));
+		}
         args = args->next;
     }
     return (res);
