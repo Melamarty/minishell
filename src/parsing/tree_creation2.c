@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_creation2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 18:44:16 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/08 14:23:47 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/08 14:47:02 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static void	func2(t_list **tokens, t_cmd *cmd)
 	}
 	else if ((*tokens)->type == TOKEN_REDIR_OUT)
 	{
-		printf("TOKEN_REDIR_OUT\n");
 		redir_add(&cmd->redir_out, (*tokens)->next->token, TOKEN_REDIR_OUT);
 		(*tokens) = (*tokens)->next;
 	}
