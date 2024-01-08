@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:52 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 11:27:06 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:05:56 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int	cd(char *path, t_env *env)
 		return (special_path(NULL, env));
 	if (path && path[0] == '~')
 		return (special_path(path, env));
+	// struct stat sb;
+	// printf ("%d\n", stat("/Users/mel-amar/Desktop/minishell/a", &sb));
 	if (!chdir(path))
 		return (1);
 	// int res = chdir(path);

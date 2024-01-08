@@ -3,15 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:11 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 09:39:28 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:54:21 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+int	is_option(char *str)
+{
+	if (ft_strncmp(str, "-n", 2))
+		return (0);
+	str += 2;
+	while (*str)
+	{
+		if (*str != 'n')
+			return (0);
+		str++;
+	}
+	return (1);
+}
 int	echo(t_cmd *cmd, t_env *env)
 {
 	t_list	*args;
@@ -24,6 +37,8 @@ int	echo(t_cmd *cmd, t_env *env)
 		is_n = 1;
 		args = args->next;
 	}
+	while (args && args->token && is_option(args->token))
+		args = args->next;
 	while (args)
 	{
 		ft_putstr_fd(args->token, 1);

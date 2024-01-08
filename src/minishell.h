@@ -10,6 +10,7 @@
 # include <fcntl.h>
 #include <dirent.h>
 #include <limits.h>
+#include <sys/stat.h>
 
 typedef struct s_map
 {
