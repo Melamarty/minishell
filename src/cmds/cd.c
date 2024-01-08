@@ -6,55 +6,82 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:52 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 16:05:02 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 18:37:11 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void cd_err()
+void cd_err(int flag, char *path)
 {
-	write (2, "cd: ", 4);
-	write (2, "error retrieving current directory: getcwd: ", 44);
-	write (2, "cannot access parent directories: ", 34);
-	write (2, "No such file or directory\n", 26);
-}
-int	two_points(char *curr_path, char *path)
-{
-	int		i;
-	char	*new_path;
-
-	if (!path[1] || path[1] == '/')
-		return (1);
-	i = ft_strlen(curr_path) - 2;
-	while (curr_path[i] && curr_path[i] != '/')
-		i--;
-	new_path = my_malloc(i, 0);
-	if (!new_path)
-		return (0);
-	++i;
-	while (--i >= 0)
-		new_path[i] = curr_path[i];
-	if (chdir(new_path))
-		return (1);
-	return (0);
+	if (flag)
+	{
+		write (2, "cd: ", 4);
+		write (2, "error retrieving current directory: getcwd: ", 44);
+		write (2, "cannot access parent directories: ", 34);
+		write (2, "No such file or directory\n", 26);
+	}
+	else
+	{
+		write(2, "minishell: cd: ", 15);
+		write(2, path, ft_strlen(path));
+		write(2, ": No such file or directory\n", 28);
+	}
 }
 
 int	special_path(char *path, t_env *env)
 {
-	char	*abs_path;
 	char	*tmp;
 
-	(void)env;
-	tmp = get_env(env, "HOME");
-	if (path)
-		abs_path = ft_strjoin(tmp, path + 1);
-	else
-		abs_path = tmp;
-	if (!chdir (abs_path))
+	if (!path || path[0] == '~')
+		tmp = get_env(env, "HOME");
+	else if (path[0] == '-')
+		tmp = get_env(env, "OLDPWD");
+	if (!chdir (tmp))
 		return (env->last_exit = 0, 1);
+	cd_err(0, path);
 	env->last_exit = 1;
 	return (0);
+}
+
+void set_env_(t_env *env, char *key, char *value)
+{
+	t_map	*tmp;
+
+	tmp = env->env;
+	while (tmp)
+	{
+		if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
+		{
+			tmp->val = value;
+			return ;
+		}
+		tmp = tmp->next;
+	}
+	env_add_back(&env->env, key, value);
+}
+
+int	update_env(t_env *env, char *path)
+{
+	char	*tmp;
+	char 	*tmp2;
+	char	*jp;
+
+	tmp = getcwd(NULL, 0);
+	tmp2 = get_env(env, "PWD");
+	set_env_(env, "OLDPWD", tmp2);
+	if (!tmp)
+	{
+		jp = ft_strjoin(tmp2, "/");
+		jp = ft_strjoin(jp, path);
+		set_env_(env, "PWD", jp);
+		cd_err(1, NULL);
+		env->last_exit = 1;
+		return (0);
+	}
+	else
+		set_env_(env, "PWD", tmp);
+	return (1);
 }
 
 int	cd(char *path, t_env *env)
@@ -62,17 +89,15 @@ int	cd(char *path, t_env *env)
 	int		res;
 
 	if (!path)
-		return (special_path(NULL, env));
-	if (path && path[0] == '~')
-		return (special_path(path, env));
+		return (special_path(NULL, env), update_env(env, path));
+	else if (path && (path[0] == '~' ||  path[0] == '-'))
+		return (special_path(path, env), update_env(env, path));
 	res = chdir(path);
-	if (!getcwd(NULL, 0))
-		return (env->last_exit = 1, cd_err(),0);
+	if (!update_env(env, path))
+		return (0);
 	if (!res)
-		return (1);
-	write(2, "minishell: cd: ", 15);
-	write(2, path, ft_strlen(path));
-	write(2, ": No such file or directory\n", 28);
+		return (env->last_exit = 0,  1);
+	cd_err(0, path);
 	env->last_exit = 1;
 	return (0);
 }

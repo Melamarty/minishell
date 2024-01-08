@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:26 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 16:06:54 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 18:20:46 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	pwd(t_cmd *cmd, t_env *env)
 {
-	char	path[1024];
+	char	*path;
 
 	if (cmd->args)
 	{
@@ -22,7 +22,7 @@ int	pwd(t_cmd *cmd, t_env *env)
 		write(2, "pwd: too many arguments\n", 24);
 		return (0);
 	}
-	getcwd(path, 1024);
+	path = get_env(env, "PWD");
 	putstr(path);
 	env->last_exit = 0;
 	return (1);

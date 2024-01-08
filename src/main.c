@@ -55,36 +55,43 @@ void	bash_loop(t_env *my_env)
 		// printf ("last exit status is %d\n", my_env->last_exit);
 	}
 }
-
 void f(void)
 {
 	system("leaks minishell");
 }
-int main(int ac, char **av, char **env)
+t_env *setup_env (char **env)
 {
 	t_list *lst;
 	char	*tmp;
 
-	(void)ac;
-	(void)av;
-	// atexit(f);
 	t_env *enver = my_malloc(sizeof(t_env), 0);
 	t_map *my_env = get_env55(env);
 	enver->env = my_env;
 	enver->ex_env = NULL;
+	lst = my_malloc(sizeof(t_list), 0);
 	if (!is_exist(enver->env, "SHLVL"))
 		env_add_back(&enver->env, "SHLVL", "1");
 	else
 	{
-		lst = my_malloc(sizeof(t_list), 0);
 		lst->token = ft_strdup("SHLVL");
 		lst->next = NULL;
 		tmp = ft_itoa (ft_atoi(get_env(enver, "SHLVL")) + 1);
 		unset(&enver, lst);
 		env_add_back(&enver->env, "SHLVL", tmp);
 	}
-	bash_loop(enver);
-	// while (1)
-	// 	pause();
+	lst->token = ft_strdup("OLDPWD");
+	unset (&enver, lst);
+	return (enver);
+}
+
+int main(int ac, char **av, char **env)
+{
+	t_env *envr;
+
+	(void)ac;
+	(void)av;
+	// atexit(f);
+	envr = setup_env (env);
+	bash_loop(envr);
 	return (0);
 }
