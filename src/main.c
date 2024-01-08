@@ -14,13 +14,14 @@ void aff_list(t_list *lst)
 
 void sigint_handler(int signo)
 {
-	(void)signo;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	// write(1, "\e[1;32", 7);
-	rl_replace_line("", 0);
-	rl_redisplay();
-	sig = 1;
+	if (signo == SIGINT)
+	{
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		sig = 1;
+	}
 }
 
 
@@ -91,6 +92,7 @@ int main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	// atexit(f);
+	signal(SIGQUIT, sigint_handler);
 	envr = setup_env (env);
 	bash_loop(envr);
 	return (0);
