@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 11:53:08 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/07 20:13:02 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/08 09:38:21 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static void	func(t_env *env)
 	if (m == -1)
 		exit(1);
 	ft_dup2(0, m);
+	close(m);
 	env->last_exit = 1;
 }
 
@@ -77,7 +78,7 @@ int	read_heredoc(char *limiter, t_env *env)
 		if (!buffer)
 			return (close(fd1), fd2);
 		if (!ft_strncmp(buffer, limiter, ft_strlen(limiter) + 1))
-			return (fd2);
+			return (close(fd1), fd2);
 		buffer = ft_strjoin(buffer, "\n");
 		write(fd1, buffer, ft_strlen(buffer));
 	}

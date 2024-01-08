@@ -1,9 +1,19 @@
-minishell >> ./a.out 
-execve: Permission denied
-minishell >> echo $?
-1 
+echo -nnnnnnnnnnn helo
 
-bash-3.2$ ./a.out
-bash: ./a.out: Permission denied
-bash-3.2$ echo $?
-126
+echo $USER$USER.$$USER
+
+echo $USER$USER.$$USER (skip $$)
+
+export a="l" b="s"
+
+declare -x a="lb=s"
+declare -x a="l"
+
+<< a << b << c
+> 
+> a
+> a
+> b
+> b
+> c
+[1]    76342 segmentation fault  ./minishell

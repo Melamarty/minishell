@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:11 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 17:37:44 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 09:39:28 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	echo(t_cmd *cmd, t_env *env)
 
 	args = cmd->args;
 	is_n = 0;
-	if (cmd->args && cmd->args->token && !ft_strcmp(cmd->args->token, "-n"))
+	if (cmd->args && cmd->args->token && !ft_strncmp(cmd->args->token, "-n", 2))
 	{
 		is_n = 1;
 		args = args->next;

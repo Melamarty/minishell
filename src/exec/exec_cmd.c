@@ -6,16 +6,22 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:10:10 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 20:59:43 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/08 09:34:04 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	expand_cmd(t_cmd *cmd)
+int	expand_cmd(t_cmd *cmd)
 {
+	if (!cmd->args)
+	{
+		cmd->cmd = NULL;
+		return (-1);
+	}
 	cmd->cmd = cmd->args->token;
 	cmd->args = cmd->args->next;
+	return (0);
 }
 
 void	norm_helper(t_list **res, int *l, char *string)
@@ -56,13 +62,17 @@ t_list	*expand_args(t_list *args, t_env *env)
 int	fix_cmd(t_cmd *cmd, t_env *env)
 {
 	if (!ft_lstlen(cmd->args))
-		expand_cmd(cmd);
+	{
+		if (expand_cmd(cmd))
+			return (1);
+	}
 	else
 	{
 		cmd->args = expand_args(cmd->args, env);
 		if (!cmd->args)
 			return (1);
-		expand_cmd(cmd);
+		if (expand_cmd(cmd))
+			return (1);
 	}
 	return (0);
 }

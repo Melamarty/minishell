@@ -10,7 +10,7 @@ READLINE_I = $(shell /Users/mozennou/homebrew/bin/brew --prefix readline)/includ
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	cc -o $@ $(OBJS) $(LIBS) -L $(READLINE_L) #-fsanitize=address 
+	cc -o $@ $(OBJS) $(LIBS) -L $(READLINE_L) -fsanitize=address 
 
 %.o: %.c src/minishell.h
 	cc $(CFLAGS) -I $(READLINE_I) -c $< -o $@ 

@@ -39,6 +39,16 @@ static int func(char *s, t_list **tokens, t_env *env)
 		ft_lstadd_back(tokens, ft_lstnew(ft_itoa(env->last_exit), 0));
 		return (2);
 	}
+	if (!ft_strncmp(s, "$", 1))
+	{
+		ft_lstadd_back(tokens, ft_lstnew(ft_strdup(""), 0));
+		return (2);
+	}
+	if (s[i] <= '9' && s[i] >= '0')
+	{
+		ft_lstadd_back(tokens, ft_lstnew(ft_strdup(""), 0));
+		return (2);
+	}
 	while (s[i] && ft_isalnum(s[i]))
 		i++;
 	ft_lstadd_back(tokens, ft_lstnew(ft_get_env2(s, i, env->env), 0));
