@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 18:44:16 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/07 19:02:38 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/08 14:23:47 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static void	func2(t_list **tokens, t_cmd *cmd)
 	}
 	else if ((*tokens)->type == TOKEN_REDIR_OUT)
 	{
+		printf("TOKEN_REDIR_OUT\n");
 		redir_add(&cmd->redir_out, (*tokens)->next->token, TOKEN_REDIR_OUT);
 		(*tokens) = (*tokens)->next;
 	}
@@ -44,7 +45,7 @@ t_tree	*get_redirs(t_tree *head, t_list *tokens)
 		return (head);
 	if (set_cmd(&cmd))
 		return (NULL);
-	while (tokens && !level(tokens))
+	while (tokens && !level(tokens) && tokens->visited == 0)
 	{
 		if (tokens->type == TOKEN_REDIR_IN)
 		{

@@ -49,7 +49,7 @@ void	bash_loop(t_env *my_env)
 			my_env->last_exit = 1;
 		cpy = tokens;
 		t_tree *tree = condition(ft_lstlast(tokens));
-		// print_tree(tree, 0);
+		//print_tree(tree, 0);
 		// printf ("\e[1;31mexecuting\e[0m\n");
 		exec_line(&tree, &my_env);
 		// printf ("last exit status is %d\n", my_env->last_exit);

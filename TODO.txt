@@ -1,1 +1,1 @@
-export a=5 a
+echo "*"export a=5 a
