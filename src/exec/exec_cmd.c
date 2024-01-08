@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:10:10 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 14:00:21 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/08 14:31:54 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,12 @@ t_list    *expand_args(t_list *args, t_env *env)
         args = args->next;
     }
 	tmp = res;
-	while (tmp2)
+	while (tmp)
 	{
 		tmp->expand = tmp2->expand;
 		tmp2 = tmp2->next;
+		if (!tmp2)
+			break ;
 		tmp = tmp->next;
 	}
     return (wildcard(res));
