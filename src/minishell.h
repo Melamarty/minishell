@@ -79,6 +79,7 @@ int		pwd(t_cmd *cmd, t_env *env);
 int		export(t_cmd *cmd, t_env **env);
 int 	unset(t_env **env, t_list *args);
 int		env(t_cmd *cmd, t_env *envr);
+int		exit_cmd(t_cmd *cmd);
 
 //cmds utils
 t_map	*parse_param(char *param, int *append);

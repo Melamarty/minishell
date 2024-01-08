@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 14:52:40 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 19:20:46 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 22:07:33 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int	exec_cmd(t_cmd	*cmd, t_env **envr)
 	else if (!ft_strcmp(cmd->cmd, "env"))
 		return (env(cmd, *envr));
 	else if (!ft_strcmp(cmd->cmd, "exit"))
-		return (my_malloc(0, 1), exit (0), 1);
+		return (exit_cmd(cmd));
 	else if ((ft_strlen(cmd->cmd) && cmd->expand != 1) || cmd->expand != 1)
 		return (exec_file(cmd, (*envr)));
 	(*envr)->last_exit = 0;
