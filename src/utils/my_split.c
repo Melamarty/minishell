@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:22:25 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/08 11:37:42 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/08 12:54:41 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,6 @@ static int	func2(const char **s)
 	return (res);
 }
 
-static char	**ft_free(char **res, int l)
-{
-	while (l >= 0)
-		free(res[l--]);
-	free(res);
-	return (NULL);
-}
-
 char	**my_split(char const *s)
 {
 	char	**res;
@@ -67,7 +59,7 @@ char	**my_split(char const *s)
 	if (!s)
 		return (NULL);
 	l = 0;
-	res = (char **)malloc(sizeof(char *) * (cw(s) + 1));
+	res = (char **)my_malloc(sizeof(char *) * (cw(s) + 1), 0);
 	if (res == NULL)
 		return (NULL);
 	while (*s)
@@ -75,9 +67,9 @@ char	**my_split(char const *s)
 		i = func2(&s);
 		if (i > 0)
 		{
-			res[l] = (char *)malloc((i + 1) * sizeof(char));
+			res[l] = (char *)my_malloc((i + 1) * sizeof(char), 0);
 			if (!res[l])
-				return (ft_free(res, l - 1));
+				return (my_malloc(0, 1), exit(1), NULL);
 			ft_memcpy(res[l], s, i);
 			res[l++][i] = '\0';
 			s += i;
