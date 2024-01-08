@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:52 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 17:36:59 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:27:06 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int	cd(char *path, t_env *env)
 		return (special_path(path, env));
 	if (!chdir(path))
 		return (1);
+	// int res = chdir(path);
+	// printf ("res = %d\n", res);
 	write(2, "minishell: cd: ", 15);
 	write(2, path, ft_strlen(path));
 	write(2, ": No such file or directory\n", 28);

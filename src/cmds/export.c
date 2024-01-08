@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:23 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 10:35:01 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:22:17 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	append_var(t_map **env, t_map *var)
 
 void	add_var(t_env**env, t_map *var, t_list *tmp )
 {
-	printf("var->key: %s\n", var->key);
 	unset(env, tmp);
 	if (var->val)
 		env_add_back(&(*env)->env, var->key, var->val);
