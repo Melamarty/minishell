@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizing1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 21:26:10 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/08 10:51:42 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 14:47:12 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,17 @@ t_list    *in_out(t_list *tokens)
             if (p->next
                 && (p->next->type == TOKEN_D_Q || p->next->type == TOKEN_S_Q))
             {
-                if (!p->next->next || p->next->next->type != TOKEN_EXPR)
+                if (!p->next->next || p->next->next->type == TOKEN_SPACE ||(p->next->next->type != TOKEN_EXPR && p->next->type != TOKEN_S_Q && p->next->type != TOKEN_D_Q))
                     p->pos = 2;
                 else
                     p->pos = 1;
             }
             else if (pp && (pp->type == TOKEN_D_Q || pp->type == TOKEN_S_Q))
             {
-                if (!p->next || p->next->type != TOKEN_EXPR)
+                if (!p->next || p->next->type != TOKEN_EXPR )
+				{
                     p->pos = 2;
+				}
                 else
                     p->pos = 1;
             }
