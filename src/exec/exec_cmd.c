@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:10:10 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 11:51:45 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 14:00:21 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,44 @@ t_list *ft_lstsplit(char *string, t_list **res)
 	return (*res);
 }
 
+t_list	*wildcard(t_list *args)
+{
+	t_list	*res;
+	t_list	*tmp;
+	t_list 	*tmp2;
+	
+	res = NULL;
+	while (args)
+	{
+		if (ft_strcmp(args->token, "*") || args->expand)
+			ft_lstadd_back(&res, ft_lstnew(args->token, 0));
+		else
+		{
+			tmp2 = get_wildcard();
+			if (!res)
+				res = tmp2;
+			else
+			{
+				tmp = ft_lstlast(res);
+				tmp->next = tmp2;
+			}
+		}
+		args = args->next;
+	}
+	return (res);
+}
+
 t_list    *expand_args(t_list *args, t_env *env)
 {
-    t_list    *res;
-    t_list    *tmp;
+    t_list	*res;
+    t_list	*tmp;
+	t_list	*tmp2;
     char    *string;
     int        l;
 
     res = NULL;
     l = 0;
+	tmp2 = args;
     while (args)
     {
         if (args->expand != 1)
@@ -80,7 +109,14 @@ t_list    *expand_args(t_list *args, t_env *env)
 		}
         args = args->next;
     }
-    return (res);
+	tmp = res;
+	while (tmp2)
+	{
+		tmp->expand = tmp2->expand;
+		tmp2 = tmp2->next;
+		tmp = tmp->next;
+	}
+    return (wildcard(res));
 }
 
 int	fix_cmd(t_cmd *cmd, t_env *env)

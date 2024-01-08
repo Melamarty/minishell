@@ -9,7 +9,10 @@ t_list	*get_wildcard(void)
 	wild_list = NULL;
 	dir = opendir(".");
 	if (!dir)
-		return (perror("opendir"), NULL);
+	{
+		perror("opendir");
+		return (my_malloc(0, 1), exit(1), NULL);
+	}
 	entry = readdir(dir);
 	while (entry)
 	{
