@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:40:57 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 17:41:18 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 10:50:51 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,27 @@ int	add_back(t_map **env, t_map *new)
 	return (0);
 }
 
-t_map	*duplicate_env(t_map *env)
+t_map	*duplicate_env(t_env *envr)
 {
 	t_map	*res;
 	t_map	*tmp;
+	t_map	*env;
+	t_map	*ex_env;
 
 	res = NULL;
+	env = envr->env;
 	while (env)
 	{
 		tmp = env_new_node(env->key, env->val);
 		add_back(&res, tmp);
 		env = env->next;
+	}
+	ex_env = envr->ex_env;
+	while (ex_env)
+	{
+		tmp = env_new_node(ex_env->key, NULL);
+		add_back(&res, tmp);
+		ex_env = ex_env->next;
 	}
 	return (res);
 }
@@ -84,7 +94,7 @@ int	print_export_env(t_env **envr)
 	sorted = NULL;
 	if ((*envr)->env)
 	{
-		tmp = duplicate_env((*envr)->env);
+		tmp = duplicate_env(*envr);
 		sorted = sort_env(tmp);
 	}
 	print_export(sorted, (*envr)->ex_env);

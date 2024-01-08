@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:10:10 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 09:34:04 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/08 10:52:05 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,33 +30,35 @@ void	norm_helper(t_list **res, int *l, char *string)
 	*l = 1;
 }
 
-t_list	*expand_args(t_list *args, t_env *env)
+t_list    *expand_args(t_list *args, t_env *env)
 {
-	t_list	*res;
-	t_list	*tmp;
-	char	*string;
-	int		l;
+    t_list    *res;
+    t_list    *tmp;
+    char    *string;
+    int        l;
 
-	res = NULL;
-	l = 0;
-	while (args)
-	{
-		if (args->expand != 1)
-			string = ft_expand(args->token, env);
-		else
-			string = ft_strdup(args->token);
-		if (args->pos && !l && ft_strlen(string))
-			norm_helper(&res, &l, string);
-		else if (args->pos && l && ft_strlen(string))
-		{
-			tmp = ft_lstlast(res);
-			tmp->token = ft_strjoin(tmp->token, string);
-		}
-		else if (ft_strlen(string))
-			ft_lstadd_back(&res, ft_lstnew(string, 0));
-		args = args->next;
-	}
-	return (res);
+    res = NULL;
+    l = 0;
+    while (args)
+    {
+        if (args->expand != 1)
+            string = ft_expand(args->token, env);
+        else
+            string = ft_strdup(args->token);
+        if (args->pos == 1 && !l && ft_strlen(string))
+            norm_helper(&res, &l, string);
+        else if (args->pos && l && ft_strlen(string))
+        {
+            tmp = ft_lstlast(res);
+            tmp->token = ft_strjoin(tmp->token, string);
+            if (args->pos == 2)
+                l = 0;
+        }
+        else if (ft_strlen(string))
+            ft_lstadd_back(&res, ft_lstnew(string, 0));
+        args = args->next;
+    }
+    return (res);
 }
 
 int	fix_cmd(t_cmd *cmd, t_env *env)

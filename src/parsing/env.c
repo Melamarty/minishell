@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:34:00 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/01 08:55:43 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/08 10:28:18 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,21 @@ t_map	*get_env55(char **env)
 	return (res);
 }
 
-void	swap(t_map *a, t_map *b)
+void swap_keys(t_map *a, t_map *b)
 {
 	char	*tmp_key;
-	char	*tmp_val;
 
 	tmp_key = a->key;
-	tmp_val = a->val;
 	a->key = b->key;
-	a->val = b->val;
 	b->key = tmp_key;
+}
+
+void swap_vals(t_map *a, t_map *b)
+{
+	char	*tmp_val;
+
+	tmp_val = a->val;
+	a->val = b->val;
 	b->val = tmp_val;
 }
 
@@ -85,7 +90,8 @@ t_map	*sort_env(t_map	*env)
 		{
 			if (ft_strncmp(p->key, p->next->key, ft_strlen(p->key) + 1) > 0)
 			{
-				swap(p, p->next);
+				swap_keys(p, p->next);
+				swap_vals(p, p->next);
 				swapped = 1;
 			}
 			p = p->next;

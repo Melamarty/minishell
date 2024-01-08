@@ -62,13 +62,27 @@ void f(void)
 }
 int main(int ac, char **av, char **env)
 {
+	t_list *lst;
+	char	*tmp;
+
 	(void)ac;
-	(void)av; //find solution to this
+	(void)av;
 	// atexit(f);
 	t_env *enver = my_malloc(sizeof(t_env), 0);
 	t_map *my_env = get_env55(env);
 	enver->env = my_env;
 	enver->ex_env = NULL;
+	if (!is_exist(enver->env, "SHLVL"))
+		env_add_back(&enver->env, "SHLVL", "1");
+	else
+	{
+		lst = my_malloc(sizeof(t_list), 0);
+		lst->token = ft_strdup("SHLVL");
+		lst->next = NULL;
+		tmp = ft_itoa (ft_atoi(get_env(enver, "SHLVL")) + 1);
+		unset(&enver, lst);
+		env_add_back(&enver->env, "SHLVL", tmp);
+	}
 	bash_loop(enver);
 	// while (1)
 	// 	pause();

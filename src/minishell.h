@@ -9,6 +9,7 @@
 # include <signal.h>
 # include <fcntl.h>
 #include <dirent.h>
+#include <limits.h>
 
 typedef struct s_map
 {
@@ -79,7 +80,7 @@ int 	unset(t_env **env, t_list *args);
 int		env(t_cmd *cmd, t_env *envr);
 
 //cmds utils
-t_map	*parse_param(char *param, int *append, t_env *env);
+t_map	*parse_param(char *param, int *append);
 
 //exec line
 int		exec_cmd(t_cmd	*cmd, t_env **env);
@@ -110,6 +111,7 @@ char	**set_args(char *file, t_list *args);
 char	**set_env(t_env *env_list);
 char	*locate_cmd(char *cmd, char *path);
 void	ft_dup2(int fd1, int fd2);
+int		ft_atoi(const char *s);
 
 // export utils
 int		print_export(t_map *env, t_map *ex_env);

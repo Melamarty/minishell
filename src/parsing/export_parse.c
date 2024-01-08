@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_parse.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:40:45 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/07 17:44:29 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/08 10:33:48 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	first_char(char c, int *i)
 		(*i)++;
 }
 
-t_map	*parse_param(char *param, int *append, t_env *env)
+t_map	*parse_param(char *param, int *append)
 {
 	int	i;
 
@@ -70,7 +70,6 @@ t_map	*parse_param(char *param, int *append, t_env *env)
 		}
 		if (!is_valid(param[i]) || (param[0] >= '0' && param[i] <= '9'))
 		{
-			env->last_exit = 1;
 			export_err(param);
 			return (NULL);
 		}

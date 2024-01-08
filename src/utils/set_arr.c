@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:45:53 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 17:46:34 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:10:45 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,19 @@ char	**set_args(char *file, t_list *args)
 	return (e_args);
 }
 
+int	map_len(t_map *map)
+{
+	int		i;
+
+	i = 0;
+	while (map)
+	{
+		++i;
+		map = map->next;
+	}
+	return (i);
+}
+
 char	**set_env(t_env *env_list)
 {
 	char	**env;
@@ -53,16 +66,11 @@ char	**set_env(t_env *env_list)
 
 	tmp = env_list->env;
 	i = 0;
+	env = my_malloc(map_len(tmp) * sizeof(char *) + 1, 0);
 	while (tmp)
 	{
-		++i;
-		tmp = tmp->next;
-	}
-	env = my_malloc(i * sizeof(char *) + 1, 0);
-	i = 0;
-	tmp = env_list->env;
-	while (tmp)
-	{
+		// if (!ft_strcmp(tmp->key, "SHLVL"))
+		// 	tmp->val = ft_itoa(ft_atoi(tmp->val) + 1);
 		env[i] = ft_strjoin(tmp->key, "=");
 		env[i] = ft_strjoin(env[i], tmp->val);
 		tmp = tmp->next;

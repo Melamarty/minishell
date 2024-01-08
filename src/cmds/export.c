@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:23 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 17:38:06 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 10:35:01 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	append_var(t_map **env, t_map *var)
 
 void	add_var(t_env**env, t_map *var, t_list *tmp )
 {
+	printf("var->key: %s\n", var->key);
 	unset(env, tmp);
 	if (var->val)
 		env_add_back(&(*env)->env, var->key, var->val);
@@ -65,19 +66,19 @@ int	export_args(t_env **env, t_list *args)
 
 	while (args)
 	{
-		var = parse_param(args->token, &append, *env);
+		var = parse_param(args->token, &append);
 		tmp = my_malloc(sizeof(t_list), 0);
 		if (var)
 			tmp->token = var->key;
 		tmp->next = NULL;
 		if (var && append && var->val && is_exist((*env)->env, var->key))
 			append_var(&(*env)->env, var);
-		else if (is_exist((*env)->env, args->token) && !var->val)
+		else if (var && is_exist((*env)->env, args->token) && !var->val)
 			append += 0;
-		else if (!append && var->val)
-			env_add_back(&(*env)->env, var->key, var->val);
 		else if (var)
 			add_var(env, var, tmp);
+		else
+			(*env)->last_exit = -1;
 		args = args->next;
 	}
 	return (1);
@@ -89,7 +90,7 @@ int	export(t_cmd *cmd, t_env **env)
 		return ((*env)->last_exit = 0, print_export_env(env));
 	else
 		export_args(env, cmd->args);
-	if ((*env)->last_exit == 33)
+	if ((*env)->last_exit == -1)
 		return ((*env)->last_exit = 1, 0);
 	(*env)->last_exit = 0;
 	return (1);

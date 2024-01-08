@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:29 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 17:40:12 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:17:36 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_map	*unset_var(t_map *env, char *key)
 			new = my_malloc(sizeof(t_map), 0);
 			new->key = env->key;
 			new->val = env->val;
+			new->next = NULL;
 			if (head == NULL)
 				head = new;
 			else
@@ -48,7 +49,7 @@ int	unset(t_env **envr, t_list *args)
 		return ((*envr)->last_exit = 0, 1);
 	while (args)
 	{
-		tmp2 = parse_param(args->token, &i, *envr);
+		tmp2 = parse_param(args->token, &i);
 		if (tmp2)
 		{
 			tmp = unset_var((*envr)->env, args->token);
