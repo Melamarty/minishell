@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 14:52:40 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 14:52:43 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 19:20:46 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,19 @@ t_list	*wildcard(t_list *args)
 
 t_list    *expand_args(t_list *args, t_env *env)
 {
-    t_list	*res;
-    t_list	*tmp;
-	t_list	*tmp2;
+    t_list    *res;
+    t_list    *tmp;
+    t_list    *tmp2;
     char    *string;
     int        l;
 
     res = NULL;
     l = 0;
-	tmp2 = args;
+    tmp2 = args;
     while (args)
     {
         if (args->expand != 1)
-        	string = ft_expand(args->token, env);
+            string = ft_expand(args->token, env);
         else
             string = ft_strdup(args->token);
         if (args->pos == 1 && !l && ft_strlen(string))
@@ -100,24 +100,24 @@ t_list    *expand_args(t_list *args, t_env *env)
             if (args->pos == 2)
                 l = 0;
         }
-        else if (ft_strlen(string))
-		{
-			if (args->expand)
-           		ft_lstadd_back(&res, ft_lstnew(string, 0));
-			else
-				ft_lstsplit(string, &res);
-		}
+        else
+        {
+            if (args->expand)
+                   ft_lstadd_back(&res, ft_lstnew(string, 0));
+            else
+                ft_lstsplit(string, &res);
+        }
         args = args->next;
     }
-	tmp = res;
-	while (tmp)
-	{
-		tmp->expand = tmp2->expand;
-		tmp2 = tmp2->next;
-		if (!tmp2)
-			break ;
-		tmp = tmp->next;
-	}
+    tmp = res;
+    while (tmp)
+    {
+        tmp->expand = tmp2->expand;
+        tmp2 = tmp2->next;
+        if (!tmp2)
+            break ;
+        tmp = tmp->next;
+    }
     return (wildcard(res));
 }
 

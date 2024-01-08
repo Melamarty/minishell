@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:52 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 18:37:11 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 19:23:35 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,9 @@ int	cd(char *path, t_env *env)
 
 	if (!path)
 		return (special_path(NULL, env), update_env(env, path));
-	else if (path && (path[0] == '~' ||  path[0] == '-'))
+	else if (!ft_strlen(path))
+		return (update_env(env, NULL), env->last_exit = 0, 1);
+	else if (path[0] == '~' ||  path[0] == '-')
 		return (special_path(path, env), update_env(env, path));
 	res = chdir(path);
 	if (!update_env(env, path))

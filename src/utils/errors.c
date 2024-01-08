@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:40:43 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 17:40:52 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/08 19:25:17 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ int	put_err(char *file, int flag)
 
 int	export_err(char *s)
 {
-	write (2, "minishell: export: ", 19);
+	write (2, "minishell: export: `", 20);
 	while (*s)
 	{
 		write (2, s, 1);
 		s++;
 	}
-	write (2, ": not a valid identifier\n", 25);
+	write (2, "': not a valid identifier\n", 26);
 	return (1);
 }
