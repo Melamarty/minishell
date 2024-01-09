@@ -6,13 +6,13 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:52 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 19:23:35 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 15:47:59 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void cd_err(int flag, char *path)
+void	cd_err(int flag, char *path)
 {
 	if (flag)
 	{
@@ -44,7 +44,7 @@ int	special_path(char *path, t_env *env)
 	return (0);
 }
 
-void set_env_(t_env *env, char *key, char *value)
+void	set_env_(t_env *env, char *key, char *value)
 {
 	t_map	*tmp;
 
@@ -64,7 +64,7 @@ void set_env_(t_env *env, char *key, char *value)
 int	update_env(t_env *env, char *path)
 {
 	char	*tmp;
-	char 	*tmp2;
+	char	*tmp2;
 	char	*jp;
 
 	tmp = getcwd(NULL, 0);
@@ -92,13 +92,13 @@ int	cd(char *path, t_env *env)
 		return (special_path(NULL, env), update_env(env, path));
 	else if (!ft_strlen(path))
 		return (update_env(env, NULL), env->last_exit = 0, 1);
-	else if (path[0] == '~' ||  path[0] == '-')
+	else if (path[0] == '~' || path[0] == '-')
 		return (special_path(path, env), update_env(env, path));
 	res = chdir(path);
 	if (!update_env(env, path))
 		return (0);
 	if (!res)
-		return (env->last_exit = 0,  1);
+		return (env->last_exit = 0, 1);
 	cd_err(0, path);
 	env->last_exit = 1;
 	return (0);

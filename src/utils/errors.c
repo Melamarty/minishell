@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:40:43 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 19:25:17 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:50:36 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,12 @@ int	export_err(char *s)
 	}
 	write (2, "': not a valid identifier\n", 26);
 	return (1);
+}
+
+int	ambiguous_err(char *s)
+{
+	write (2, "minishell: ", 11);
+	write (2, s, ft_strlen(s));
+	write (2, ": ambiguous redirect\n", 21);
+	return (0);
 }

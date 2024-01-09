@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:43 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 12:28:57 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 16:06:31 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ int	exec_file(t_cmd *cmd, t_env *env)
 {
 	char	*file;
 	char	*tmp;
-
 	tmp = ft_strdup(cmd->cmd);
 	if (cmd->cmd[0] == '/' || cmd->cmd[0] == '.')
 		return (root_cmd(cmd, env, tmp));

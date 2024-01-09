@@ -1,71 +1,69 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/09 15:17:15 by mel-amar          #+#    #+#             */
+/*   Updated: 2024/01/09 16:05:52 by mel-amar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int sig;
+int	g_sig;
 
-void aff_list(t_list *lst)
+void	sigint_handler(int sig)
 {
-	while (lst) //////////////////////////////////////////////////////////////////////
-	{
-		printf("%s -(%d)(%d)-> ", lst->token, lst->expand, lst->pos);
-		lst = lst->next;
-	}
-	printf("\n\n");
-}
-
-void sigint_handler(int signo)
-{
-	if (signo == SIGINT)
+	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		sig = 1;
+		g_sig = 1;
 	}
 }
 
-
 void	bash_loop(t_env *my_env)
 {
-	t_list *cpy;
+	t_list	*cpy;
 	char	*cmd;
+	t_list	*tokens;
+	t_tree	*tree;
 
 	cmd = NULL;
 	while (1)
 	{
-		sig = 0;
+		g_sig = 0;
 		signal(SIGINT, sigint_handler);
-		write (1, "\e[1;32m", 7);
 		rl_catch_signals = 0;
 		cmd = readline("\e[1;32mminishell >> \e[0m");
 		add_history(cmd);
-		if (!cmd) // to handel espace
+		if (!cmd)
 			return (my_malloc(0, 1), exit (0));
-		t_list *tokens = tokenizing(cmd, my_env);
+		tokens = tokenizing(cmd, my_env);
 		free(cmd);
 		if (!tokens)
 			continue ;
-		if (sig)
+		if (g_sig)
 			my_env->last_exit = 1;
 		cpy = tokens;
-		t_tree *tree = condition(ft_lstlast(tokens));
-		//print_tree(tree, 0);
-		// printf ("\e[1;31mexecuting\e[0m\n");
+		tree = condition(ft_lstlast(tokens));
 		exec_line(&tree, &my_env);
-		// printf ("last exit status is %d\n", my_env->last_exit);
 	}
 }
-void f(void)
-{
-	system("leaks minishell");
-}
-t_env *setup_env (char **env)
-{
-	t_list *lst;
-	char	*tmp;
 
-	t_env *enver = my_malloc(sizeof(t_env), 0);
-	t_map *my_env = get_env55(env);
+t_env	*setup_env(char **env)
+{
+	t_list	*lst;
+	char	*tmp;
+	t_env	*enver;
+	t_map	*my_env;
+
+	enver = my_malloc(sizeof(t_env), 0);
+	my_env = get_env55(env);
 	enver->env = my_env;
 	enver->ex_env = NULL;
 	lst = my_malloc(sizeof(t_list), 0);
@@ -84,13 +82,12 @@ t_env *setup_env (char **env)
 	return (enver);
 }
 
-int main(int ac, char **av, char **env)
+int	main(int ac, char **av, char **env)
 {
-	t_env *envr;
+	t_env	*envr;
 
 	(void)ac;
 	(void)av;
-	// atexit(f);
 	signal(SIGQUIT, sigint_handler);
 	envr = setup_env (env);
 	bash_loop(envr);

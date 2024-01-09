@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:11 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 15:54:21 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 15:46:32 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	is_option(char *str)
 	}
 	return (1);
 }
+
 int	echo(t_cmd *cmd, t_env *env)
 {
 	t_list	*args;

@@ -4,8 +4,8 @@ OBJS = $(SRCS:.c=.o)
 NAME = minishell
 CFLAGS = -Wall -Wextra -Werror
 LIBS = -lreadline
-READLINE_L = $(shell ~/homebrew/bin/brew --prefix readline)/lib
-READLINE_I = $(shell ~/homebrew/bin/brew --prefix readline)/include
+READLINE_L = $(shell brew --prefix readline)/lib
+READLINE_I = $(shell brew --prefix readline)/include
 
 all: $(NAME)
 

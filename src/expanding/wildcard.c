@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wildcard.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/09 15:27:56 by mel-amar          #+#    #+#             */
+/*   Updated: 2024/01/09 16:02:41 by mel-amar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-void sort_list (t_list **head)
+void	sort_list(t_list **head)
 {
 	t_list	*tmp;
 	t_list	*tmp2;
@@ -47,4 +59,38 @@ t_list	*get_wildcard(void)
 	closedir(dir);
 	sort_list(&wild_list);
 	return (wild_list);
+}
+
+
+t_list	*wildcard(t_list *args)
+{
+	t_list	*res;
+	t_list	*tmp;
+	t_list 	*tmp2;
+	
+	res = NULL;
+	while (args)
+	{
+		if (ft_strcmp(args->token, "*") || args->expand)
+		{
+			ft_lstadd_back(&res, ft_lstnew(args->token, 0));
+			tmp2 = ft_lstlast(res);
+			tmp2->expand = args->expand;
+			tmp2->type = args->type;
+			tmp2->fd = args->fd;
+		}
+		else
+		{
+			tmp2 = get_wildcard();
+			if (!res)
+				res = tmp2;
+			else
+			{
+				tmp = ft_lstlast(res);
+				tmp->next = tmp2;
+			}
+		}
+		args = args->next;
+	}
+	return (res);
 }

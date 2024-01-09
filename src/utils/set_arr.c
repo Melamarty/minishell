@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:45:53 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 11:10:45 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 16:13:49 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ char	**set_env(t_env *env_list)
 	env = my_malloc(map_len(tmp) * sizeof(char *) + 1, 0);
 	while (tmp)
 	{
-		// if (!ft_strcmp(tmp->key, "SHLVL"))
-		// 	tmp->val = ft_itoa(ft_atoi(tmp->val) + 1);
 		env[i] = ft_strjoin(tmp->key, "=");
 		env[i] = ft_strjoin(env[i], tmp->val);
 		tmp = tmp->next;

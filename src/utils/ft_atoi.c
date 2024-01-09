@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 08:37:00 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/08 11:40:01 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 16:13:10 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	func0(const char	*s, int i, int neg)
 		}
 		res = (res * 10) + (s[i++] - '0');
 	}
-	if (res > LONG_MAX) 
+	if (res > LONG_MAX)
 	{
 		if (neg == -1)
 			return (0);
@@ -53,9 +53,9 @@ int	ft_atoi(const char *s)
 
 	i = 0;
 	neg = 1;
-	while (s[i] && (s[i] == ' ' || func(s[i]))) 
+	while (s[i] && (s[i] == ' ' || func(s[i])))
 		i++;
-	if (s[i] == '+' || s[i] == '-') 
+	if (s[i] == '+' || s[i] == '-')
 	{
 		if (s[i] == '-')
 			neg *= -1;

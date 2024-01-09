@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 21:44:22 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 14:10:54 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:18:38 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static int	func2(t_list *tk, t_list **p, t_list **pp)
 
 static char	*chck(t_list *tk, char *str)
 {
-	printf("str: %s and %d\n", str, tk->expand);
 	if (str[ft_strlen(str) - 1] == '$' && !tk->expand && tk->next && (tk->next->type == TOKEN_D_Q || tk->next->type == TOKEN_S_Q))
 	{
 		if (ft_strlen(str) == 1)
