@@ -66,7 +66,7 @@ char	*ft_expand(char *s, t_env *env)
 	tokens = NULL;
 	res = NULL;
 	tmp = s;
-	if (!s[0])
+	if (!s[0] || !ft_strcmp(s, "$"))
 		return (s);
 	while (s[i])
 	{

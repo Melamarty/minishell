@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 14:52:40 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 11:31:10 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 13:54:48 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ t_list    *expand_args(t_list *args, t_env *env, int m)
         else
         {
             if (args->expand)
-                add_cpy(&res, args, args->type);
+                add_cpy(&res, args, args->type, string);
             else
                 ft_lstsplit(string, &res, args);
         }

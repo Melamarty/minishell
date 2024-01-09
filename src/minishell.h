@@ -116,7 +116,7 @@ void	ft_dup2(int fd1, int fd2);
 int		ft_atoi(const char *s);
 char	**my_split(char const *s);
 void	*ft_memcpy(void *d, const void *s, size_t n);
-void	add_cpy(t_list **dest, t_list *src, int type);
+void	add_cpy(t_list **dest, t_list *src, int type, char *str);
 void	ft_putstr_fd(char *s, int fd);
 
 // export utils

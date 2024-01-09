@@ -1,19 +1,11 @@
-echo -nnnnnnnnnnn helo
+minishell >> exit 42 world 
+exit
+minishell: exit: too many arguments
+minishell >> echo $?
+0
 
-echo $USER$USER.$$USER
-
-echo $USER$USER.$$USER (skip $$)
-
-export a="l" b="s"
-
-declare -x a="lb=s"
-declare -x a="l"
-
-<< a << b << c
-> 
-> a
-> a
-> b
-> b
-> c
-[1]    76342 segmentation fault  ./minishell
+minishell >> unset HELLO1 HELLO2
+minishell: export: `HELLO1': not a valid identifier
+minishell: export: `HELLO2': not a valid identifier
+minishell >> echo $?
+1

@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 18:43:42 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 11:32:14 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 13:38:42 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,14 @@ void	redir_add(t_list **lst, char *token, int type)
 	ft_lstadd_back(lst, ft_lstnew(ft_strdup(token), type));
 }
 
-void	add_cpy(t_list **dest, t_list *src, int type)
+void	add_cpy(t_list **dest, t_list *src, int type, char *str)
 {
 	t_list	*cpy;
 
-	redir_add(dest, src->token, type);
+	if (str)
+		redir_add(dest, str, type);
+	else
+		redir_add(dest, src->token, type);
 	cpy = ft_lstlast(*dest);
 	cpy->fd = src->fd;
 	cpy->expand = src->expand;
@@ -53,26 +56,26 @@ static void	func(t_list **tokens, t_cmd *cmd)
 {
 	if ((*tokens)->type == TOKEN_HEREDOC)
 	{
-		add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC);
+		add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC, NULL);
 		(*tokens) = (*tokens)->next;
 		while ((*tokens)->next && (*tokens)->next->pos)
 		{
-			add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC);
+			add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC, NULL);
 			(*tokens) = (*tokens)->next;
 		}
 	}
 	else if ((*tokens)->type == TOKEN_REDIR_APPEND)
 	{
-		add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_APPEND);
+		add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_APPEND, NULL);
 		(*tokens) = (*tokens)->next;
 		while ((*tokens)->next && (*tokens)->next->pos)
 		{
-			add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_APPEND);
+			add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_APPEND, NULL);
 			(*tokens) = (*tokens)->next;
 		}
 	}
 	else if ((*tokens)->type == TOKEN_EXPR)
-		add_cpy(&cmd->args, *tokens, TOKEN_EXPR);
+		add_cpy(&cmd->args, *tokens, TOKEN_EXPR, NULL);
 }
 
 t_tree	*command(t_list *tokens)
@@ -86,21 +89,21 @@ t_tree	*command(t_list *tokens)
 	{
 		if (tokens->type == TOKEN_REDIR_IN)
 		{
-			add_cpy(&cmd->redir_in, tokens->next, TOKEN_REDIR_IN);
+			add_cpy(&cmd->redir_in, tokens->next, TOKEN_REDIR_IN, NULL);
 			tokens = tokens->next;
 			while (tokens->next && tokens->next->pos)
 			{
-				add_cpy(&cmd->redir_in, tokens->next, TOKEN_REDIR_IN);
+				add_cpy(&cmd->redir_in, tokens->next, TOKEN_REDIR_IN, NULL);
 				tokens = tokens->next;
 			}
 		}
 		else if (tokens->type == TOKEN_REDIR_OUT)
 		{
-			add_cpy(&cmd->redir_out, tokens->next, TOKEN_REDIR_OUT);
+			add_cpy(&cmd->redir_out, tokens->next, TOKEN_REDIR_OUT, NULL);
 			tokens = tokens->next;
 			while (tokens->next && tokens->next->pos)
 			{
-				add_cpy(&cmd->redir_out, tokens->next, TOKEN_REDIR_OUT);
+				add_cpy(&cmd->redir_out, tokens->next, TOKEN_REDIR_OUT, NULL);
 				tokens = tokens->next;
 			}
 		}

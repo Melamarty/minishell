@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 21:44:22 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/07 17:45:59 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:10:54 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,17 @@ static int	func2(t_list *tk, t_list **p, t_list **pp)
 	return (0);
 }
 
-static int	chck(t_list *tk)
+static char	*chck(t_list *tk, char *str)
 {
-	if (!ft_strncmp(tk->token, "$", 2) && tk->next
-		&& (tk->next->type == TOKEN_D_Q || tk->next->type == TOKEN_S_Q))
-		return (0);
-	return (1);
+	printf("str: %s and %d\n", str, tk->expand);
+	if (str[ft_strlen(str) - 1] == '$' && !tk->expand && tk->next && (tk->next->type == TOKEN_D_Q || tk->next->type == TOKEN_S_Q))
+	{
+		if (ft_strlen(str) == 1)
+			return (ft_strdup(""));
+		else
+			return (ft_substr(str, 0, ft_strlen(str) - 1));
+	}
+	return (str);
 }
 
 t_list	*out_of_quotes(t_list	*tk, t_env *env)
@@ -52,8 +57,11 @@ t_list	*out_of_quotes(t_list	*tk, t_env *env)
 		if (tk->type == TOKEN_SPACE)
 			flg = 0;
 		else if (tk->type != TOKEN_D_Q
-			&& tk->type != TOKEN_S_Q && tk->type != TOKEN_SPACE && chck(tk))
+			&& tk->type != TOKEN_S_Q && tk->type != TOKEN_SPACE)
+		{
+			tk->token = chck(tk, tk->token);	
 			flg = func2(tk, &p, &pp);
+		}
 		tk = tk->next;
 	}
 	return (syntax_check(p, env));

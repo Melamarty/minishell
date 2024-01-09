@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 18:44:16 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 10:42:06 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 13:39:33 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,31 @@ static void	func2(t_list **tokens, t_cmd *cmd)
 {
 	if ((*tokens)->type == TOKEN_HEREDOC)
 	{
-		add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC);
+		add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC, NULL);
 		(*tokens) = (*tokens)->next;
 		while ((*tokens)->next && (*tokens)->pos)
 		{
-			add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC);
+			add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC, NULL);
 			(*tokens) = (*tokens)->next;
 		}
 	}
 	else if ((*tokens)->type == TOKEN_REDIR_OUT)
 	{
-		add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_OUT);
+		add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_OUT, NULL);
 		(*tokens) = (*tokens)->next;
 		while ((*tokens)->next && (*tokens)->pos)
 		{
-			add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_OUT);
+			add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_OUT, NULL);
 			(*tokens) = (*tokens)->next;
 		}
 	}
 	else if ((*tokens)->type == TOKEN_REDIR_APPEND)
 	{
-		add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_APPEND);
+		add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_APPEND, NULL);
 		(*tokens) = (*tokens)->next;
 		while ((*tokens)->next && (*tokens)->pos)
 		{
-			add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_APPEND);
+			add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_APPEND, NULL);
 			(*tokens) = (*tokens)->next;
 		}
 	}
@@ -59,11 +59,11 @@ t_tree	*get_redirs(t_tree *head, t_list *tokens)
 	{
 		if (tokens->type == TOKEN_REDIR_IN)
 		{
-			add_cpy(&cmd->redir_in, tokens->next, TOKEN_REDIR_IN);
+			add_cpy(&cmd->redir_in, tokens->next, TOKEN_REDIR_IN, NULL);
 			tokens = tokens->next;
 			while (tokens->next && tokens->next->pos)
 			{
-				add_cpy(&cmd->redir_in, tokens->next, TOKEN_REDIR_IN);
+				add_cpy(&cmd->redir_in, tokens->next, TOKEN_REDIR_IN, NULL);
 				tokens = tokens->next;
 			}
 		}
