@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 13:14:41 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 12:27:13 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 13:15:22 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_list	*syntax_check(t_list *p, t_env *env)
 			f++;
 		else if (cpy->type == TOKEN_BRKT_CLOSE)
 			f--;
-		if (f < 0 || ft_strchr(cpy->token, ';') || ft_strchr(cpy->token, '\\'))
+		if (f < 0)
 			return (ft_putsyntax_error(env));
 		if (func(&cpy, pp, env))
 			return (NULL);
@@ -64,5 +64,5 @@ t_list	*syntax_check(t_list *p, t_env *env)
 	}
 	if (is_valid2(pp, NULL, f))
 		return (ft_putsyntax_error(env));
-	return (relink(p));
+	return (relink(p, env));
 }

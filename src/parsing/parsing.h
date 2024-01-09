@@ -45,7 +45,7 @@ char	*ft_get_expr(char *s);
 t_list	*syntax_check(t_list *p, t_env *env);
 int		is_valid2(t_list *a, t_list *b, int f);
 t_list	*in_out(t_list *tokens);
-t_list	*relink(t_list *p);
+t_list	*relink(t_list *p, t_env *env);
 t_tree	*command(t_list *tokens);
 void	redir_add(t_list **lst, char *token, int type);
 int		set_cmd(t_cmd **cmd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizing1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 21:26:10 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/08 14:52:30 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 13:19:43 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_list    *in_out(t_list *tokens)
     return (tokens);
 }
 
-t_list	*relink(t_list *p)
+t_list	*relink(t_list *p, t_env *env)
 {
 	t_list	*pp;
 	t_list	*cpy;
@@ -67,6 +67,8 @@ t_list	*relink(t_list *p)
 	pp = NULL;
 	while (cpy)
 	{
+		if (!cpy->pos && (ft_strchr(cpy->token, '\\') || ft_strchr(cpy->token, ';')))
+			return (ft_putsyntax_error(env));
 		cpy->prev = pp;
 		cpy->visited = 0;
 		pp = cpy;
