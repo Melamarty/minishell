@@ -95,6 +95,7 @@ int		redirect(t_tree *tree, t_env **env);
 char	*ft_expand(char *s, t_env *env);
 char	*ft_get_name(void);
 t_list	*get_wildcard(void);
+t_list    *expand_args(t_list *args, t_env *env);
 
 // utils
 int		 ft_lstlen(t_list *lst);

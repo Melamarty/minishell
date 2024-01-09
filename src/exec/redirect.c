@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:08:35 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 12:20:01 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 10:01:39 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,14 @@ int	redirect_in(t_tree *tree, t_env **env)
 	return (1);
 }
 
+void expand_redirect(t_cmd *cmd, t_env *env)
+{
+	if (cmd->redir_in)
+		cmd->redir_in = expand_args(cmd->redir_in, env);
+	if (cmd->redir_out)
+		cmd->redir_out = expand_args(cmd->redir_out, env);
+}
+
 int	redirect(t_tree *tree, t_env **env)
 {
 	int	cpy1;
@@ -115,6 +123,7 @@ int	redirect(t_tree *tree, t_env **env)
 	cpy1 = -1;
 	cpy0 = -1;
 	res = 1;
+	expand_redirect(tree->cmd, *env);
 	if (tree->cmd->redir_in)
 	{
 		cpy0 = dup(0);

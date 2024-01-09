@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 14:52:40 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 22:07:33 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 10:10:18 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,13 @@ int	expand_cmd(t_cmd *cmd)
 	return (0);
 }
 
-void	norm_helper(t_list **res, int *l, char *string)
+void	norm_helper(t_list **res, int *l, char *string, t_list *args)
 {
-	ft_lstadd_back(res, ft_lstnew(string, 0));
+	t_list	*tmp;
+	ft_lstadd_back(res, ft_lstnew(string, args->type));
 	*l = 1;
+	tmp = ft_lstlast(*res);
+	tmp->fd = args->fd;
 }
 
 t_list *ft_lstsplit(char *string, t_list **res)
@@ -92,7 +95,7 @@ t_list    *expand_args(t_list *args, t_env *env)
         else
             string = ft_strdup(args->token);
         if (args->pos == 1 && !l && ft_strlen(string))
-            norm_helper(&res, &l, string);
+            norm_helper(&res, &l, string, args);
         else if (args->pos && l && ft_strlen(string))
         {
             tmp = ft_lstlast(res);
