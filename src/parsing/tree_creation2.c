@@ -6,25 +6,15 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 18:44:16 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 13:39:33 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 15:41:20 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-static void	func2(t_list **tokens, t_cmd *cmd)
+static void	func3(t_list **tokens, t_cmd *cmd)
 {
-	if ((*tokens)->type == TOKEN_HEREDOC)
-	{
-		add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC, NULL);
-		(*tokens) = (*tokens)->next;
-		while ((*tokens)->next && (*tokens)->pos)
-		{
-			add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC, NULL);
-			(*tokens) = (*tokens)->next;
-		}
-	}
-	else if ((*tokens)->type == TOKEN_REDIR_OUT)
+	if ((*tokens)->type == TOKEN_REDIR_OUT)
 	{
 		add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_OUT, NULL);
 		(*tokens) = (*tokens)->next;
@@ -46,6 +36,32 @@ static void	func2(t_list **tokens, t_cmd *cmd)
 	}
 }
 
+static void	func2(t_list **tokens, t_cmd *cmd)
+{
+	if ((*tokens)->type == TOKEN_REDIR_IN)
+	{
+		add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_REDIR_IN, NULL);
+		(*tokens) = (*tokens)->next;
+		while ((*tokens)->next && (*tokens)->next->pos)
+		{
+			add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_REDIR_IN, NULL);
+			(*tokens) = (*tokens)->next;
+		}
+	}
+	else if ((*tokens)->type == TOKEN_HEREDOC)
+	{
+		add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC, NULL);
+		(*tokens) = (*tokens)->next;
+		while ((*tokens)->next && (*tokens)->pos)
+		{
+			add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC, NULL);
+			(*tokens) = (*tokens)->next;
+		}
+	}
+	else
+		func3(tokens, cmd);
+}
+
 t_tree	*get_redirs(t_tree *head, t_list *tokens)
 {
 	t_tree	*res;
@@ -57,22 +73,12 @@ t_tree	*get_redirs(t_tree *head, t_list *tokens)
 		return (NULL);
 	while (tokens && !level(tokens) && tokens->visited == 0)
 	{
-		if (tokens->type == TOKEN_REDIR_IN)
-		{
-			add_cpy(&cmd->redir_in, tokens->next, TOKEN_REDIR_IN, NULL);
-			tokens = tokens->next;
-			while (tokens->next && tokens->next->pos)
-			{
-				add_cpy(&cmd->redir_in, tokens->next, TOKEN_REDIR_IN, NULL);
-				tokens = tokens->next;
-			}
-		}
-		else
-			func2(&tokens, cmd);
+		func2(&tokens, cmd);
 		tokens = tokens->next;
 	}
 	res = new_node(cmd, TOKEN_REDIR_IN);
 	res->right = head;
+	res->left = NULL;
 	return (res);
 }
 

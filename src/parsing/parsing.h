@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/09 15:11:24 by mozennou          #+#    #+#             */
+/*   Updated: 2024/01/09 15:23:38 by mozennou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSING_H
 # define PARSING_H
 
@@ -33,6 +45,7 @@ t_tree	*condition(t_list *tokens);
 t_list	*tokenizing(char *expr, t_env *env);
 char	*ft_strchr(const char *s, int c);
 t_map	*get_env55(char **env);
+t_map	*ft_envnew(char *key, char *val);
 void	ft_putstr_fd(char *s, int fd);
 void	*ft_putsyntax_error(t_env *env);
 t_map	*ft_envlast(t_map *env);
@@ -56,6 +69,4 @@ t_list	*out_of_quotes(t_list	*tk, t_env *env);
 int		ft_isalnum(int c);
 char	*ft_itoa(int n);
 int		read_heredoc(char *limiter, t_env *env);
-void	print_tree(t_tree	*tree, int c);     /////////////////////////
-void aff_list(t_list *lst); ///////////
 #endif

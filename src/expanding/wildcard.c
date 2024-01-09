@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:27:56 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 16:02:41 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 16:22:28 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,12 @@ t_list	*get_wildcard(void)
 	return (wild_list);
 }
 
-
 t_list	*wildcard(t_list *args)
 {
 	t_list	*res;
 	t_list	*tmp;
 	t_list 	*tmp2;
-	
+
 	res = NULL;
 	while (args)
 	{

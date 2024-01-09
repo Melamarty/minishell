@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_parse.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:40:45 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/08 10:33:48 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:56:41 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,17 @@ t_map	*parse_param(char *param, int *append)
 		i++;
 	}
 	return (get_keyval(param, i));
+}
+
+t_map	*ft_envnew(char *key, char *val)
+{
+	t_map	*res;
+
+	res = my_malloc(sizeof(t_map), 0);
+	if (res == NULL)
+		return (NULL);
+	res->next = NULL;
+	res->key = key;
+	res->val = val;
+	return (res);
 }
