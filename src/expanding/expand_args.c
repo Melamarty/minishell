@@ -24,7 +24,7 @@ void	norm_helper(t_list **res, int *l, char *string, t_list *args)
 	tmp->fd = args->fd;
 }
 
-t_list	*ft_lstsplit(char *string, t_list **res, t_list *args)
+t_list	*ft_lstsplit(char *string, t_list **res, t_list *args, int m)
 {
 	char	*str;
 	t_list	*tmp;
@@ -32,6 +32,11 @@ t_list	*ft_lstsplit(char *string, t_list **res, t_list *args)
 	int		i;
 
 	i = 0;
+	if (string[0] == '\0' && m)
+	{
+		add_cpy(res, args, args->type, string);
+		return (*res);
+	}
 	split = my_split(string);
 	while (split[i])
 	{
@@ -46,7 +51,7 @@ t_list	*ft_lstsplit(char *string, t_list **res, t_list *args)
 	return (*res);
 }
 
-static void	func(t_list *args, t_list **res, char *string, int *l)
+static void	func(t_list *args, t_list **res, char *string, int *l, int m)
 {
 	t_list	*tmp;
 
@@ -62,7 +67,7 @@ static void	func(t_list *args, t_list **res, char *string, int *l)
 		if (args->expand)
 			add_cpy(res, args, args->type, string);
 		else
-			ft_lstsplit(string, res, args);
+			ft_lstsplit(string, res, args, m);
 	}
 }
 
@@ -83,7 +88,7 @@ t_list	*expand_args(t_list *args, t_env *env, int m)
 		if (args->pos == 1 && !l && ft_strlen(string))
 			norm_helper(&res, &l, string, args);
 		else
-			func(args, &res, string, &l);
+			func(args, &res, string, &l, m);
 		args = args->next;
 	}
 	if (!m)
