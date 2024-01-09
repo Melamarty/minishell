@@ -40,7 +40,7 @@ void	bash_loop(t_env *my_env)
 		cmd = readline("\e[1;32mminishell >> \e[0m");
 		add_history(cmd);
 		if (!cmd) // to handel espace
-			return (my_malloc(0, 1), free (cmd), printf("exit\n"), exit (0));
+			return (my_malloc(0, 1), exit (0));
 		t_list *tokens = tokenizing(cmd, my_env);
 		free(cmd);
 		if (!tokens)

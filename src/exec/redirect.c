@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:08:35 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 10:01:39 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 10:36:50 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	redirect_out(t_tree *tree, t_env **env)
 	tmp = tree->cmd->redir_out;
 	while (tmp)
 	{
+		printf ("token: %d\n", tmp->type);
 		if (tmp->type == 3)
 			fd = open(tmp->token, O_CREAT | O_RDWR | O_APPEND, 0644);
 		else

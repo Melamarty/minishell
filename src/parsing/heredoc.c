@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 11:53:08 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/08 09:38:21 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 11:52:25 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ static void	func(t_env *env)
 	m = open(ttyname(2), O_RDWR);
 	if (m == -1)
 		exit(1);
-	ft_dup2(0, m);
-	close(m);
 	env->last_exit = 1;
 }
 
