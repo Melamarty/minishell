@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/21 21:26:10 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 13:58:31 by mozennou         ###   ########.fr       */
+/*   Created: 2024/01/09 15:14:27 by mozennou          #+#    #+#             */
+/*   Updated: 2024/01/09 15:24:13 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,43 +19,52 @@ int	set_space(t_list **tokens, int flg)
 	return (0);
 }
 
-t_list    *in_out(t_list *tokens)
+static int	func4(t_list *p, int mode)
 {
-    t_list    *p;
-    t_list    *pp;
+	if (!mode)
+	{
+		if (!p->next->next || p->next->next->type == TOKEN_SPACE
+			|| (p->next->next->type != TOKEN_EXPR
+				&& p->next->type != TOKEN_S_Q && p->next->type != TOKEN_D_Q))
+			return (2);
+		else
+			return (1);
+	}
+	else
+	{
+		if (!p->next || p->next->type != TOKEN_EXPR)
+			return (2);
+		else
+			return (1);
+	}
+	return (0);
+}
 
-    p = tokens;
-    pp = NULL;
-    while (p)
-    {
-        if (p->type == TOKEN_EXPR)
-        {
-            if (p->next
-                && (p->next->type == TOKEN_D_Q || p->next->type == TOKEN_S_Q))
-            {
-                if (!p->next->next || p->next->next->type == TOKEN_SPACE ||(p->next->next->type != TOKEN_EXPR && p->next->type != TOKEN_S_Q && p->next->type != TOKEN_D_Q))
-                    p->pos = 2;
-                else
-                    p->pos = 1;
-            }
-            else if (pp && (pp->type == TOKEN_D_Q || pp->type == TOKEN_S_Q))
-            {
-                if (!p->next || p->next->type != TOKEN_EXPR )
-                {
-                    p->pos = 2;
-                }
-                else
-                    p->pos = 1;
-            }
-            else
-                p->pos = 0;
-        }
-        else
-            p->pos = 0;
-        pp = p;
-        p = p->next;
-    }
-    return (tokens);
+t_list	*in_out(t_list *tokens)
+{
+	t_list	*p;
+	t_list	*pp;
+
+	p = tokens;
+	pp = NULL;
+	while (p)
+	{
+		if (p->type == TOKEN_EXPR)
+		{
+			if (p->next && (p->next->type == TOKEN_D_Q
+					|| p->next->type == TOKEN_S_Q))
+				p->pos = func4(p, 0);
+			else if (pp && (pp->type == TOKEN_D_Q || pp->type == TOKEN_S_Q))
+				p->pos = func4(p, 1);
+			else
+				p->pos = 0;
+		}
+		else
+			p->pos = 0;
+		pp = p;
+		p = p->next;
+	}
+	return (tokens);
 }
 
 t_list	*relink(t_list *p, t_env *env)
@@ -67,7 +76,8 @@ t_list	*relink(t_list *p, t_env *env)
 	pp = NULL;
 	while (cpy)
 	{
-		if (!cpy->pos && (ft_strchr(cpy->token, '\\') || ft_strchr(cpy->token, ';')))
+		if (!cpy->pos && (ft_strchr(cpy->token, '\\')
+				|| ft_strchr(cpy->token, ';')))
 			return (ft_putsyntax_error(env));
 		cpy->prev = pp;
 		cpy->visited = 0;
@@ -75,23 +85,4 @@ t_list	*relink(t_list *p, t_env *env)
 		cpy = cpy->next;
 	}
 	return (p);
-}
-
-static int	func5(int l, int *i, int *flg)
-{
-	if (l == TOKEN_SPACE)
-	{
-		*flg = 1;
-		(*i)++;
-		return (1);
-	}
-	return (0);
-}
-
-int	func333(int l, int *i, int *flg, t_list **tokens)
-{
-	if (func5(l, i, flg))
-		return (1);
-	*flg = set_space(tokens, *flg);
-	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 18:43:42 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 13:38:42 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 15:28:55 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,68 +50,4 @@ void	add_cpy(t_list **dest, t_list *src, int type, char *str)
 	cpy->fd = src->fd;
 	cpy->expand = src->expand;
 	cpy->pos = src->pos;
-}
-
-static void	func(t_list **tokens, t_cmd *cmd)
-{
-	if ((*tokens)->type == TOKEN_HEREDOC)
-	{
-		add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC, NULL);
-		(*tokens) = (*tokens)->next;
-		while ((*tokens)->next && (*tokens)->next->pos)
-		{
-			add_cpy(&cmd->redir_in, (*tokens)->next, TOKEN_HEREDOC, NULL);
-			(*tokens) = (*tokens)->next;
-		}
-	}
-	else if ((*tokens)->type == TOKEN_REDIR_APPEND)
-	{
-		add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_APPEND, NULL);
-		(*tokens) = (*tokens)->next;
-		while ((*tokens)->next && (*tokens)->next->pos)
-		{
-			add_cpy(&cmd->redir_out, (*tokens)->next, TOKEN_REDIR_APPEND, NULL);
-			(*tokens) = (*tokens)->next;
-		}
-	}
-	else if ((*tokens)->type == TOKEN_EXPR)
-		add_cpy(&cmd->args, *tokens, TOKEN_EXPR, NULL);
-}
-
-t_tree	*command(t_list *tokens)
-{
-	t_tree	*head;
-	t_cmd	*cmd;
-
-	if (!tokens || set_cmd(&cmd))
-		return (NULL);
-	while (tokens && !level(tokens) && tokens->visited == 0)
-	{
-		if (tokens->type == TOKEN_REDIR_IN)
-		{
-			add_cpy(&cmd->redir_in, tokens->next, TOKEN_REDIR_IN, NULL);
-			tokens = tokens->next;
-			while (tokens->next && tokens->next->pos)
-			{
-				add_cpy(&cmd->redir_in, tokens->next, TOKEN_REDIR_IN, NULL);
-				tokens = tokens->next;
-			}
-		}
-		else if (tokens->type == TOKEN_REDIR_OUT)
-		{
-			add_cpy(&cmd->redir_out, tokens->next, TOKEN_REDIR_OUT, NULL);
-			tokens = tokens->next;
-			while (tokens->next && tokens->next->pos)
-			{
-				add_cpy(&cmd->redir_out, tokens->next, TOKEN_REDIR_OUT, NULL);
-				tokens = tokens->next;
-			}
-		}
-		else
-			func(&tokens, cmd);
-		cmd->cmd = NULL;
-		tokens = tokens->next;
-	}
-	head = new_node(cmd, TOKEN_EXPR);
-	return (head);
 }

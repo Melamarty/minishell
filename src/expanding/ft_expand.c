@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_expand.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/09 15:42:47 by mozennou          #+#    #+#             */
+/*   Updated: 2024/01/09 15:56:19 by mozennou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 char	*ft_lstjoin(t_list **tokens)
 {
 	t_list	*p;
-	char	 *res;
-		
+	char	*res;
+
 	p = *tokens;
 	res = NULL;
 	while (p)
@@ -28,9 +40,9 @@ char	*ft_get_env2(char *s, int len, t_map *env)
 	return (ft_strdup(""));
 }
 
-static int func(char *s, t_list **tokens, t_env *env)
+static int	func(char *s, t_list **tokens, t_env *env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	s++;
@@ -55,12 +67,23 @@ static int func(char *s, t_list **tokens, t_env *env)
 	return (i + 1);
 }
 
+static int	func5(char *s, t_list **tokens)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && s[i] != '$')
+		i++;
+	ft_lstadd_back(tokens, ft_lstnew(ft_substr(s, 0, i), 0));
+	return (i);
+}
+
 char	*ft_expand(char *s, t_env *env)
 {
 	char	*res;
 	t_list	*tokens;
 	int		i;
-	char	 *tmp;
+	char	*tmp;
 
 	i = 0;
 	tokens = NULL;
@@ -72,11 +95,7 @@ char	*ft_expand(char *s, t_env *env)
 	{
 		i = 0;
 		if (s[i] != '$')
-		{
-			while (s[i] && s[i] != '$')
-				i++;
-			ft_lstadd_back(&tokens, ft_lstnew(ft_substr(s, 0, i), 0));
-		}
+			i = func5(s, &tokens);
 		s = s + i;
 		i = 0;
 		if (s[i] == '$')
