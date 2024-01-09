@@ -6,28 +6,35 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 13:14:41 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/07 17:46:11 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 11:14:34 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-static int	func(t_list *cpy, t_list *pp, t_list *p, t_env *env)
+static int	func(t_list **cpy, t_list *pp, t_env *env)
 {
-	(void)p;
-	if (is_valid2(pp, cpy, 0))
+	char	*string;
+
+	if (is_valid2(pp, (*cpy), 0))
 	{
 		ft_putsyntax_error(NULL);
 		return (1);
 	}
-	if (pp && pp->type == TOKEN_HEREDOC && cpy->type == TOKEN_EXPR)
+	if (pp && pp->type == TOKEN_HEREDOC && (*cpy)->type == TOKEN_EXPR)
 	{
-		my_close(cpy);
-		cpy->fd = read_heredoc(cpy->token, env);
-		if (cpy->fd == -1)
+		my_close((*cpy));
+		string = ft_strdup((*cpy)->token);
+		while ((*cpy)->next && (*cpy)->next->pos)
 		{
-			return (1);
+			string = ft_strjoin(string, (*cpy)->next->token);
+			(*cpy) = (*cpy)->next;
+			if ((*cpy)->pos == 2)
+				break ;
 		}
+		(*cpy)->fd = read_heredoc(string, env);
+		if ((*cpy)->fd == -1)
+			return (1);
 	}
 	return (0);
 }
@@ -50,7 +57,7 @@ t_list	*syntax_check(t_list *p, t_env *env)
 			f--;
 		if (f < 0 || ft_strchr(cpy->token, ';') || ft_strchr(cpy->token, '\\'))
 			return (ft_putsyntax_error(NULL));
-		if (func(cpy, pp, p, env))
+		if (func(&cpy, pp, env))
 			return (NULL);
 		pp = cpy;
 		cpy = cpy->next;

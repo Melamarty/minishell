@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 14:52:40 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 10:10:18 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 11:31:10 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,15 @@ void	norm_helper(t_list **res, int *l, char *string, t_list *args)
 	ft_lstadd_back(res, ft_lstnew(string, args->type));
 	*l = 1;
 	tmp = ft_lstlast(*res);
+	tmp->expand = args->expand;
+	tmp->type = args->type;
 	tmp->fd = args->fd;
 }
 
-t_list *ft_lstsplit(char *string, t_list **res)
+t_list *ft_lstsplit(char *string, t_list **res, t_list *args)
 {
 	char	*str;
+	t_list	*tmp;
 	char 	**split;
 	int		i;
 
@@ -45,6 +48,10 @@ t_list *ft_lstsplit(char *string, t_list **res)
 	{
 		str = ft_strdup(split[i]);
 		ft_lstadd_back(res, ft_lstnew(str, 0));
+		tmp = ft_lstlast(*res);
+		tmp->expand = args->expand;
+		tmp->type = args->type;
+		tmp->fd = args->fd;
 		i++;
 	}
 	return (*res);
@@ -60,7 +67,13 @@ t_list	*wildcard(t_list *args)
 	while (args)
 	{
 		if (ft_strcmp(args->token, "*") || args->expand)
+		{
 			ft_lstadd_back(&res, ft_lstnew(args->token, 0));
+			tmp2 = ft_lstlast(res);
+			tmp2->expand = args->expand;
+			tmp2->type = args->type;
+			tmp2->fd = args->fd;
+		}
 		else
 		{
 			tmp2 = get_wildcard();
@@ -77,17 +90,15 @@ t_list	*wildcard(t_list *args)
 	return (res);
 }
 
-t_list    *expand_args(t_list *args, t_env *env)
+t_list    *expand_args(t_list *args, t_env *env, int m)
 {
     t_list    *res;
     t_list    *tmp;
-    t_list    *tmp2;
     char    *string;
     int        l;
 
     res = NULL;
     l = 0;
-    tmp2 = args;
     while (args)
     {
         if (args->expand != 1)
@@ -106,22 +117,15 @@ t_list    *expand_args(t_list *args, t_env *env)
         else
         {
             if (args->expand)
-                   ft_lstadd_back(&res, ft_lstnew(string, 0));
+                add_cpy(&res, args, args->type);
             else
-                ft_lstsplit(string, &res);
+                ft_lstsplit(string, &res, args);
         }
         args = args->next;
     }
-    tmp = res;
-    while (tmp)
-    {
-        tmp->expand = tmp2->expand;
-        tmp2 = tmp2->next;
-        if (!tmp2)
-            break ;
-        tmp = tmp->next;
-    }
-    return (wildcard(res));
+	if (!m)
+   		return (wildcard(res));
+	return (res);
 }
 
 int	fix_cmd(t_cmd *cmd, t_env *env)
@@ -133,7 +137,7 @@ int	fix_cmd(t_cmd *cmd, t_env *env)
 	}
 	else
 	{
-		cmd->args = expand_args(cmd->args, env);
+		cmd->args = expand_args(cmd->args, env, 0);
 		if (!cmd->args)
 			return (1);
 		if (expand_cmd(cmd))

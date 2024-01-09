@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 11:53:08 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 11:52:25 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 11:53:49 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ static void	func(t_env *env)
 
 	m = open(ttyname(2), O_RDWR);
 	if (m == -1)
+	{
+		my_malloc(0, 1);
 		exit(1);
+	}
 	env->last_exit = 1;
 }
 
@@ -72,13 +75,14 @@ int	read_heredoc(char *limiter, t_env *env)
 	{
 		buffer = readline("> ");
 		if (!ttyname(0))
-			return (func(env), close(fd1), close(fd2), -1);
+			return (free(buffer), func(env), close(fd1), close(fd2), -1);
 		if (!buffer)
 			return (close(fd1), fd2);
 		if (!ft_strncmp(buffer, limiter, ft_strlen(limiter) + 1))
 			return (close(fd1), fd2);
 		buffer = ft_strjoin(buffer, "\n");
 		write(fd1, buffer, ft_strlen(buffer));
+		free(buffer);
 	}
 	return (-1);
 }

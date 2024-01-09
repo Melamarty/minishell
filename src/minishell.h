@@ -95,7 +95,6 @@ int		redirect(t_tree *tree, t_env **env);
 char	*ft_expand(char *s, t_env *env);
 char	*ft_get_name(void);
 t_list	*get_wildcard(void);
-t_list    *expand_args(t_list *args, t_env *env);
 
 // utils
 int		 ft_lstlen(t_list *lst);
@@ -117,6 +116,7 @@ void	ft_dup2(int fd1, int fd2);
 int		ft_atoi(const char *s);
 char	**my_split(char const *s);
 void	*ft_memcpy(void *d, const void *s, size_t n);
+void	add_cpy(t_list **dest, t_list *src, int type);
 
 // export utils
 int		print_export(t_map *env, t_map *ex_env);
@@ -137,6 +137,7 @@ int		is_exist(t_map *env, char *key);
 int		list_len (t_list *lst);
 t_list	*ft_lstlast(t_list *lst);
 void	ft_dup2(int fd1, int fd2);
+t_list    *expand_args(t_list *args, t_env *env, int m);
 
 //errors 
 int	file_error(char *file);

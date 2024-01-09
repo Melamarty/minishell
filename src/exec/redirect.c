@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:08:35 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 10:36:50 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 11:30:27 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int	redirect_out(t_tree *tree, t_env **env)
 	tmp = tree->cmd->redir_out;
 	while (tmp)
 	{
-		printf ("token: %d\n", tmp->type);
 		if (tmp->type == 3)
 			fd = open(tmp->token, O_CREAT | O_RDWR | O_APPEND, 0644);
 		else
@@ -110,9 +109,9 @@ int	redirect_in(t_tree *tree, t_env **env)
 void expand_redirect(t_cmd *cmd, t_env *env)
 {
 	if (cmd->redir_in)
-		cmd->redir_in = expand_args(cmd->redir_in, env);
+		cmd->redir_in = expand_args(cmd->redir_in, env, 1);
 	if (cmd->redir_out)
-		cmd->redir_out = expand_args(cmd->redir_out, env);
+		cmd->redir_out = expand_args(cmd->redir_out, env, 1);
 }
 
 int	redirect(t_tree *tree, t_env **env)
