@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:27:56 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 16:02:41 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 17:20:16 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,23 +61,34 @@ t_list	*get_wildcard(void)
 	return (wild_list);
 }
 
+static void	norm_helper(t_list *res, t_list *tmp, t_list *tmp2)
+{
+	tmp = ft_lstlast(res);
+	tmp->next = tmp2;
+}
+
+static void	norm_helper2(t_list *tmp2, t_list *args)
+{
+	tmp2->expand = args->expand;
+	tmp2->type = args->type;
+	tmp2->fd = args->fd;
+}
 
 t_list	*wildcard(t_list *args)
 {
 	t_list	*res;
 	t_list	*tmp;
-	t_list 	*tmp2;
-	
+	t_list	*tmp2;
+
 	res = NULL;
+	tmp = NULL;
 	while (args)
 	{
 		if (ft_strcmp(args->token, "*") || args->expand)
 		{
 			ft_lstadd_back(&res, ft_lstnew(args->token, 0));
 			tmp2 = ft_lstlast(res);
-			tmp2->expand = args->expand;
-			tmp2->type = args->type;
-			tmp2->fd = args->fd;
+			norm_helper2(tmp2, args);
 		}
 		else
 		{
@@ -85,10 +96,7 @@ t_list	*wildcard(t_list *args)
 			if (!res)
 				res = tmp2;
 			else
-			{
-				tmp = ft_lstlast(res);
-				tmp->next = tmp2;
-			}
+				norm_helper(res, tmp, tmp2);
 		}
 		args = args->next;
 	}
