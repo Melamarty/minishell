@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 13:14:41 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 11:14:34 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 12:27:13 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	func(t_list **cpy, t_list *pp, t_env *env)
 
 	if (is_valid2(pp, (*cpy), 0))
 	{
-		ft_putsyntax_error(NULL);
+		ft_putsyntax_error(env);
 		return (1);
 	}
 	if (pp && pp->type == TOKEN_HEREDOC && (*cpy)->type == TOKEN_EXPR)
@@ -56,13 +56,13 @@ t_list	*syntax_check(t_list *p, t_env *env)
 		else if (cpy->type == TOKEN_BRKT_CLOSE)
 			f--;
 		if (f < 0 || ft_strchr(cpy->token, ';') || ft_strchr(cpy->token, '\\'))
-			return (ft_putsyntax_error(NULL));
+			return (ft_putsyntax_error(env));
 		if (func(&cpy, pp, env))
 			return (NULL);
 		pp = cpy;
 		cpy = cpy->next;
 	}
 	if (is_valid2(pp, NULL, f))
-		return (ft_putsyntax_error(NULL));
+		return (ft_putsyntax_error(env));
 	return (relink(p));
 }

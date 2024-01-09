@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizing0.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:49:39 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/05 15:31:06 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 12:25:18 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static void	set_it(int *i, int *flg, int *inquotes, t_list **tokens)
 	*tokens = NULL;
 }
 
-t_list	*get_tokens(char *expr, int i)
+t_list	*get_tokens(char *expr, int i, t_env *env)
 {
 	t_list	*tokens;
 	int		flg;
@@ -88,7 +88,7 @@ t_list	*get_tokens(char *expr, int i)
 	{
 		l = is_special(expr + i);
 		if (l == -1)
-			return (ft_putsyntax_error(NULL));
+			return (ft_putsyntax_error(env));
 		if (l)
 		{
 			if (func333(l, &i, &flg, &tokens))
@@ -96,7 +96,7 @@ t_list	*get_tokens(char *expr, int i)
 			ft_lstadd_back(&tokens, ft_lstnew(ft_get_special(l), l));
 			inquotes = func(inquotes, &i, &tokens, expr);
 			if (inquotes == -1)
-				return (ft_putsyntax_error(NULL));
+				return (ft_putsyntax_error(env));
 		}
 		else
 			flg = func9(&tokens, flg, i, expr);

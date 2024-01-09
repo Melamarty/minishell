@@ -117,6 +117,7 @@ int		ft_atoi(const char *s);
 char	**my_split(char const *s);
 void	*ft_memcpy(void *d, const void *s, size_t n);
 void	add_cpy(t_list **dest, t_list *src, int type);
+void	ft_putstr_fd(char *s, int fd);
 
 // export utils
 int		print_export(t_map *env, t_map *ex_env);

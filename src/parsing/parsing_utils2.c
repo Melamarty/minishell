@@ -3,25 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:39:40 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/05 15:11:28 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 12:27:02 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-void	*ft_putsyntax_error(char *s)
+void	*ft_putsyntax_error(t_env *env)
 {
-	if (!s)
-	{
-		ft_putstr_fd("minishell: syntax error\n", 2);
-		return (NULL);
-	}
-	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-	ft_putstr_fd(s, 2);
-	ft_putstr_fd("'\n", 2);
+	ft_putstr_fd("minishell: syntax error\n", 2);
+	env->last_exit = 258;
 	return (NULL);
 }
 

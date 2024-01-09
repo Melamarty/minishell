@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:08:35 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 11:30:27 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 12:32:44 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	redirect_out(t_tree *tree, t_env **env)
 		else
 			fd = open(tmp->token, O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if (fd < 0)
-			return (file_error(tmp->token));
+			return ((*env)->last_exit = 1, file_error(tmp->token));
 		tmp->fd = fd;
 		if (tmp->next)
 			close(fd);
@@ -90,7 +90,7 @@ int	redirect_in(t_tree *tree, t_env **env)
 		else
 			fd = open(tmp->token, O_RDONLY);
 		if (fd < 0)
-			return (file_error(tmp->token));
+			return ((*env)->last_exit = 1, file_error(tmp->token));
 		tmp->fd = fd;
 		if (tmp->next)
 			close(fd);

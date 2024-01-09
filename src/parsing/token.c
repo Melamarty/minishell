@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 20:45:56 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/07 17:47:41 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/09 12:25:51 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_list	*tokenizing(char *expr, t_env *env)
 	t_list	*p;
 	int		in;
 
-	tokens = get_tokens(expr, 0);
+	tokens = get_tokens(expr, 0, env);
 	if (!tokens)
 		return (NULL);
 	in = 0;

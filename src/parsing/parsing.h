@@ -20,7 +20,7 @@ enum
 	TOKEN_S_Q,
 } ;
 
-t_list	*get_tokens(char *expr, int i);
+t_list	*get_tokens(char *expr, int i, t_env *env);
 t_list	*ft_lstnew(char *content, int type);
 int		ft_lstsize(t_list *lst);
 int		ft_lstadd_back(t_list **lst, t_list *new);
@@ -34,8 +34,7 @@ t_list	*tokenizing(char *expr, t_env *env);
 char	*ft_strchr(const char *s, int c);
 t_map	*get_env55(char **env);
 void	ft_putstr_fd(char *s, int fd);
-void	tree_free(t_tree *tree);
-void	*ft_putsyntax_error(char *s);
+void	*ft_putsyntax_error(t_env *env);
 t_map	*ft_envlast(t_map *env);
 char	*get_arg(char *s, int l);
 t_tree	*command(t_list *tokens);
