@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:22:35 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 16:03:40 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 21:21:42 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ int		is_starts(char *str);
 char	*ft_get_name2(void);
 
 // export utils
-int		print_export(t_map *env, t_map *ex_env);
+int		print_export(t_map *env);
 int		print_export_env(t_env **envr);
 void	sort_ex_env(t_map **env);
 

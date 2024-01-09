@@ -6,32 +6,27 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:40:57 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 10:50:51 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 21:21:24 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	print_export(t_map *env, t_map *ex_env)
+int	print_export(t_map *env)
 {
 	while (env)
 	{
 		write (1, "declare -x ", 11);
 		write (1, env->key, ft_strlen(env->key));
-		write(1, "=", 1);
-		write (1, "\"", 1);
-		write (1, env->val, ft_strlen(env->val));
-		write (1, "\"", 1);
+		if (env->val)
+		{
+			write(1, "=", 1);
+			write (1, "\"", 1);
+			write (1, env->val, ft_strlen(env->val));
+			write (1, "\"", 1);
+		}
 		write(1, "\n", 1);
 		env = env->next;
-	}
-	sort_ex_env(&ex_env);
-	while (ex_env)
-	{
-		write (1, "declare -x ", 11);
-		write (1, ex_env->key, ft_strlen(ex_env->key));
-		write(1, "\n", 1);
-		ex_env = ex_env->next;
 	}
 	return (1);
 }
@@ -97,6 +92,6 @@ int	print_export_env(t_env **envr)
 		tmp = duplicate_env(*envr);
 		sorted = sort_env(tmp);
 	}
-	print_export(sorted, (*envr)->ex_env);
+	print_export(sorted);
 	return (1);
 }

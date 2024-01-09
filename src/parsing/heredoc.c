@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/23 11:53:08 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 11:53:49 by mozennou         ###   ########.fr       */
+/*   Created: 2024/01/09 21:51:21 by mel-amar          #+#    #+#             */
+/*   Updated: 2024/01/09 21:51:25 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	read_heredoc(char *limiter, t_env *env)
 	int		fd1;
 	int		fd2;
 	char	*buffer;
+	char	*tmp;
 
 	signal(SIGINT, signal_handler);
 	if (func2(&fd1, &fd2) == -1)
@@ -79,10 +80,11 @@ int	read_heredoc(char *limiter, t_env *env)
 		if (!buffer)
 			return (close(fd1), fd2);
 		if (!ft_strncmp(buffer, limiter, ft_strlen(limiter) + 1))
-			return (close(fd1), fd2);
+			return (free(buffer), close(fd1), fd2);
+		tmp = buffer;
 		buffer = ft_strjoin(buffer, "\n");
-		write(fd1, buffer, ft_strlen(buffer));
-		free(buffer);
+		write(fd1, buffer, ft_strlen(tmp));
+		free(tmp);
 	}
 	return (-1);
 }

@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:11 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 15:46:32 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 21:55:38 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	echo(t_cmd *cmd, t_env *env)
 
 	args = cmd->args;
 	is_n = 0;
-	if (cmd->args && cmd->args->token && !ft_strncmp(cmd->args->token, "-n", 2))
+	if (cmd->args && cmd->args->token && is_option(cmd->args->token))
 	{
 		is_n = 1;
 		args = args->next;

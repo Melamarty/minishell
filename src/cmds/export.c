@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:49:40 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 11:49:42 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/09 21:49:18 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int	export_args(t_env **env, t_list *args)
 {
 	t_map	*var;
 	int		append;
+	int		exit_status;
 	t_list	*tmp;
 
 	while (args)
@@ -77,9 +78,10 @@ int	export_args(t_env **env, t_list *args)
 		else if (var)
 			add_var(env, var, tmp);
 		else
-			(*env)->last_exit = -1;
+			exit_status = -1;
 		args = args->next;
 	}
+	(*env)->last_exit = exit_status;
 	return (1);
 }
 

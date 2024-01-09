@@ -51,24 +51,33 @@ t_list	*ft_lstsplit(char *string, t_list **res, t_list *args, int m)
 	return (*res);
 }
 
-static void	func(t_list *args, t_list **res, char *string, int *l, int m)
+static void	func(t_list *args, t_list **res, char *string, int *l)
 {
 	t_list	*tmp;
 
-	if (args->pos && *l && ft_strlen(string))
-	{
-		tmp = ft_lstlast(*res);
-		tmp->token = ft_strjoin(tmp->token, string);
-		if (args->pos == 2)
-			*l = 0;
-	}
+	tmp = ft_lstlast(*res);
+	tmp->token = ft_strjoin(tmp->token, string);
+	if (args->pos == 2)
+		*l = 0;
+}
+
+static void	func2(t_list *args, t_list **res, char *string, int m)
+{
+	if (args->expand)
+		add_cpy(res, args, args->type, string);
 	else
+		ft_lstsplit(string, res, args, m);
+}
+
+void aff_list(t_list *list)
+{
+	printf("\n");
+	while (list)
 	{
-		if (args->expand)
-			add_cpy(res, args, args->type, string);
-		else
-			ft_lstsplit(string, res, args, m);
+		printf("%s -(%d)-(%d)->", list->token, list->expand, list->pos);
+		list = list->next;
 	}
+	printf("\n");
 }
 
 t_list	*expand_args(t_list *args, t_env *env, int m)
@@ -87,8 +96,10 @@ t_list	*expand_args(t_list *args, t_env *env, int m)
 			string = ft_strdup(args->token);
 		if (args->pos == 1 && !l && ft_strlen(string))
 			norm_helper(&res, &l, string, args);
+		else if (args->pos && l)
+			func(args, &res, string, &l);
 		else
-			func(args, &res, string, &l, m);
+			func2(args, &res, string, m);
 		args = args->next;
 	}
 	if (!m)
