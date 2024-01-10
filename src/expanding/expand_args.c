@@ -58,6 +58,7 @@ static void	func(t_list *args, t_list **res, char *string, int *l)
 
 	tmp = ft_lstlast(*res);
 	tmp->token = ft_strjoin(tmp->token, string);
+	tmp->fd = args->fd;
 	if (args->pos == 2)
 		*l = 0;
 }
