@@ -6,11 +6,12 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:41:29 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 16:13:37 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:17:15 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include "../parsing/parsing.h"
 
 void	expand_redirect(t_cmd *cmd, t_env *env)
 {

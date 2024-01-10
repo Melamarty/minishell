@@ -6,11 +6,12 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:42:33 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 17:43:42 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:17:08 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include "../parsing/parsing.h"
 
 int	env_add_back(t_map **env, char *key, char *val)
 {

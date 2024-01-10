@@ -6,12 +6,11 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:08:35 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 16:01:10 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:20:25 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 int	redirect_out(t_tree *tree, t_env **env)
 {

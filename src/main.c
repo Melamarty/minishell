@@ -6,11 +6,12 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:17:15 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 10:18:16 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:16:45 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "parsing/parsing.h"
 
 void	sigint_handler(int sig)
 {
@@ -22,13 +23,10 @@ void	sigint_handler(int sig)
 		rl_redisplay();
 		g_sig = 1;
 	}
-		
 }
 
-void	setup_signals(t_env *env)
+void	setup_signals(void)
 {
-	if (g_sig == -1)
-	env->last_exit = 130;
 	g_sig = 0;
 	signal(SIGINT, sigint_handler);
 	rl_catch_signals = 0;
@@ -45,7 +43,7 @@ void	bash_loop(t_env *my_env)
 	cmd = NULL;
 	while (1)
 	{
-		setup_signals(my_env);
+		setup_signals();
 		cmd = readline("\e[1;32mminishell >> \e[0m");
 		add_history(cmd);
 		if (!cmd)

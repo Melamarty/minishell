@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 21:51:21 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 21:51:25 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:10:08 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	read_heredoc(char *limiter, t_env *env)
 			return (free(buffer), close(fd1), fd2);
 		tmp = buffer;
 		buffer = ft_strjoin(buffer, "\n");
-		write(fd1, buffer, ft_strlen(tmp));
+		write(fd1, buffer, ft_strlen(buffer));
 		free(tmp);
 	}
 	return (-1);

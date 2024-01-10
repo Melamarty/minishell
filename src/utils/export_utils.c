@@ -6,11 +6,12 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:40:57 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 21:21:24 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:17:00 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include "../parsing/parsing.h"
 
 int	print_export(t_map *env)
 {

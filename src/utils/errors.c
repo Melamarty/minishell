@@ -6,11 +6,12 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:40:43 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 14:50:36 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:16:54 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include "../parsing/parsing.h"
 
 int	file_error(char *file)
 {

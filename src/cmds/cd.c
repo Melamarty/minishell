@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:52 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 10:36:07 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:19:15 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,11 @@ int	cd(t_cmd *cmd, t_env *env)
 	path = NULL;
 	if (cmd->args)
 		path = cmd->args->token;
-	// printf ("expand %d\n", );
 	if (!path)
 		return (special_path(NULL, env), update_env(env, path));
 	else if (!ft_strlen(path))
 		return (update_env(env, NULL), env->last_exit = 0, 1);
-	else if ((path[0] == '~' && !cmd->args->expand)|| path[0] == '-')
+	else if ((path[0] == '~' && !cmd->args->expand) || path[0] == '-')
 		return (special_path(path, env), update_env(env, path));
 	res = chdir(path);
 	if (!update_env(env, path))

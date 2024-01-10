@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_expand.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:42:47 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 15:56:19 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:16:18 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include "../parsing/parsing.h"
 
 char	*ft_lstjoin(t_list **tokens)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/05 13:14:41 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 13:15:22 by mozennou         ###   ########.fr       */
+/*   Created: 2024/01/10 11:13:27 by mel-amar          #+#    #+#             */
+/*   Updated: 2024/01/10 11:13:30 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,15 @@ static int	func(t_list **cpy, t_list *pp, t_env *env)
 	return (0);
 }
 
+void	close_all(t_list *tk)
+{
+	while (tk)
+	{
+		my_close(tk);
+		tk = tk->next;
+	}
+}
+
 t_list	*syntax_check(t_list *p, t_env *env)
 {
 	t_list	*cpy;
@@ -56,9 +65,9 @@ t_list	*syntax_check(t_list *p, t_env *env)
 		else if (cpy->type == TOKEN_BRKT_CLOSE)
 			f--;
 		if (f < 0)
-			return (ft_putsyntax_error(env));
+			return (close_all(p), ft_putsyntax_error(env));
 		if (func(&cpy, pp, env))
-			return (NULL);
+			return (close_all(p), NULL);
 		pp = cpy;
 		cpy = cpy->next;
 	}

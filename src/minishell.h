@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:22:35 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 10:33:28 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:15:14 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,7 @@ typedef struct s_adress
 // signal variable
 int	g_sig;
 
-
-//////////////////////////////////
-#include "parsing/parsing.h"
+/////////////////////////////////
 int		ft_strcmp(char *str1, char *str2);
 int		ft_strncmp(char *str1, char *str2, int n);
 

@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:40:45 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 21:46:47 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 11:18:30 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_map	*get_keyval(char *param, int i)
 	var->val = NULL;
 	if (param[i + 1])
 	{
-		if ( param[i] == '+')
+		if (param[i] == '+')
 			var->val = ft_substr(param, i + 2, ft_strlen(param) - i - 2);
 		else
 			var->val = ft_substr(param, i + 1, ft_strlen(param) - i - 1);

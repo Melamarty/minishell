@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include "../parsing/parsing.h"
 
 void	norm_helper(t_list **res, int *l, char *string, t_list *args)
 {
@@ -67,17 +68,6 @@ static void	func2(t_list *args, t_list **res, char *string, int m)
 		add_cpy(res, args, args->type, string);
 	else
 		ft_lstsplit(string, res, args, m);
-}
-
-void aff_list(t_list *list)
-{
-	printf("\n");
-	while (list)
-	{
-		printf("%s -(%d)-(%d)->", list->token, list->expand, list->pos);
-		list = list->next;
-	}
-	printf("\n");
 }
 
 t_list	*expand_args(t_list *args, t_env *env, int m)
