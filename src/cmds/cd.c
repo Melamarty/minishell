@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:52 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 13:08:41 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 17:08:15 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,34 +29,6 @@ void	cd_err(int flag, char *path)
 	}
 }
 
-int	special_path(char *path, t_env *env)
-{
-	char	*tmp;
-
-	tmp = NULL;
-	if (!path || path[0] == '~')
-		tmp = get_env(env, "HOME");
-	if (tmp && !ft_strlen (tmp))
-	{
-		write(2, "minishell: cd: HOME not set\n", 28);
-		env->last_exit = 1;
-		return (0);
-	}
-	else if (path[0] == '-')
-		tmp = get_env(env, "OLDPWD");
-	if (tmp && !ft_strlen(tmp))
-	{
-		write(2, "minishell: cd: OLDPWD not set\n", 30);
-		env->last_exit = 1;
-		return (0);
-	}
-	if (!chdir (tmp))
-		return (env->last_exit = 0, 1);
-	cd_err(0, path);
-	env->last_exit = 1;
-	return (0);
-}
-
 void	set_env_(t_env *env, char *key, char *value)
 {
 	t_map	*tmp;
@@ -66,7 +38,7 @@ void	set_env_(t_env *env, char *key, char *value)
 	{
 		if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
 		{
-			tmp->val = value;
+			tmp->val = ft_strdup (value);
 			return ;
 		}
 		tmp = tmp->next;
@@ -98,7 +70,35 @@ int	update_env(t_env *env, char *path)
 		set_env_(env, "PWD", tmp);
 	if (tmp)
 		free(tmp);
-	return (1);
+	return (0);
+}
+
+int	special_path(char *path, t_env *env)
+{
+	char	*tmp;
+
+	tmp = NULL;
+	if (!path || path[0] == '~')
+		tmp = get_env(env, "HOME");
+	if (tmp && !ft_strlen (tmp))
+	{
+		write(2, "minishell: cd: HOME not set\n", 28);
+		env->last_exit = 1;
+		return (0);
+	}
+	else if (path && path[0] == '-')
+		tmp = get_env(env, "OLDPWD");
+	if (tmp && !ft_strlen(tmp))
+	{
+		write(2, "minishell: cd: OLDPWD not set\n", 30);
+		env->last_exit = 1;
+		return (0);
+	}
+	if (!chdir (tmp))
+		return (update_env(env, path), env->last_exit = 0, 1);
+	cd_err(0, path);
+	env->last_exit = 1;
+	return (0);
 }
 
 int	cd(t_cmd *cmd, t_env *env)
@@ -110,15 +110,11 @@ int	cd(t_cmd *cmd, t_env *env)
 	if (cmd->args)
 		path = cmd->args->token;
 	if (!path)
-		return (special_path(NULL, env), update_env(env, path));
-	else if (!ft_strlen(path))
-		return (update_env(env, NULL), env->last_exit = 0, 1);
+		return (special_path(NULL, env));
 	else if ((path[0] == '~' && !cmd->args->expand) || path[0] == '-')
-		return (special_path(path, env), update_env(env, path));
+		return (special_path(path, env));
 	res = chdir(path);
-	if (!update_env(env, path))
-		return (0);
-	if (!res)
+	if (!res && !update_env(env, path))
 		return (env->last_exit = 0, 1);
 	cd_err(0, path);
 	env->last_exit = 1;
