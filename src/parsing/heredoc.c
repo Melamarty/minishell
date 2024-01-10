@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 21:51:21 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 21:11:32 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/10 22:20:12 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,11 @@ static int	func2(int *fd1, int *fd2)
 
 	name = ft_get_name();
 	*fd1 = my_open(name, O_RDWR | O_CREAT | O_TRUNC, 0644, 0);
+	if (*fd1 == -1)
+		return (my_malloc(0, 1), exit(1), -1);
 	*fd2 = my_open(name, O_RDWR | O_CREAT | O_TRUNC, 0644, 0);
-	if (unlink(name) == -1)
-		return (perror("unlink"), -1);
+	if (unlink(name) == -1 || *fd2 == -1)
+		return (my_malloc(0, 1), exit(1), -1);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:44:03 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 20:56:54 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/10 22:20:37 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,8 @@ void	*my_malloc(size_t size, int mode)
 		return (ptr);
 	}
 	else
+	{
+		my_open(NULL, 0, 0, 1);
 		return (ft_addr_clear(&head), NULL);
+	}
 }
