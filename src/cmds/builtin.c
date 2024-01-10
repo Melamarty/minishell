@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:43 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 16:06:31 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 09:56:24 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	get_status(int pid, t_env *env)
 {
 	int	status;
 
+	g_sig = -1;
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 	{

@@ -6,23 +6,23 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:17:15 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 16:05:52 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 09:59:26 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_sig;
-
 void	sigint_handler(int sig)
 {
-	if (sig == SIGINT)
+	if (sig == SIGINT && g_sig >= 0)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		g_sig = 1;
+		int tmp = g_sig + 1;
+		printf ("tmp = %d\n", tmp << 1);
+		printf ("g_sig = %d\n", tmp >> 1);
 	}
 }
 
@@ -47,10 +47,10 @@ void	bash_loop(t_env *my_env)
 		free(cmd);
 		if (!tokens)
 			continue ;
-		if (g_sig)
-			my_env->last_exit = 1;
 		cpy = tokens;
 		tree = condition(ft_lstlast(tokens));
+		if (g_sig)
+			my_env->last_exit = 1;
 		exec_line(&tree, &my_env);
 	}
 }
@@ -58,7 +58,7 @@ void	bash_loop(t_env *my_env)
 t_env	*setup_env(char **env)
 {
 	t_list	*lst;
-	char	*tmp;
+	int		tmp;
 	t_env	*enver;
 	t_map	*my_env;
 
@@ -73,9 +73,11 @@ t_env	*setup_env(char **env)
 	{
 		lst->token = ft_strdup("SHLVL");
 		lst->next = NULL;
-		tmp = ft_itoa (ft_atoi(get_env(enver, "SHLVL")) + 1);
+		tmp = ft_atoi(get_env(enver, "SHLVL")) + 1;
+		if (tmp < 0)
+			tmp = 0;
 		unset(&enver, lst);
-		env_add_back(&enver->env, "SHLVL", tmp);
+		env_add_back(&enver->env, "SHLVL", ft_itoa (tmp));
 	}
 	lst->token = ft_strdup("OLDPWD");
 	unset (&enver, lst);
