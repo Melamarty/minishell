@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:17:15 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 11:16:45 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 14:36:15 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,18 @@ void	sigint_handler(int sig)
 		rl_redisplay();
 		g_sig = 1;
 	}
+	else if (sig == SIGINT)
+		g_sig = -2;
+	else if (sig == SIGQUIT)
+		g_sig = -3;
 }
 
-void	setup_signals(void)
+void	setup_signals(t_env *my_env)
 {
+	if (g_sig == -2)
+		my_env->last_exit = 130;
+	else if (g_sig == -3)
+		my_env->last_exit = 131;
 	g_sig = 0;
 	signal(SIGINT, sigint_handler);
 	rl_catch_signals = 0;
@@ -43,7 +51,7 @@ void	bash_loop(t_env *my_env)
 	cmd = NULL;
 	while (1)
 	{
-		setup_signals();
+		setup_signals(my_env);
 		cmd = readline("\e[1;32mminishell >> \e[0m");
 		add_history(cmd);
 		if (!cmd)

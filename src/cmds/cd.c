@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:52 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 11:19:15 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:08:41 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,23 @@ int	special_path(char *path, t_env *env)
 {
 	char	*tmp;
 
+	tmp = NULL;
 	if (!path || path[0] == '~')
 		tmp = get_env(env, "HOME");
+	if (tmp && !ft_strlen (tmp))
+	{
+		write(2, "minishell: cd: HOME not set\n", 28);
+		env->last_exit = 1;
+		return (0);
+	}
 	else if (path[0] == '-')
 		tmp = get_env(env, "OLDPWD");
+	if (tmp && !ft_strlen(tmp))
+	{
+		write(2, "minishell: cd: OLDPWD not set\n", 30);
+		env->last_exit = 1;
+		return (0);
+	}
 	if (!chdir (tmp))
 		return (env->last_exit = 0, 1);
 	cd_err(0, path);

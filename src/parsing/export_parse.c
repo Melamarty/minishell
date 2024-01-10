@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 12:40:45 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/10 11:18:30 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:13:25 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_map	*parse_param(char *param, int *append)
 			*append = 1;
 			break ;
 		}
-		if (!is_valid(param[i]) || (param[0] >= '0' && param[i] <= '9'))
+		if (!is_valid(param[i]))
 		{
 			export_err(param);
 			return (NULL);
