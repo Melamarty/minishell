@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:43 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 18:50:00 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 21:02:09 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	root_cmd(t_cmd *cmd, t_env *env, char *tmp)
 	if (cmd->cmd[0] == '/')
 		file = ft_strdup(cmd->cmd);
 	else
-	{	
+	{
 		path = getcwd(NULL, 0);
 		file = ft_strjoin(path, "/");
 		file = ft_strjoin(file, cmd->cmd);
@@ -82,7 +82,8 @@ int	exec_file(t_cmd *cmd, t_env *env)
 	char	*tmp;
 
 	tmp = ft_strdup(cmd->cmd);
-	if (cmd->cmd[0] == '/' || cmd->cmd[0] == '.' || !ft_strlen (get_env(env, "PATH")))
+	if (cmd->cmd[0] == '/' || cmd->cmd[0] == '.'
+		|| !ft_strlen (get_env(env, "PATH")))
 		return (root_cmd(cmd, env, tmp));
 	file = locate_cmd(cmd->cmd, get_env(env, "PATH"));
 	if (!ft_strlen (get_env(env, "PATH")) && access(cmd->cmd, F_OK))

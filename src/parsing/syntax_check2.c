@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 11:13:27 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 11:13:30 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 21:12:23 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static int	func(t_list **cpy, t_list *pp, t_env *env)
 	}
 	if (pp && pp->type == TOKEN_HEREDOC && (*cpy)->type == TOKEN_EXPR)
 	{
-		my_close((*cpy));
 		string = ft_strdup((*cpy)->token);
 		while ((*cpy)->next && (*cpy)->next->pos)
 		{
@@ -37,15 +36,6 @@ static int	func(t_list **cpy, t_list *pp, t_env *env)
 			return (1);
 	}
 	return (0);
-}
-
-void	close_all(t_list *tk)
-{
-	while (tk)
-	{
-		my_close(tk);
-		tk = tk->next;
-	}
 }
 
 t_list	*syntax_check(t_list *p, t_env *env)
@@ -65,9 +55,9 @@ t_list	*syntax_check(t_list *p, t_env *env)
 		else if (cpy->type == TOKEN_BRKT_CLOSE)
 			f--;
 		if (f < 0)
-			return (close_all(p), ft_putsyntax_error(env));
+			return (ft_putsyntax_error(env));
 		if (func(&cpy, pp, env))
-			return (close_all(p), NULL);
+			return (NULL);
 		pp = cpy;
 		cpy = cpy->next;
 	}

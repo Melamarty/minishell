@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 21:51:21 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 11:10:08 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 21:11:32 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,10 @@ static int	func2(int *fd1, int *fd2)
 	char	*name;
 
 	name = ft_get_name();
-	*fd1 = open(name, O_RDWR | O_CREAT | O_TRUNC, 0644);
-	if (*fd1 == -1)
-		return (-1);
-	*fd2 = open(name, O_RDWR | O_CREAT | O_TRUNC, 0644);
-	if (unlink(name) == -1 || *fd2 == -1)
-		return (perror("unlink"), close(*fd1), -1);
+	*fd1 = my_open(name, O_RDWR | O_CREAT | O_TRUNC, 0644, 0);
+	*fd2 = my_open(name, O_RDWR | O_CREAT | O_TRUNC, 0644, 0);
+	if (unlink(name) == -1)
+		return (perror("unlink"), -1);
 	return (0);
 }
 
@@ -76,11 +74,11 @@ int	read_heredoc(char *limiter, t_env *env)
 	{
 		buffer = readline("> ");
 		if (!ttyname(0))
-			return (free(buffer), func(env), close(fd1), close(fd2), -1);
+			return (free(buffer), func(env), -1);
 		if (!buffer)
-			return (close(fd1), fd2);
+			return (fd2);
 		if (!ft_strncmp(buffer, limiter, ft_strlen(limiter) + 1))
-			return (free(buffer), close(fd1), fd2);
+			return (free(buffer), fd2);
 		tmp = buffer;
 		buffer = ft_strjoin(buffer, "\n");
 		write(fd1, buffer, ft_strlen(buffer));

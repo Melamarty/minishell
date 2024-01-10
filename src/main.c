@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:17:15 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 14:36:15 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 21:16:45 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	bash_loop(t_env *my_env)
 		if (g_sig)
 			my_env->last_exit = 1;
 		exec_line(&tree, &my_env);
+		my_open(NULL, 0, 0, 1);
 	}
 }
 

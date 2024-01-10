@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:44:03 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 17:45:44 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 20:56:54 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,15 @@ void	ft_addr_clear(t_adress **head)
 	{
 		tmp = *head;
 		*head = (*head)->next;
-		free(tmp->addr);
+		if (tmp->fd != -1)
+			close(tmp->fd);
+		if (tmp->addr)
+			free(tmp->addr);
 		free(tmp);
 	}
 }
 
-t_adress	*ft_addrnew(void *addr)
+t_adress	*ft_addrnew(void *addr, int fd)
 {
 	t_adress	*new;
 
@@ -52,6 +55,7 @@ t_adress	*ft_addrnew(void *addr)
 	if (!new)
 		return (NULL);
 	new->addr = addr;
+	new->fd = fd;
 	new->next = NULL;
 	return (new);
 }
@@ -66,7 +70,7 @@ void	*my_malloc(size_t size, int mode)
 		ptr = malloc(size);
 		if (!ptr)
 			return (ft_addr_clear(&head), exit(1), NULL);
-		ft_addr_back(&head, ft_addrnew(ptr));
+		ft_addr_back(&head, ft_addrnew(ptr, -1));
 		return (ptr);
 	}
 	else

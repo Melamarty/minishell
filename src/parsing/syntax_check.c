@@ -6,19 +6,11 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 21:44:22 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 15:12:10 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/10 21:12:10 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-
-int	my_close(t_list *cpy)
-{
-	if (cpy->fd > 2)
-		close(cpy->fd);
-	cpy->fd = -1;
-	return (0);
-}
 
 static int	func2(t_list *tk, t_list **p, t_list **pp)
 {
