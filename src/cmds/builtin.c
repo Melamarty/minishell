@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:43 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 10:28:24 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 18:50:00 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,24 @@ int	root_cmd(t_cmd *cmd, t_env *env, char *tmp)
 	char	*file;
 	char	*path;
 
-	if (cmd->cmd[0] == '.')
-	{
+	if (cmd->cmd[0] == '/')
+		file = ft_strdup(cmd->cmd);
+	else
+	{	
 		path = getcwd(NULL, 0);
-		file = ft_strjoin(path, cmd->cmd + 1);
+		file = ft_strjoin(path, "/");
+		file = ft_strjoin(file, cmd->cmd);
 		if (path)
 			free(path);
 		cmd->cmd = file;
 	}
-	else
-		file = cmd->cmd;
 	cmd->e_args = set_args(file, cmd->args);
 	if (access(cmd->cmd, F_OK) == 0)
 		return (exec_system(cmd, env, tmp));
-	else
+	else if (ft_strlen (get_env(env, "PATH")))
 		return (env->last_exit = 127, put_err(tmp, 1));
+	else
+		return (env->last_exit = 127, put_err(tmp, 33));
 }
 
 int	exec_file(t_cmd *cmd, t_env *env)
@@ -79,10 +82,10 @@ int	exec_file(t_cmd *cmd, t_env *env)
 	char	*tmp;
 
 	tmp = ft_strdup(cmd->cmd);
-	if (cmd->cmd[0] == '/' || cmd->cmd[0] == '.')
+	if (cmd->cmd[0] == '/' || cmd->cmd[0] == '.' || !ft_strlen (get_env(env, "PATH")))
 		return (root_cmd(cmd, env, tmp));
 	file = locate_cmd(cmd->cmd, get_env(env, "PATH"));
-	if (! ft_strlen (get_env(env, "PATH")) && access(cmd->cmd, F_OK))
+	if (!ft_strlen (get_env(env, "PATH")) && access(cmd->cmd, F_OK))
 		return (env->last_exit = 127, put_err(tmp, 33));
 	if (!file || !ft_strlen(tmp))
 		return (env->last_exit = 127, put_err(tmp, 1));
