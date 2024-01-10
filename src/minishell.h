@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:22:35 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 09:52:19 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 10:33:28 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int		ft_strncmp(char *str1, char *str2, int n);
 
 // cmds
 int		echo(t_cmd *cmd, t_env *env);
-int		cd(char *path, t_env *env);
+int		cd(t_cmd *cmd, t_env *env);
 char	*get_env(t_env *env, char *key);
 int		pwd(t_cmd *cmd, t_env *env);
 int		export(t_cmd *cmd, t_env **env);

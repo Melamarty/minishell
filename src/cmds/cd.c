@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:52 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 15:47:59 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 10:36:07 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,23 +76,32 @@ int	update_env(t_env *env, char *path)
 		jp = ft_strjoin(jp, path);
 		set_env_(env, "PWD", jp);
 		cd_err(1, NULL);
+		if (tmp)
+			free(tmp);
 		env->last_exit = 1;
 		return (0);
 	}
 	else
 		set_env_(env, "PWD", tmp);
+	if (tmp)
+		free(tmp);
 	return (1);
 }
 
-int	cd(char *path, t_env *env)
+int	cd(t_cmd *cmd, t_env *env)
 {
 	int		res;
+	char	*path;
 
+	path = NULL;
+	if (cmd->args)
+		path = cmd->args->token;
+	// printf ("expand %d\n", );
 	if (!path)
 		return (special_path(NULL, env), update_env(env, path));
 	else if (!ft_strlen(path))
 		return (update_env(env, NULL), env->last_exit = 0, 1);
-	else if (path[0] == '~' || path[0] == '-')
+	else if ((path[0] == '~' && !cmd->args->expand)|| path[0] == '-')
 		return (special_path(path, env), update_env(env, path));
 	res = chdir(path);
 	if (!update_env(env, path))

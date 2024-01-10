@@ -49,12 +49,7 @@ int	exec_cmd(t_cmd	*cmd, t_env **envr)
 	if (!ft_strcmp(cmd->cmd, "echo"))
 		return (echo(cmd, *envr));
 	else if (!ft_strcmp(cmd->cmd, "cd"))
-	{
-		if (cmd->args)
-			return (cd(cmd->args->token, *envr));
-		else
-			return (cd(NULL, *envr));
-	}
+		return (cd(cmd, *envr));
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
 		return (pwd(cmd, *envr));
 	else if (!ft_strcmp(cmd->cmd, "export"))

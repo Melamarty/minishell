@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:36:43 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 09:56:24 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 10:28:24 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,14 @@ int	exec_system(t_cmd *cmd, t_env *env, char *file)
 int	root_cmd(t_cmd *cmd, t_env *env, char *tmp)
 {
 	char	*file;
+	char	*path;
 
 	if (cmd->cmd[0] == '.')
 	{
-		file = ft_strjoin(getcwd(NULL, 0), cmd->cmd + 1);
+		path = getcwd(NULL, 0);
+		file = ft_strjoin(path, cmd->cmd + 1);
+		if (path)
+			free(path);
 		cmd->cmd = file;
 	}
 	else
@@ -73,6 +77,7 @@ int	exec_file(t_cmd *cmd, t_env *env)
 {
 	char	*file;
 	char	*tmp;
+
 	tmp = ft_strdup(cmd->cmd);
 	if (cmd->cmd[0] == '/' || cmd->cmd[0] == '.')
 		return (root_cmd(cmd, env, tmp));

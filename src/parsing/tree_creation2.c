@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_creation2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 18:44:16 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/09 15:41:20 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/10 10:22:06 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_tree	*get_redirs(t_tree *head, t_list *tokens)
 	t_tree	*res;
 	t_cmd	*cmd;
 
-	if (!tokens || level(tokens))
+	if (!tokens || level(tokens) || tokens->visited == 1)
 		return (head);
 	if (set_cmd(&cmd))
 		return (NULL);

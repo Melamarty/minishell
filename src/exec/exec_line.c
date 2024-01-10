@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:10:03 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/08 14:17:52 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/10 10:15:56 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,6 @@ int	exec_line(t_tree **line, t_env **env)
 	else if (tree->type == 7)
 		return (exec_line(&tree->left, env) || exec_line(&tree->right, env));
 	else if (tree->type == 5)
-		return (handel_pipe(tree, env));
+		return (g_sig = -1, handel_pipe(tree, env));
 	return (1);
 }

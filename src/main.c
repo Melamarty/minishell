@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:17:15 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 09:59:26 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/10 10:18:16 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,19 @@ void	sigint_handler(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		int tmp = g_sig + 1;
-		printf ("tmp = %d\n", tmp << 1);
-		printf ("g_sig = %d\n", tmp >> 1);
+		g_sig = 1;
 	}
+		
+}
+
+void	setup_signals(t_env *env)
+{
+	if (g_sig == -1)
+	env->last_exit = 130;
+	g_sig = 0;
+	signal(SIGINT, sigint_handler);
+	rl_catch_signals = 0;
+	signal(SIGQUIT, sigint_handler);
 }
 
 void	bash_loop(t_env *my_env)
@@ -36,9 +45,7 @@ void	bash_loop(t_env *my_env)
 	cmd = NULL;
 	while (1)
 	{
-		g_sig = 0;
-		signal(SIGINT, sigint_handler);
-		rl_catch_signals = 0;
+		setup_signals(my_env);
 		cmd = readline("\e[1;32mminishell >> \e[0m");
 		add_history(cmd);
 		if (!cmd)
@@ -90,8 +97,8 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	signal(SIGQUIT, sigint_handler);
 	envr = setup_env (env);
+	envr->last_exit = 0;
 	bash_loop(envr);
 	return (0);
 }
