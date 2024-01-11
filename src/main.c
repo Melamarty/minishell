@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:17:15 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 21:16:45 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/11 12:01:30 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,12 @@ t_env	*setup_env(char **env)
 		tmp = ft_atoi(get_env(enver, "SHLVL")) + 1;
 		if (tmp < 0)
 			tmp = 0;
+		if (tmp >= 1000)
+			tmp = 1;
 		unset(&enver, lst);
 		env_add_back(&enver->env, "SHLVL", ft_itoa (tmp));
 	}
-	lst->token = ft_strdup("OLDPWD");
-	unset (&enver, lst);
+	init_env(enver);
 	return (enver);
 }
 

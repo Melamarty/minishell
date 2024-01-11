@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:40:57 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 11:17:00 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/11 11:38:13 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,19 @@ int	print_export(t_map *env)
 {
 	while (env)
 	{
-		write (1, "declare -x ", 11);
-		write (1, env->key, ft_strlen(env->key));
-		if (env->val)
+		if (ft_strcmp(env->key, "_"))
 		{
-			write(1, "=", 1);
-			write (1, "\"", 1);
-			write (1, env->val, ft_strlen(env->val));
-			write (1, "\"", 1);
+			write (1, "declare -x ", 11);
+			write (1, env->key, ft_strlen(env->key));
+			if (env->val)
+			{
+				write(1, "=", 1);
+				write (1, "\"", 1);
+				write (1, env->val, ft_strlen(env->val));
+				write (1, "\"", 1);
+			}
+			write(1, "\n", 1);
 		}
-		write(1, "\n", 1);
 		env = env->next;
 	}
 	return (1);

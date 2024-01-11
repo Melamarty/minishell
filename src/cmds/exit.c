@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:43:47 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 15:46:17 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/11 12:00:42 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,18 @@ int	ft_atoi2(char *s, long *num)
 	return (*num = (int)(res * neg), 0);
 }
 
+void	exit_err(char *arg, int flag)
+{
+	write (2, "minishell: exit: ", 17);
+	if (flag == 1)
+	{
+		write (2, arg, ft_strlen(arg));
+		write (2, ": numeric argument required\n", 28);
+	}
+	else
+		write (2, ": too many arguments\n", 21);
+}
+
 int	exit_cmd(t_cmd *cmd)
 {
 	long	nb;
@@ -74,19 +86,23 @@ int	exit_cmd(t_cmd *cmd)
 	nb = 0;
 	if (list_len(cmd->args) > 1)
 	{
-		write(2, "exit\n", 5);
-		write(2, "minishell: exit: too many arguments\n", 37);
+		if (ft_atoi2(cmd->args->token, &nb) == -1)
+		{
+			exit_err(cmd->args->token, 1);
+			my_malloc (0, 1);
+			exit(255);
+		}
+		exit_err(cmd->args->token, 2);
 		return (0);
 	}
 	my_malloc (0, 1);
+	printf ("segfault not in malloc\n");
 	if (cmd->args)
 	{
 		if (ft_atoi2(cmd->args->token, &nb) == -1)
 		{
 			write (2, "exit\n", 5);
-			write (2, "minishell: exit: ", 17);
-			write (2, cmd->args->token, ft_strlen(cmd->args->token));
-			write (2, ": numeric argument required\n", 28);
+			exit_err(cmd->args->token, 1);
 			exit(255);
 		}
 		write(2, "exit\n", 5);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:22:35 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 21:03:02 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/11 11:28:47 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ char		*ft_get_name(void);
 t_list		*get_wildcard(void);
 t_list		*expand_args(t_list *args, t_env *env, int m);
 t_list		*wildcard(t_list *args);
+void		init_env (t_env *env);
 
 // utils
 int			ft_lstlen(t_list *lst);

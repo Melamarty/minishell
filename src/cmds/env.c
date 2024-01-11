@@ -6,7 +6,7 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:18 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/07 17:37:19 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/11 11:38:55 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,6 @@ int	env(t_cmd *cmd, t_env *envr)
 	t_map	*env;
 
 	env = envr->env;
-	if (!ft_strlen (get_env(envr, "PATH")))
-	{
-		ft_putstr_fd("minishell: env: No such file or directory\n", 2);
-		envr->last_exit = 127;
-		return (1);
-	}
 	(void )cmd;
 	if (!env)
 		return (1);
