@@ -44,7 +44,8 @@ int	ft_isalnum(int c)
 {
 	return ((c >= 'a' && c <= 'z')
 		|| (c >= 'A' && c <= 'Z')
-		|| (c >= '0' && c <= '9'));
+		|| (c >= '0' && c <= '9')
+		|| c == '_');
 }
 
 void	ft_dup2(int fd1, int fd2)
@@ -56,7 +57,7 @@ void	ft_dup2(int fd1, int fd2)
 	}
 }
 
-void	init_env (t_env *env)
+void	init_env(t_env *env)
 {
 	t_list	*tmp;
 	char	*path;
@@ -77,4 +78,3 @@ void	init_env (t_env *env)
 	env_add_back(&env->env, ft_strdup("PWD"), path);
 	free (path);
 }
-

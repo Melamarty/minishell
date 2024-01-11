@@ -33,7 +33,7 @@ t_list	*ft_lstsplit(char *string, t_list **res, t_list *args, int m)
 	int		i;
 
 	i = 0;
-	if (string[0] == '\0' && m)
+	if (m)
 	{
 		add_cpy(res, args, args->type, string);
 		return (*res);
@@ -85,7 +85,7 @@ t_list	*expand_args(t_list *args, t_env *env, int m)
 			string = ft_expand(args->token, env);
 		else
 			string = ft_strdup(args->token);
-		if (args->pos == 1 && !l && ft_strlen(string))
+		if (args->pos == 1 && !l)
 			norm_helper(&res, &l, string, args);
 		else if (args->pos && l)
 			func(args, &res, string, &l);

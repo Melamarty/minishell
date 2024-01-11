@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_expand.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:42:47 by mozennou          #+#    #+#             */
-/*   Updated: 2024/01/10 11:16:18 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/11 13:18:35 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ char	*ft_get_env2(char *s, int len, t_map *env)
 	while (env)
 	{
 		if (!ft_strncmp(env->key, s, ft_strlen(env->key)))
-			return (ft_strdup(env->val));
+		{
+			if (!ft_isalnum(s[ft_strlen(env->key)]))
+				return (ft_strdup(env->val));
+		}
 		env = env->next;
 	}
 	return (ft_strdup(""));

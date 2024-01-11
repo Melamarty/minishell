@@ -6,7 +6,7 @@
 /*   By: mozennou <mozennou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:08:35 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/10 21:10:26 by mozennou         ###   ########.fr       */
+/*   Updated: 2024/01/11 13:26:34 by mozennou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	redirect_out(t_tree *tree, t_env **env)
 	tmp = tree->cmd->redir_out;
 	while (tmp)
 	{
-		if (!ft_strlen(tmp->token) || is_starts(tmp->token))
+		if ((!ft_strlen(tmp->token) || is_starts(tmp->token)) && !tmp->pos)
 			return ((*env)->last_exit = 1, ambiguous_err(tmp->token));
 		if (tmp->type == 3)
 			fd = my_open(tmp->token, O_CREAT | O_RDWR | O_APPEND, 0644, 0);
