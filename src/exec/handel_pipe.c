@@ -6,11 +6,27 @@
 /*   By: mel-amar <mel-amar@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:10:01 by mel-amar          #+#    #+#             */
-/*   Updated: 2024/01/09 15:36:49 by mel-amar         ###   ########.fr       */
+/*   Updated: 2024/01/11 10:24:55 by mel-amar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	pid_status(int pid, t_env *env)
+{
+	int	status;
+
+	g_sig = -1;
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+	{
+		status = WEXITSTATUS(status);
+		env->last_exit = status;
+		return (status);
+	}
+	else
+		return (-1);
+}
 
 int	first_cmd(t_tree *tree, int fds[2], t_env **env)
 {
@@ -18,7 +34,7 @@ int	first_cmd(t_tree *tree, int fds[2], t_env **env)
 	dup2(fds[1], STDOUT_FILENO);
 	exec_line(&tree->left, env);
 	close(fds[1]);
-	exit (0);
+	exit ((*env)->last_exit);
 }
 
 int	seceond_cmd(t_tree *tree, int fds[2], t_env **env)
@@ -27,7 +43,7 @@ int	seceond_cmd(t_tree *tree, int fds[2], t_env **env)
 	dup2(fds[0], STDIN_FILENO);
 	exec_line(&tree->right, env);
 	close(fds[0]);
-	exit (0);
+	exit ((*env)->last_exit);
 }
 
 int	handel_pipe(t_tree *tree, t_env **env)
@@ -47,9 +63,14 @@ int	handel_pipe(t_tree *tree, t_env **env)
 	p2 = fork();
 	if (!p2)
 		seceond_cmd(tree, fds, env);
-	close(fds[0]);
-	close(fds[1]);
-	waitpid(p1, NULL, 0);
-	waitpid(p2, NULL, 0);
+	if (p1 && p2)
+	{
+		close(fds[0]);
+		close(fds[1]);
+		get_status(p1, *env);
+		get_status(p2, *env);
+		waitpid(p1, NULL, 0);
+		waitpid(p2, NULL, 0);
+	}
 	return (1);
 }

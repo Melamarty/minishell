@@ -12,6 +12,20 @@
 
 #include "../minishell.h"
 
+char	*to_lower(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] >= 'A' && str[i] <= 'Z')
+			str[i] += 32;
+		i++;
+	}
+	return (str);
+}
+
 int	expand_cmd(t_cmd *cmd)
 {
 	if (!cmd->args)
@@ -46,6 +60,7 @@ int	exec_cmd(t_cmd	*cmd, t_env **envr)
 {
 	if (fix_cmd(cmd, *envr))
 		return ((*envr)->last_exit = 0, 1);
+	cmd->cmd = to_lower(cmd->cmd);
 	if (!ft_strcmp(cmd->cmd, "echo"))
 		return (echo(cmd, *envr));
 	else if (!ft_strcmp(cmd->cmd, "cd"))
